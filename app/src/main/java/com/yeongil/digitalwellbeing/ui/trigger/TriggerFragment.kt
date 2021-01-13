@@ -20,7 +20,7 @@ class TriggerFragment : Fragment() {
     ): View? {
         _binding = FragmentTriggerBinding.inflate(inflater, container, false)
 
-        binding.addBtn.setOnClickListener { }
+        binding.addBtn.setOnClickListener {findNavController().navigate(R.id.action_triggerFragment_to_triggerNestedGraph) }
         binding.beforeBtn.setOnClickListener{ findNavController().navigate(R.id.action_triggerFragment_to_mainFragment) }
         binding.nextBtn.setOnClickListener { findNavController().navigate(R.id.action_triggerFragment_to_actionFragment) }
 
