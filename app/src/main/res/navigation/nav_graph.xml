@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.main.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_triggerFragment"
+            app:destination="@id/triggerFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_descriptionFragment"
+            app:destination="@id/descriptionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triggerFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.TriggerFragment"
+        android:label="TriggerFragment" >
+        <action
+            android:id="@+id/action_triggerFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo='@+id/mainFragment'
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_triggerFragment_to_actionFragment"
+            app:destination="@id/actionFragment"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/actionFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.action.ActionFragment"
+        android:label="ActionFragment" >
+        <action
+            android:id="@+id/action_actionFragment_to_triggerFragment"
+            app:destination="@id/triggerFragment"
+            app:popUpTo="@+id/triggerFragment"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_actionFragment_to_confirmFragment"
+            app:destination="@id/confirmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.confirm.ConfirmFragment"
+        android:label="ConfirmFragment" >
+        <action
+            android:id="@+id/action_confirmFragment_to_actionFragment"
+            app:destination="@id/actionFragment"
+            app:popUpTo="@+id/actionFragment"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_confirmFragment_to_confirmDialog"
+            app:destination="@id/confirmDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/descriptionFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.description.DescriptionFragment"
+        android:label="DescriptionFragment" >
+        <action
+            android:id="@+id/action_descriptionFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+    <dialog
+        android:id="@+id/confirmDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.confirm.ConfirmDialog"
+        android:label="ConfirmDialog" >
+        <action
+            android:id="@+id/action_confirmDialog_to_confirmFragment"
+            app:destination="@id/confirmFragment"
+            app:popUpTo="@+id/confirmFragment"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_confirmDialog_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="true"
+            />
+    </dialog>
+</navigation>
