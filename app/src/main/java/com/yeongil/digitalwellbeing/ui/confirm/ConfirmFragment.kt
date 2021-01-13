@@ -21,8 +21,11 @@ class ConfirmFragment : Fragment() {
         _binding = FragmentConfirmBinding.inflate(inflater, container, false)
 
         binding.addBtn.setOnClickListener { }
-        binding.beforeBtn.setOnClickListener{ findNavController().navigate(R.id.action_confirmFragment_to_actionFragment) }
-        binding.nextBtn.setOnClickListener { findNavController().navigate(R.id.action_confirmFragment_to_confirmDialog) }
+        binding.beforeBtn.setOnClickListener { findNavController().navigate(R.id.action_confirmFragment_to_actionFragment) }
+        binding.nextBtn.setOnClickListener {
+            it.setOnClickListener(null)
+            findNavController().navigate(R.id.action_confirmFragment_to_confirmDialog)
+        }
 
         return binding.root
     }

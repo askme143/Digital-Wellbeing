@@ -20,7 +20,7 @@ class ActionFragment : Fragment() {
     ): View? {
         _binding = FragmentActionBinding.inflate(inflater, container, false)
 
-        binding.addBtn.setOnClickListener { }
+        binding.addBtn.setOnClickListener { findNavController().navigate(R.id.action_actionFragment_to_navigation) }
         binding.beforeBtn.setOnClickListener{ findNavController().navigate(R.id.action_actionFragment_to_triggerFragment) }
         binding.nextBtn.setOnClickListener { findNavController().navigate(R.id.action_actionFragment_to_confirmFragment) }
 
