@@ -20,8 +20,8 @@ class NotiAppListFragment : Fragment() {
     ): View? {
         _binding = FragmentNotiAppListBinding.inflate(inflater, container, false)
 
-        binding.beforeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiKeywordDialog_to_notiEditFragment) }
-        binding.completeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiKeywordDialog_to_notiEditFragment) }
+        binding.beforeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiAppListFragment_to_notiEditFragment) }
+        binding.completeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiAppListFragment_to_notiEditFragment) }
 
         return binding.root
     }
