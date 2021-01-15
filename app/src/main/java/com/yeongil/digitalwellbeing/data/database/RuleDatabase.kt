@@ -36,18 +36,15 @@ abstract class RuleDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: RuleDatabase? = null
-        private val mutex = Mutex()
 
-        suspend fun getInstance(context: Context): RuleDatabase {
-            mutex.withLock {
-                return INSTANCE ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    RuleDatabase::class.java,
-                    "rule_db"
-                ).build().also {
-                    INSTANCE = it
+        fun getInstance(context: Context): RuleDatabase {
+            return INSTANCE ?: Room.databaseBuilder(
+                context.applicationContext,
+                RuleDatabase::class.java,
+                "rule_db"
+            ).build().also {
+                INSTANCE = it
             }
         }
     }
-}
 }

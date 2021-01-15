@@ -3,6 +3,7 @@ package com.yeongil.digitalwellbeing
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.data.dto.action.*
 import com.yeongil.digitalwellbeing.data.dto.rule.Rule
@@ -10,21 +11,31 @@ import com.yeongil.digitalwellbeing.data.dto.rule.RuleInfo
 import com.yeongil.digitalwellbeing.data.dto.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.viewModel.RuleViewModel
+import com.yeongil.digitalwellbeing.viewModel.RuleViewModelFactory
 import kotlinx.coroutines.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
-
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
+
+    private val ruleViewModel by viewModels<RuleViewModel> {
+        RuleViewModelFactory(RuleDatabase.getInstance(applicationContext).ruleDao())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         job = Job()
+
+        ruleViewModel.loadRuleList()
+    }
+
+    private fun databaseTest() {
         baseContext.deleteDatabase("rule_db")
 
         launch {
@@ -64,6 +75,5 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val ruleList = dao.getRuleList()
             Log.d("json", prettyJson.encodeToString(ruleList[0]))
         }
-
     }
 }
