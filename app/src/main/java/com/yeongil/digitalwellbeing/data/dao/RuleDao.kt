@@ -1,71 +1,19 @@
 package com.yeongil.digitalwellbeing.data.dao
 
 import androidx.room.*
-import com.yeongil.digitalwellbeing.data.dto.action.AppBlockAction
-import com.yeongil.digitalwellbeing.data.dto.action.DndAction
-import com.yeongil.digitalwellbeing.data.dto.action.NotificationAction
-import com.yeongil.digitalwellbeing.data.dto.action.RingerAction
+import com.yeongil.digitalwellbeing.data.dao.action.AppBlockActionDao
+import com.yeongil.digitalwellbeing.data.dao.action.DndActionDao
+import com.yeongil.digitalwellbeing.data.dao.action.NotificationActionDao
+import com.yeongil.digitalwellbeing.data.dao.action.RingerActionDao
+import com.yeongil.digitalwellbeing.data.dao.rule.RuleInfoDao
+import com.yeongil.digitalwellbeing.data.dao.trigger.ActivityTriggerDao
+import com.yeongil.digitalwellbeing.data.dao.trigger.LocationTriggerDao
+import com.yeongil.digitalwellbeing.data.dao.trigger.TimeTriggerDao
 import com.yeongil.digitalwellbeing.data.dto.rule.Rule
-import com.yeongil.digitalwellbeing.data.dto.rule.RuleInfo
-import com.yeongil.digitalwellbeing.data.dto.trigger.ActivityTrigger
-import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
-import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
 
 @Dao
-interface RuleDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRuleInfo(ruleInfo: RuleInfo)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLocationTrigger(locationTrigger: LocationTrigger)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTimeTrigger(timeTrigger: TimeTrigger)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertActivityTrigger(activityTrigger: ActivityTrigger)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAppBlockAction(appBlockAction: AppBlockAction)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNotificationAction(notificationAction: NotificationAction)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDndAction(dndAction: DndAction)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRingerAction(ringerAction: RingerAction)
-
-
-    @Delete
-    suspend fun deleteRuleInfo(ruleInfo: RuleInfo)
-
-    @Delete
-    suspend fun deleteLocationTrigger(locationTrigger: LocationTrigger)
-
-    @Delete
-    suspend fun deleteTimeTrigger(timeTrigger: TimeTrigger)
-
-    @Delete
-    suspend fun deleteActivityTrigger(activityTrigger: ActivityTrigger)
-
-    @Delete
-    suspend fun deleteAppBlockAction(appBlockAction: AppBlockAction)
-
-    @Delete
-    suspend fun deleteNotificationAction(notificationAction: NotificationAction)
-
-    @Delete
-    suspend fun deleteDndAction(dndAction: DndAction)
-
-    @Delete
-    suspend fun deleteRingerAction(ringerAction: RingerAction)
-
-    @Transaction
-    @Query("SELECT * FROM rule_info")
-    suspend fun getRuleList(): List<Rule>
-
+interface RuleDao : RuleInfoDao, LocationTriggerDao, TimeTriggerDao, ActivityTriggerDao,
+    AppBlockActionDao, NotificationActionDao, DndActionDao, RingerActionDao {
     @Transaction
     suspend fun insertRule(rule: Rule) {
         insertRuleInfo(rule.ruleInfo)
@@ -81,10 +29,42 @@ interface RuleDao {
     }
 
     @Transaction
+    @Query("SELECT * FROM rule_info")
+    suspend fun getRuleList(): List<Rule>
+
+    @Transaction
     @Query("SELECT * FROM rule_info WHERE rid = :rid")
     suspend fun getRuleWithRid(rid: Int): Rule
 
     @Transaction
     @Query("SELECT * FROM rule_info WHERE rule_name = :ruleName")
     suspend fun getRuleWithRuleName(ruleName: String): Rule
+
+    @Transaction
+    suspend fun deleteRule(rule: Rule) {
+        deleteRuleInfo(rule.ruleInfo)
+
+        rule.locationTrigger?.let { deleteLocationTrigger(it) }
+        rule.timeTrigger?.let { deleteTimeTrigger(it) }
+        rule.activityTrigger?.let { deleteActivityTrigger(it) }
+
+        rule.appBlockAction?.let { deleteAppBlockAction(it) }
+        rule.notificationAction?.let { deleteNotificationAction(it) }
+        rule.dndAction?.let { deleteDndAction(it) }
+        rule.ringerAction?.let { deleteRingerAction(it) }
+    }
+
+    @Transaction
+    suspend fun deleteRuleByRid(rid: Int) {
+        deleteRuleInfoByRid(rid)
+
+        deleteLocationTriggerByRid(rid)
+        deleteTimeTriggerByRid(rid)
+        deleteActivityTriggerByRid(rid)
+
+        deleteAppBlockActionByRid(rid)
+        deleteNotificationActionByRid(rid)
+        deleteDndActionByRid(rid)
+        deleteRingerActionByRid(rid)
+    }
 }

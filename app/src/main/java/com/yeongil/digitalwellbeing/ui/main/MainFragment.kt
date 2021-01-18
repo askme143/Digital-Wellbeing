@@ -11,7 +11,7 @@ import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentMainBinding
 import com.yeongil.digitalwellbeing.viewModel.RuleViewModel
-import com.yeongil.digitalwellbeing.viewModel.RuleViewModelFactory
+import com.yeongil.digitalwellbeing.viewModelFactory.RuleViewModelFactory
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null

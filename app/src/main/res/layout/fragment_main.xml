@@ -38,7 +38,7 @@
             app:constraint_referenced_ids="add_btn, title" />
 
         <androidx.recyclerview.widget.RecyclerView
-            rule_info_list="@{vm.ruleInfoList}"
+            recycler_item_list="@{vm.ruleInfoItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

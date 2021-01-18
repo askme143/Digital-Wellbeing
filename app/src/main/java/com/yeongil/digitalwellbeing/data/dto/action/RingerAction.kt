@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Entity
+@Entity(tableName = "ringer_actions")
 data class RingerAction(
     @PrimaryKey val rid: Int,
     @ColumnInfo val ringerMode: Int,

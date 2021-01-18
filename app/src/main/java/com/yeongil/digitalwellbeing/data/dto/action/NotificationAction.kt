@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Entity(tableName = "notification_action")
+@Entity(tableName = "notification_actions")
 data class NotificationAction(
     @PrimaryKey val rid: Int,
     @ColumnInfo(name = "app_list") val appList: List<String>,

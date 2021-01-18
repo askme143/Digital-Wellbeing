@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Entity
+@Entity(tableName = "dnd_actions")
 data class DndAction(
     @PrimaryKey val rid: Int
 )
