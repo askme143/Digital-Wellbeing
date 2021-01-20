@@ -2,7 +2,7 @@ package com.yeongil.digitalwellbeing.data.database
 
 import android.content.Context
 import androidx.room.*
-import com.yeongil.digitalwellbeing.data.dao.RuleDao
+import com.yeongil.digitalwellbeing.data.dao.rule.RuleDao
 import com.yeongil.digitalwellbeing.data.dto.action.AppBlockAction
 import com.yeongil.digitalwellbeing.data.dto.action.DndAction
 import com.yeongil.digitalwellbeing.data.dto.action.NotificationAction
@@ -11,10 +11,6 @@ import com.yeongil.digitalwellbeing.data.dto.rule.RuleInfo
 import com.yeongil.digitalwellbeing.data.dto.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.internal.synchronized
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 @Database(
     entities = [

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Digital Wellbeing</string>
+    <string name="preference_seq_number">sequence number</string>
 </resources>

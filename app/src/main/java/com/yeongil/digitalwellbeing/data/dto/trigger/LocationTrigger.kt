@@ -11,4 +11,6 @@ data class LocationTrigger(
     @PrimaryKey val rid: Int,
     val latitude: Double,
     val longitude: Double,
+    val range: Int,
+    val locationName: String
 )

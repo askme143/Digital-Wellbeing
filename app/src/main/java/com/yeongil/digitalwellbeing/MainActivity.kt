@@ -39,8 +39,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val prettyJson = Json { prettyPrint = true }
 
             val sampleRuleInfo = RuleInfo(1, "sample", activated = false, notiOnTrigger = false)
-            val sampleLocationTrigger = LocationTrigger(1, 1.0, 1.0)
-            val sampleTimeTrigger = TimeTrigger(1, 1, 1)
+            val sampleLocationTrigger = LocationTrigger(1, 1.0, 1.0, 1, "sample")
+            val sampleTimeTrigger =
+                TimeTrigger(1, 1, 1, listOf(false, false, false, false, false, false, true))
             val sampleActivityTrigger = ActivityTrigger(1, "Driving")
 
             val sampleAppBlockAction = AppBlockAction(1, listOf(AppBlockEntry("yotube", 0)), 1)

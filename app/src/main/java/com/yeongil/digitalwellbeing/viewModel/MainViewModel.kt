@@ -1,12 +1,12 @@
 package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.*
-import com.yeongil.digitalwellbeing.data.dao.RuleDao
+import com.yeongil.digitalwellbeing.data.dao.rule.RuleDao
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleInfoItemViewModel
 import kotlinx.coroutines.flow.collect
 
-class RuleViewModel(
+class MainViewModel(
     private val ruleDao: RuleDao
 ) : ViewModel() {
     val ruleInfoItemList: LiveData<List<RecyclerItem>> = liveData {
@@ -17,8 +17,7 @@ class RuleViewModel(
                     ruleDao,
                     viewModelScope
                 ).toRecyclerItem()
-            }
-                .also { recyclerItems -> emit(recyclerItems) }
+            }.also { recyclerItems -> emit(recyclerItems) }
         }
     }
 }

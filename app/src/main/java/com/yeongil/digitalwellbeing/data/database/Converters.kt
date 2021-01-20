@@ -37,4 +37,14 @@ class Converters {
     fun fromStringToAppBlockEntryList(value: String): List<AppBlockEntry> {
         return Json.decodeFromString<List<AppBlockEntry>>(value)
     }
+
+    @TypeConverter
+    fun fromRepeatDayToString(value: List<Boolean>): String {
+        return Json.encodeToString(value)
+    }
+
+    @TypeConverter
+    fun fromStringToRepeatDay(value: String): List<Boolean> {
+        return Json.decodeFromString(value)
+    }
 }

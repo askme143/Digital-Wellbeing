@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "app_block_actions")
-class AppBlockAction(
+data class AppBlockAction(
     @PrimaryKey val rid: Int,
     @ColumnInfo(name = "app_block_entries") val AppBlockEntries: List<AppBlockEntry>,
     @ColumnInfo(name = "handling_action") val handlingAction: Int,    //TODO: handling_action : integer mapping table

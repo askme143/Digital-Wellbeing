@@ -12,7 +12,7 @@ import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Rule(
+data class Rule(
     @Embedded val ruleInfo: RuleInfo,
     @Relation(
         parentColumn = "rid",
