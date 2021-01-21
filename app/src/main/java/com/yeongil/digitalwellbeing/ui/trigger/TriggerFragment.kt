@@ -37,7 +37,13 @@ class TriggerFragment : Fragment() {
         binding.vm = ruleEditViewModel
 
         binding.addBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerFragmentToTriggerNestedGraph()) }
-        binding.beforeBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerFragmentToMainFragment()) }
+        binding.beforeBtn.setOnClickListener {
+            if (ruleEditViewModel.isNewRule) {
+                findNavController().navigateSafe(directions.actionTriggerFragmentToMainFragment())
+            } else {
+                findNavController().navigateSafe(directions.actionTriggerFragmentToDescriptionFragment())
+            }
+        }
         binding.nextBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerFragmentToActionFragment()) }
 
         return binding.root

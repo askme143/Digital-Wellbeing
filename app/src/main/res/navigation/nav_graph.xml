@@ -30,6 +30,11 @@
         <action
             android:id="@+id/action_triggerFragment_to_triggerNestedGraph"
             app:destination="@id/triggerNestedGraph" />
+        <action
+            android:id="@+id/action_triggerFragment_to_descriptionFragment"
+            app:destination="@id/descriptionFragment"
+            app:popUpTo="@+id/descriptionFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/actionFragment"
@@ -69,6 +74,9 @@
             app:destination="@id/mainFragment"
             app:popUpTo="@+id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_descriptionFragment_to_triggerFragment"
+            app:destination="@id/triggerFragment" />
     </fragment>
     <dialog
         android:id="@+id/confirmDialog"
@@ -83,6 +91,11 @@
             android:id="@+id/action_confirmDialog_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_confirmDialog_to_descriptionFragment"
+            app:destination="@id/descriptionFragment"
+            app:popUpTo="@+id/descriptionFragment"
             app:popUpToInclusive="true" />
     </dialog>
     <navigation
@@ -180,8 +193,7 @@
                 android:id="@+id/action_appListConfirmFragment_to_actionEditFragment"
                 app:destination="@id/actionEditFragment"
                 app:popUpTo="@+id/actionEditFragment"
-                app:popUpToInclusive="true"
-                />
+                app:popUpToInclusive="true" />
         </fragment>
         <fragment
             android:id="@+id/notiAppListFragment"
@@ -217,8 +229,7 @@
                 android:id="@+id/action_notiEditFragment_to_actionEditFragment"
                 app:destination="@id/actionEditFragment"
                 app:popUpTo="@+id/actionEditFragment"
-                app:popUpToInclusive="true"
-                />
+                app:popUpToInclusive="true" />
         </fragment>
         <dialog
             android:id="@+id/dndDialog"
@@ -228,8 +239,7 @@
                 android:id="@+id/action_dndDialog_to_actionEditFragment"
                 app:destination="@id/actionEditFragment"
                 app:popUpTo="@+id/actionEditFragment"
-                app:popUpToInclusive="true"
-                />
+                app:popUpToInclusive="true" />
         </dialog>
         <dialog
             android:id="@+id/ringerDialog"
@@ -239,14 +249,12 @@
                 android:id="@+id/action_ringerDialog_to_actionEditFragment"
                 app:destination="@id/actionEditFragment"
                 app:popUpTo="@+id/actionEditFragment"
-                app:popUpToInclusive="true"
-                />
+                app:popUpToInclusive="true" />
         </dialog>
         <action
             android:id="@+id/action_global_actionFragment"
             app:destination="@id/actionFragment"
             app:popUpTo="@+id/actionFragment"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
     </navigation>
 </navigation>

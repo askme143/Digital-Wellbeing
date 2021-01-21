@@ -1,20 +1,31 @@
 package com.yeongil.digitalwellbeing.ui.confirm
 
 import android.app.Service
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yeongil.digitalwellbeing.R
+import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
+import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class ConfirmDialog : BottomSheetDialogFragment() {
     private var _binding: DialogConfirmBinding? = null;
     private val binding get() = _binding!!
 
     private val directions = ConfirmDialogDirections
+
+    private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
+        val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        RuleEditViewModelFactory(ruleDao, sharedPref)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +45,10 @@ class ConfirmDialog : BottomSheetDialogFragment() {
             findNavController().navigateSafe(directions.actionConfirmDialogToConfirmFragment())
         }
         binding.completeBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
+            if (ruleEditViewModel.isNewRule)
+                findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
+            else
+                findNavController().navigateSafe(directions.actionConfirmDialogToDescriptionFragment())
         }
 
         return binding.root

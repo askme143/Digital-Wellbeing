@@ -12,9 +12,8 @@ import com.yeongil.digitalwellbeing.data.dto.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.repository.RuleRepository
+import com.yeongil.digitalwellbeing.utils.*
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleMemberItem
-import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
-import com.yeongil.digitalwellbeing.utils.TimeUtils
 import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleMemberItemViewModel
@@ -41,18 +40,22 @@ class RuleEditViewModel(
     private val _actionItemList = MutableLiveData<List<RecyclerItem>>()
     val actionItemList: LiveData<List<RecyclerItem>> get() = _actionItemList
 
+    val itemClickEvent = MutableLiveData<Event<String>>()
+
     init {
         init()
         test()
     }
 
     fun init(rule: Rule) {
+        isNewRule = false
         editingRule.value = rule.copy()
 
         initRuleMemberItemList()
     }
 
     fun init() {
+        isNewRule = true
         editingRule.value = Rule(
             RuleInfo(TEMPORAL_RID, "규칙 이름", activated = true, notiOnTrigger = false),
             null,
@@ -70,7 +73,7 @@ class RuleEditViewModel(
     private fun initRuleMemberItemList() {
         _triggerItemList.value = listOf()
         _actionItemList.value = listOf()
-        
+
         val rule = editingRule.value
 
         if (rule != null) {
@@ -96,71 +99,85 @@ class RuleEditViewModel(
     }
 
     fun addLocationTrigger(locationTrigger: LocationTrigger) {
-        editingRule.value = editingRule.value?.copy(locationTrigger = locationTrigger)
-
-        val item =
+        val newItem =
             RuleMemberItemViewModel(locationTriggerRuleItem(locationTrigger)).toRecyclerItem()
-        _triggerItemList.value =
-            _triggerItemList.value?.plus(item) ?: listOf(item)
+
+        editingRule.value = editingRule.value!!.copy(locationTrigger = locationTrigger)
+        _triggerItemList.value = _triggerItemList.value?.filterNot {
+            val vm = it.viewModel
+            vm is RuleMemberItemViewModel && vm.ruleMemberItem.title == LOCATION_TRIGGER_TITLE
+        }?.plus(newItem) ?: listOf(newItem)
     }
 
     fun addTimeTrigger(timeTrigger: TimeTrigger) {
-        editingRule.value = editingRule.value?.copy(timeTrigger = timeTrigger)
-
-        val item =
+        val newItem =
             RuleMemberItemViewModel(timeTriggerRuleItem(timeTrigger)).toRecyclerItem()
-        _triggerItemList.value =
-            _triggerItemList.value?.plus(item) ?: listOf(item)
+
+        editingRule.value = editingRule.value!!.copy(timeTrigger = timeTrigger)
+        _triggerItemList.value = _triggerItemList.value?.filterNot {
+            val vm = it.viewModel
+            vm is RuleMemberItemViewModel && vm.ruleMemberItem.title == TIME_TRIGGER_TITLE
+        }?.plus(newItem) ?: listOf(newItem)
     }
 
     fun addActivityTrigger(activityTrigger: ActivityTrigger) {
-        editingRule.value = editingRule.value?.copy(activityTrigger = activityTrigger)
-
-        val item =
+        val newItem =
             RuleMemberItemViewModel(activityTriggerRuleItem(activityTrigger)).toRecyclerItem()
-        _triggerItemList.value =
-            _triggerItemList.value?.plus(item) ?: listOf(item)
+
+        editingRule.value = editingRule.value!!.copy(activityTrigger = activityTrigger)
+        _triggerItemList.value = _triggerItemList.value?.filterNot {
+            val vm = it.viewModel
+            vm is RuleMemberItemViewModel && vm.ruleMemberItem.title == ACTIVITY_TRIGGER_TITLE
+        }?.plus(newItem) ?: listOf(newItem)
     }
 
     fun addAppBlockAction(appBlockAction: AppBlockAction) {
-        editingRule.value = editingRule.value?.copy(appBlockAction = appBlockAction)
-
-        val item =
+        val newItem =
             RuleMemberItemViewModel(appBlockActionRuleItem(appBlockAction)).toRecyclerItem()
-        _actionItemList.value =
-            _actionItemList.value?.plus(item) ?: listOf(item)
+
+        editingRule.value = editingRule.value!!.copy(appBlockAction = appBlockAction)
+        _actionItemList.value = _triggerItemList.value?.filterNot {
+            val vm = it.viewModel
+            vm is RuleMemberItemViewModel && vm.ruleMemberItem.title == APP_BLOCK_ACTION_TITLE
+        }?.plus(newItem) ?: listOf(newItem)
     }
 
     fun addNotificationAction(notificationAction: NotificationAction) {
-        editingRule.value = editingRule.value?.copy(notificationAction = notificationAction)
-
-        val item =
+        val newItem =
             RuleMemberItemViewModel(notificationActionRuleItem(notificationAction)).toRecyclerItem()
-        _actionItemList.value =
-            _actionItemList.value?.plus(item) ?: listOf(item)
+
+        editingRule.value = editingRule.value!!.copy(notificationAction = notificationAction)
+        _actionItemList.value = _triggerItemList.value?.filterNot {
+            val vm = it.viewModel
+            vm is RuleMemberItemViewModel && vm.ruleMemberItem.title == NOTIFICATION_ACTION_TITLE
+        }?.plus(newItem) ?: listOf(newItem)
     }
 
     fun addDndAction(dndAction: DndAction) {
-        editingRule.value = editingRule.value?.copy(dndAction = dndAction)
-
-        val item =
+        val newItem =
             RuleMemberItemViewModel(dndActionRuleItem(dndAction)).toRecyclerItem()
-        _actionItemList.value =
-            _actionItemList.value?.plus(item) ?: listOf(item)
+
+        editingRule.value = editingRule.value!!.copy(dndAction = dndAction)
+        _actionItemList.value = _triggerItemList.value?.filterNot {
+            val vm = it.viewModel
+            vm is RuleMemberItemViewModel && vm.ruleMemberItem.title == DND_ACTION_TITLE
+        }?.plus(newItem) ?: listOf(newItem)
     }
 
     fun addRingerAction(ringerAction: RingerAction) {
-        editingRule.value = editingRule.value?.copy(ringerAction = ringerAction)
-
-        val item =
+        val newItem =
             RuleMemberItemViewModel(ringerActionRuleItem(ringerAction)).toRecyclerItem()
-        _actionItemList.value =
-            _actionItemList.value?.plus(item) ?: listOf(item)
+
+        editingRule.value = editingRule.value!!.copy(ringerAction = ringerAction)
+        _actionItemList.value = _triggerItemList.value?.filterNot {
+            val vm = it.viewModel
+            vm is RuleMemberItemViewModel && vm.ruleMemberItem.title == RINGER_ACTION_TITLE
+        }?.plus(newItem) ?: listOf(newItem)
     }
 
     private fun locationTriggerRuleItem(locationTrigger: LocationTrigger): RuleMemberItem =
         object : RuleMemberItem {
-            override val title = "장소"
+            override val title = LOCATION_TRIGGER_TITLE
             override val description = locationTrigger.locationName
             override val layoutId = R.layout.item_trigger
 
@@ -172,7 +189,7 @@ class RuleEditViewModel(
 
     private fun timeTriggerRuleItem(timeTrigger: TimeTrigger): RuleMemberItem =
         object : RuleMemberItem {
-            override val title = "시간"
+            override val title = TIME_TRIGGER_TITLE
             override val description =
                 "${
                     startEndMinutesToString(
@@ -190,7 +207,7 @@ class RuleEditViewModel(
 
     private fun activityTriggerRuleItem(activityTrigger: ActivityTrigger): RuleMemberItem =
         object : RuleMemberItem {
-            override val title = "활동"
+            override val title = ACTIVITY_TRIGGER_TITLE
             override val description = activityTrigger.activity
             override val layoutId = R.layout.item_trigger
 
@@ -202,7 +219,7 @@ class RuleEditViewModel(
 
     private fun appBlockActionRuleItem(appBlockAction: AppBlockAction): RuleMemberItem =
         object : RuleMemberItem {
-            override val title = "앱 사용 제한"
+            override val title = APP_BLOCK_ACTION_TITLE
             override val description = appBlockAction.AppBlockEntries.joinToString(", ") {
                 "${it.appName} ${it.allowedTimeInMinutes}분 사용 시"
             }
@@ -216,7 +233,7 @@ class RuleEditViewModel(
 
     private fun notificationActionRuleItem(notificationAction: NotificationAction): RuleMemberItem =
         object : RuleMemberItem {
-            override val title = "알림 처리"
+            override val title = NOTIFICATION_ACTION_TITLE
             override val description = "${notificationAction.appList.joinToString("/")} 알림 숨김"
             override val layoutId = R.layout.item_action
 
@@ -228,7 +245,7 @@ class RuleEditViewModel(
 
     private fun dndActionRuleItem(dndAction: DndAction): RuleMemberItem =
         object : RuleMemberItem {
-            override val title = "방해 금지 모드"
+            override val title = DND_ACTION_TITLE
             override val description = "방해 금지 모드 실행"
             override val layoutId = R.layout.item_action
 
@@ -240,7 +257,7 @@ class RuleEditViewModel(
 
     private fun ringerActionRuleItem(ringerAction: RingerAction): RuleMemberItem =
         object : RuleMemberItem {
-            override val title = "소리 모드 변경"
+            override val title = RINGER_ACTION_TITLE
             override val description: String = ringerAction.ringerMode.toString()   //TODO: Mapping
             override val layoutId = R.layout.item_action
 
