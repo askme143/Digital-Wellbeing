@@ -80,16 +80,14 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun initViewModel() {
-        with(ruleEditViewModel.editingRule.value?.locationTrigger) {
-            if (this != null) {
-                locationTriggerViewModel.latLng.value = LatLng(this.latitude, this.longitude)
-                locationTriggerViewModel.progress.value = this.range - 150
-            } else {
-                locationTriggerViewModel.progress.value = 0
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    location?.let {
-                        locationTriggerViewModel.latLng.value = LatLng(it.latitude, it.longitude)
-                    }
+        val trigger = ruleEditViewModel.editingRule.value?.locationTrigger
+
+        if (trigger != null) {
+            locationTriggerViewModel.init(trigger)
+        } else {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    locationTriggerViewModel.init(LatLng(it.latitude, it.longitude))
                 }
             }
         }

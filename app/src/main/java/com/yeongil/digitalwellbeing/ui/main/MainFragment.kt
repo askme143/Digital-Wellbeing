@@ -42,7 +42,7 @@ class MainFragment : Fragment() {
         binding.vm = mainViewModel
 
         binding.addBtn.setOnClickListener {
-            ruleEditViewModel.initialize()
+            ruleEditViewModel.init()
             findNavController().navigateSafe(MainFragmentDirections.actionMainFragmentToTriggerFragment())
         }
 

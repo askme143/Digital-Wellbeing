@@ -3,7 +3,7 @@ package com.yeongil.digitalwellbeing.utils
 import java.lang.IllegalArgumentException
 
 object TimeUtils {
-    fun minutesToString(timeInMinutes: Int): String {
+    private fun minutesToString(timeInMinutes: Int): String {
         val hour = timeInMinutes / 60
         val minute = timeInMinutes % 60
         val noon = if (timeInMinutes < 12) "오전" else "오후"
@@ -11,17 +11,24 @@ object TimeUtils {
         return "$noon $hour:$minute"
     }
 
+    fun startEndMinutesToString(start: Int, end: Int): String {
+        val startString = minutesToString(start)
+        val endString = minutesToString(end)
+
+        return if (start < end) "$startString - $endString" else "$startString - 다음 날 $endString"
+    }
+
     fun repeatDayToString(repeatDay: List<Boolean>): String {
         return repeatDay.mapIndexed { index, bool ->
             if (bool) {
                 return when (index) {
-                    0 -> "월요일"
-                    1 -> "화요일"
-                    2 -> "수요일"
-                    3 -> "목요일"
-                    4 -> "금요일"
-                    5 -> "토요일"
-                    6 -> "일요일"
+                    SUN -> "일요일"
+                    MON -> "월요일"
+                    TUE -> "화요일"
+                    WED -> "수요일"
+                    THU -> "목요일"
+                    FRI -> "금요일"
+                    SAT -> "토요일"
                     else -> ""
                 }
             } else ""

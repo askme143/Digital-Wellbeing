@@ -103,7 +103,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="일"
-            android:textColor="@color/black"
+            android:onClick="@{() -> vm.onClickRepeatDay(0)}"
+            android:textColor="@{vm.repeatDay[0] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/mon"
             app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
@@ -116,7 +117,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="월"
-            android:textColor="@color/black"
+            android:onClick="@{() -> vm.onClickRepeatDay(1)}"
+            android:textColor="@{vm.repeatDay[1] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/sun"
             app:layout_constraintRight_toLeftOf="@id/tue"
             app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
@@ -129,7 +131,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="화"
-            android:textColor="@color/black"
+            android:onClick="@{() -> vm.onClickRepeatDay(2)}"
+            android:textColor="@{vm.repeatDay[2] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/mon"
             app:layout_constraintRight_toLeftOf="@id/wed"
             app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
@@ -142,7 +145,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="수"
-            android:textColor="@color/black"
+            android:onClick="@{() -> vm.onClickRepeatDay(3)}"
+            android:textColor="@{vm.repeatDay[3] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/tue"
             app:layout_constraintRight_toLeftOf="@id/thu"
             app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
@@ -155,7 +159,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="목"
-            android:textColor="@color/black"
+            android:onClick="@{() -> vm.onClickRepeatDay(4)}"
+            android:textColor="@{vm.repeatDay[4] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/wed"
             app:layout_constraintRight_toLeftOf="@id/fri"
             app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
@@ -168,7 +173,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="금"
-            android:textColor="@color/black"
+            android:onClick="@{() -> vm.onClickRepeatDay(5)}"
+            android:textColor="@{vm.repeatDay[5] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/thu"
             app:layout_constraintRight_toLeftOf="@id/sat"
             app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
@@ -181,7 +187,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="토"
-            android:textColor="@color/black"
+            android:onClick="@{() -> vm.onClickRepeatDay(6)}"
+            android:textColor="@{vm.repeatDay[6] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/fri"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/start_time_picker" />

@@ -15,7 +15,7 @@ import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleMemberItem
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 import com.yeongil.digitalwellbeing.utils.TimeUtils
-import com.yeongil.digitalwellbeing.utils.TimeUtils.minutesToString
+import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleMemberItemViewModel
 
@@ -42,15 +42,17 @@ class RuleEditViewModel(
     val actionItemList: LiveData<List<RecyclerItem>> get() = _actionItemList
 
     init {
-        initialize()
+        init()
         test()
     }
 
-    fun initialize(rule: Rule) {
+    fun init(rule: Rule) {
         editingRule.value = rule.copy()
+
+        initRuleMemberItemList()
     }
 
-    fun initialize() {
+    fun init() {
         editingRule.value = Rule(
             RuleInfo(TEMPORAL_RID, "규칙 이름", activated = true, notiOnTrigger = false),
             null,
@@ -61,6 +63,26 @@ class RuleEditViewModel(
             null,
             null
         )
+
+        initRuleMemberItemList()
+    }
+
+    private fun initRuleMemberItemList() {
+        _triggerItemList.value = listOf()
+        _actionItemList.value = listOf()
+        
+        val rule = editingRule.value
+
+        if (rule != null) {
+            rule.locationTrigger?.let { addLocationTrigger(it) }
+            rule.timeTrigger?.let { addTimeTrigger(it) }
+            rule.activityTrigger?.let { addActivityTrigger(it) }
+
+            rule.appBlockAction?.let { addAppBlockAction(it) }
+            rule.notificationAction?.let { addNotificationAction(it) }
+            rule.dndAction?.let { addDndAction(it) }
+            rule.ringerAction?.let { addRingerAction(it) }
+        }
     }
 
     private fun test() {
@@ -152,9 +174,12 @@ class RuleEditViewModel(
         object : RuleMemberItem {
             override val title = "시간"
             override val description =
-                "${minutesToString(timeTrigger.startTimeInMinutes)} - ${minutesToString(timeTrigger.endTimeInMinutes)}\n${
-                    TimeUtils.repeatDayToString(timeTrigger.repeatDay)
-                }"
+                "${
+                    startEndMinutesToString(
+                        timeTrigger.startTimeInMinutes,
+                        timeTrigger.endTimeInMinutes
+                    )
+                }\n${TimeUtils.repeatDayToString(timeTrigger.repeatDay)}"
             override val layoutId = R.layout.item_trigger
 
             override fun delete(recyclerItem: RecyclerItem) {
