@@ -109,9 +109,12 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             }
 
             binding.beforeBtn.setOnClickListener {
-                findNavController().navigateSafe(
-                    directions.actionLocationTriggerFragmentToTriggerEditFragment()
-                )
+                if (ruleEditViewModel.editingRule.value?.locationTrigger != null)
+                    findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
+                else
+                    findNavController().navigateSafe(
+                        directions.actionLocationTriggerFragmentToTriggerEditFragment()
+                    )
             }
             binding.completeBtn.setOnClickListener {
                 locationTriggerViewModel.locationTrigger.value?.let {

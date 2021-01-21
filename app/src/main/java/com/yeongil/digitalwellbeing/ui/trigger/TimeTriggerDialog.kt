@@ -42,7 +42,10 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionTimeTriggerDialogToTriggerEditFragment())
+            if (ruleEditViewModel.editingRule.value?.timeTrigger != null)
+                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
+            else
+                findNavController().navigateSafe(directions.actionTimeTriggerDialogToTriggerEditFragment())
         }
         binding.completeBtn.setOnClickListener {
             ruleEditViewModel.addTimeTrigger(timeTriggerViewModel.getTimeTrigger())

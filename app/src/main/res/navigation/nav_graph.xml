@@ -35,6 +35,9 @@
             app:destination="@id/descriptionFragment"
             app:popUpTo="@+id/descriptionFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_triggerFragment_to_locationTriggerFragment"
+            app:destination="@id/locationTriggerFragment" />
     </fragment>
     <fragment
         android:id="@+id/actionFragment"

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentTriggerBinding
+import com.yeongil.digitalwellbeing.utils.LOCATION_TRIGGER_TITLE
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
@@ -35,6 +36,16 @@ class TriggerFragment : Fragment() {
         _binding = FragmentTriggerBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ruleEditViewModel
+
+        ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                when (it) {
+                    LOCATION_TRIGGER_TITLE -> {
+//                        findNavController().navigateSafe()
+                    }
+                }
+            }
+        }
 
         binding.addBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerFragmentToTriggerNestedGraph()) }
         binding.beforeBtn.setOnClickListener {
