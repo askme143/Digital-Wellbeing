@@ -8,4 +8,8 @@ const val THU = 4
 const val FRI = 5
 const val SAT = 6
 
+const val DRIVE = "Driving"
+const val BICYCLE = "Bicycle"
+const val STILL = "Still"
+
 const val TEMPORAL_RID = 0
