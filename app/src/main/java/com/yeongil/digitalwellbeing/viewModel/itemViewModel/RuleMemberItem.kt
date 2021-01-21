@@ -7,4 +7,5 @@ interface RuleMemberItem {
     val description: String
     val layoutId: Int
     fun delete(recyclerItem: RecyclerItem)
+    fun click()
 }

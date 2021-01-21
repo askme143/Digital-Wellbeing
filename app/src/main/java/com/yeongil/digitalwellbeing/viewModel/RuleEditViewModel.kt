@@ -185,6 +185,10 @@ class RuleEditViewModel(
                 _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(locationTrigger = null)
             }
+
+            override fun click() {
+                itemClickEvent.value = Event(title)
+            }
         }
 
     private fun timeTriggerRuleItem(timeTrigger: TimeTrigger): RuleMemberItem =
@@ -203,6 +207,10 @@ class RuleEditViewModel(
                 _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(timeTrigger = null)
             }
+
+            override fun click() {
+                itemClickEvent.value = Event(title)
+            }
         }
 
     private fun activityTriggerRuleItem(activityTrigger: ActivityTrigger): RuleMemberItem =
@@ -214,6 +222,10 @@ class RuleEditViewModel(
             override fun delete(recyclerItem: RecyclerItem) {
                 _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(activityTrigger = null)
+            }
+
+            override fun click() {
+                itemClickEvent.value = Event(title)
             }
         }
 
@@ -229,6 +241,10 @@ class RuleEditViewModel(
                 _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(appBlockAction = null)
             }
+
+            override fun click() {
+                itemClickEvent.value = Event(title)
+            }
         }
 
     private fun notificationActionRuleItem(notificationAction: NotificationAction): RuleMemberItem =
@@ -240,6 +256,10 @@ class RuleEditViewModel(
             override fun delete(recyclerItem: RecyclerItem) {
                 _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(notificationAction = null)
+            }
+
+            override fun click() {
+                itemClickEvent.value = Event(title)
             }
         }
 
@@ -253,6 +273,10 @@ class RuleEditViewModel(
                 _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(dndAction = null)
             }
+
+            override fun click() {
+                itemClickEvent.value = Event(title)
+            }
         }
 
     private fun ringerActionRuleItem(ringerAction: RingerAction): RuleMemberItem =
@@ -264,6 +288,10 @@ class RuleEditViewModel(
             override fun delete(recyclerItem: RecyclerItem) {
                 _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(ringerAction = null)
+            }
+
+            override fun click() {
+                itemClickEvent.value = Event(title)
             }
         }
 }

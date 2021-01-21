@@ -26,4 +26,8 @@ class RuleMemberItemViewModel(
     fun onClickDelete() {
         ruleMemberItem.delete(toRecyclerItem())
     }
+
+    fun onClickItem() {
+        ruleMemberItem.click()
+    }
 }

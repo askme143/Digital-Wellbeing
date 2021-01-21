@@ -11,7 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentTriggerBinding
+import com.yeongil.digitalwellbeing.utils.ACTIVITY_TRIGGER_TITLE
 import com.yeongil.digitalwellbeing.utils.LOCATION_TRIGGER_TITLE
+import com.yeongil.digitalwellbeing.utils.TIME_TRIGGER_TITLE
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
@@ -40,14 +42,17 @@ class TriggerFragment : Fragment() {
         ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 when (it) {
-                    LOCATION_TRIGGER_TITLE -> {
-//                        findNavController().navigateSafe()
-                    }
+                    LOCATION_TRIGGER_TITLE ->
+                        findNavController().navigateSafe(directions.actionTriggerFragmentToLocationTriggerFragment())
+                    TIME_TRIGGER_TITLE ->
+                        findNavController().navigateSafe(directions.actionTriggerFragmentToTimeTriggerDialog())
+                    ACTIVITY_TRIGGER_TITLE ->
+                        findNavController().navigateSafe(directions.actionTriggerFragmentToActivityTriggerDialog())
                 }
             }
         }
 
-        binding.addBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerFragmentToTriggerNestedGraph()) }
+        binding.addBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerFragmentToTriggerEditFragment()) }
         binding.beforeBtn.setOnClickListener {
             if (ruleEditViewModel.isNewRule) {
                 findNavController().navigateSafe(directions.actionTriggerFragmentToMainFragment())

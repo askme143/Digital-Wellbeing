@@ -3,6 +3,7 @@ package com.yeongil.digitalwellbeing.ui.trigger
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,10 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
     }
     private val activityTriggerViewModel by activityViewModels<ActivityTriggerViewModel>()
 
+    private val editing by lazy {
+        ruleEditViewModel.editingRule.value?.activityTrigger != null
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +47,7 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            if (ruleEditViewModel.editingRule.value?.activityTrigger != null)
+            if (editing)
                 findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             else
                 findNavController().navigateSafe(directions.actionActivityTriggerDialogToTriggerEditFragment())

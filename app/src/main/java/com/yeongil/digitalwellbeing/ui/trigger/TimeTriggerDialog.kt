@@ -22,6 +22,9 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val directions = TimeTriggerDialogDirections
+    private val editing by lazy {
+        ruleEditViewModel.editingRule.value?.timeTrigger != null
+    }
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
@@ -42,7 +45,7 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            if (ruleEditViewModel.editingRule.value?.timeTrigger != null)
+            if (editing)
                 findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             else
                 findNavController().navigateSafe(directions.actionTimeTriggerDialogToTriggerEditFragment())

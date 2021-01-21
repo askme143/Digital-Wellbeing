@@ -28,16 +28,22 @@
             android:id="@+id/action_triggerFragment_to_actionFragment"
             app:destination="@id/actionFragment" />
         <action
-            android:id="@+id/action_triggerFragment_to_triggerNestedGraph"
-            app:destination="@id/triggerNestedGraph" />
-        <action
             android:id="@+id/action_triggerFragment_to_descriptionFragment"
             app:destination="@id/descriptionFragment"
             app:popUpTo="@+id/descriptionFragment"
             app:popUpToInclusive="true" />
         <action
+            android:id="@+id/action_triggerFragment_to_triggerEditFragment"
+            app:destination="@id/triggerEditFragment" />
+        <action
             android:id="@+id/action_triggerFragment_to_locationTriggerFragment"
             app:destination="@id/locationTriggerFragment" />
+        <action
+            android:id="@+id/action_triggerFragment_to_timeTriggerDialog"
+            app:destination="@id/timeTriggerDialog" />
+        <action
+            android:id="@+id/action_triggerFragment_to_activityTriggerDialog"
+            app:destination="@id/activityTriggerDialog" />
     </fragment>
     <fragment
         android:id="@+id/actionFragment"
@@ -101,60 +107,76 @@
             app:popUpTo="@+id/descriptionFragment"
             app:popUpToInclusive="true" />
     </dialog>
-    <navigation
-        android:id="@+id/triggerNestedGraph"
-        app:startDestination="@id/triggerEditFragment">
+    <action
+        android:id="@+id/action_global_triggerFragment"
+        app:destination="@id/triggerFragment"
+        app:popUpTo="@+id/triggerFragment"
+        app:popUpToInclusive="true" />
+
+    <fragment
+        android:id="@+id/triggerEditFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.TriggerEditFragment"
+        android:label="TriggerEditFragment">
         <action
-            android:id="@+id/action_global_triggerFragment"
+            android:id="@+id/action_triggerEditFragment_to_locationTriggerFragment"
+            app:destination="@id/locationTriggerFragment" />
+        <action
+            android:id="@+id/action_triggerEditFragment_to_activityTriggerDialog"
+            app:destination="@id/activityTriggerDialog" />
+        <action
+            android:id="@+id/action_triggerEditFragment_to_timeTriggerDialog"
+            app:destination="@id/timeTriggerDialog" />
+        <action
+            android:id="@+id/action_triggerEditFragment_to_triggerFragment"
             app:destination="@id/triggerFragment"
             app:popUpTo="@+id/triggerFragment"
             app:popUpToInclusive="true" />
-
-        <fragment
-            android:id="@+id/triggerEditFragment"
-            android:name="com.yeongil.digitalwellbeing.ui.trigger.TriggerEditFragment"
-            android:label="TriggerEditFragment">
-            <action
-                android:id="@+id/action_triggerEditFragment_to_locationTriggerFragment"
-                app:destination="@id/locationTriggerFragment" />
-            <action
-                android:id="@+id/action_triggerEditFragment_to_activityTriggerDialog"
-                app:destination="@id/activityTriggerDialog" />
-            <action
-                android:id="@+id/action_triggerEditFragment_to_timeTriggerDialog"
-                app:destination="@id/timeTriggerDialog" />
-        </fragment>
-        <fragment
-            android:id="@+id/locationTriggerFragment"
-            android:name="com.yeongil.digitalwellbeing.ui.trigger.LocationTriggerFragment"
-            android:label="LocationTriggerFragment">
-            <action
-                android:id="@+id/action_locationTriggerFragment_to_triggerEditFragment"
-                app:destination="@id/triggerEditFragment"
-                app:popUpTo="@+id/triggerEditFragment"
-                app:popUpToInclusive="true" />
-        </fragment>
-        <dialog
-            android:id="@+id/timeTriggerDialog"
-            android:name="com.yeongil.digitalwellbeing.ui.trigger.TimeTriggerDialog"
-            android:label="TimeTriggerDialog">
-            <action
-                android:id="@+id/action_timeTriggerDialog_to_triggerEditFragment"
-                app:destination="@id/triggerEditFragment"
-                app:popUpTo="@+id/triggerEditFragment"
-                app:popUpToInclusive="true" />
-        </dialog>
-        <dialog
-            android:id="@+id/activityTriggerDialog"
-            android:name="com.yeongil.digitalwellbeing.ui.trigger.ActivityTriggerDialog"
-            android:label="ActivityTriggerDialog">
-            <action
-                android:id="@+id/action_activityTriggerDialog_to_triggerEditFragment"
-                app:destination="@id/triggerEditFragment"
-                app:popUpTo="@+id/triggerEditFragment"
-                app:popUpToInclusive="true" />
-        </dialog>
-    </navigation>
+    </fragment>
+    <fragment
+        android:id="@+id/locationTriggerFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.LocationTriggerFragment"
+        android:label="LocationTriggerFragment">
+        <action
+            android:id="@+id/action_locationTriggerFragment_to_triggerEditFragment"
+            app:destination="@id/triggerEditFragment"
+            app:popUpTo="@+id/triggerEditFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_locationTriggerFragment_to_triggerFragment"
+            app:destination="@id/triggerFragment"
+            app:popUpTo="@+id/triggerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <dialog
+        android:id="@+id/timeTriggerDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.TimeTriggerDialog"
+        android:label="TimeTriggerDialog">
+        <action
+            android:id="@+id/action_timeTriggerDialog_to_triggerEditFragment"
+            app:destination="@id/triggerEditFragment"
+            app:popUpTo="@+id/triggerEditFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_timeTriggerDialog_to_triggerFragment"
+            app:destination="@id/triggerFragment"
+            app:popUpTo="@+id/triggerFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/activityTriggerDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.ActivityTriggerDialog"
+        android:label="ActivityTriggerDialog">
+        <action
+            android:id="@+id/action_activityTriggerDialog_to_triggerEditFragment"
+            app:destination="@id/triggerEditFragment"
+            app:popUpTo="@+id/triggerEditFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_activityTriggerDialog_to_triggerFragment"
+            app:destination="@id/triggerFragment"
+            app:popUpTo="@+id/triggerFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
     <navigation
         android:id="@+id/actionNestedGraph"
         app:startDestination="@id/actionEditFragment">

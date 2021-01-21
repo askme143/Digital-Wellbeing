@@ -33,6 +33,9 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
     private val binding get() = _binding!!
 
     private val directions = LocationTriggerFragmentDirections
+    private val editing by lazy {
+        ruleEditViewModel.editingRule.value?.locationTrigger != null
+    }
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
@@ -109,12 +112,10 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             }
 
             binding.beforeBtn.setOnClickListener {
-                if (ruleEditViewModel.editingRule.value?.locationTrigger != null)
+                if (editing)
                     findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
                 else
-                    findNavController().navigateSafe(
-                        directions.actionLocationTriggerFragmentToTriggerEditFragment()
-                    )
+                    findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
             }
             binding.completeBtn.setOnClickListener {
                 locationTriggerViewModel.locationTrigger.value?.let {
