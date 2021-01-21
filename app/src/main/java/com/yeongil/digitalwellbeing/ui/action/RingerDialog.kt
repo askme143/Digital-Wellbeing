@@ -8,10 +8,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.DialogRingerBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 
 class RingerDialog : DialogFragment() {
     private var _binding: DialogRingerBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = RingerDialogDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,8 +23,12 @@ class RingerDialog : DialogFragment() {
     ): View? {
         _binding = DialogRingerBinding.inflate(inflater, container, false)
 
-        binding.cancelBtn.setOnClickListener { findNavController().navigate(R.id.action_ringerDialog_to_actionEditFragment) }
-        binding.completeBtn.setOnClickListener { findNavController().navigate(R.id.action_global_actionFragment) }
+        binding.cancelBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionRingerDialogToActionEditFragment())
+        }
+        binding.completeBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionGlobalActionFragment())
+        }
 
         return binding.root
     }

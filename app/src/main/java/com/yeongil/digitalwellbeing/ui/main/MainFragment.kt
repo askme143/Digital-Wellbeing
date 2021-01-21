@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentMainBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.MainViewModel
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.MainViewModelFactory
@@ -42,7 +43,7 @@ class MainFragment : Fragment() {
 
         binding.addBtn.setOnClickListener {
             ruleEditViewModel.initialize()
-            findNavController().navigate(R.id.action_mainFragment_to_triggerFragment)
+            findNavController().navigateSafe(MainFragmentDirections.actionMainFragmentToTriggerFragment())
         }
 
         return binding.root

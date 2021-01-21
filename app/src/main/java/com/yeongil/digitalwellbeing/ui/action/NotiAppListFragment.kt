@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentNotiAppListBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 
 class NotiAppListFragment : Fragment() {
     private var _binding: FragmentNotiAppListBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = NotiAppListFragmentDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,8 +23,12 @@ class NotiAppListFragment : Fragment() {
     ): View? {
         _binding = FragmentNotiAppListBinding.inflate(inflater, container, false)
 
-        binding.beforeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiAppListFragment_to_notiEditFragment) }
-        binding.completeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiAppListFragment_to_notiEditFragment) }
+        binding.beforeBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotiEditFragment())
+        }
+        binding.completeBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotiEditFragment())
+        }
 
         return binding.root
     }

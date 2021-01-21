@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentActionEditBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 
 class ActionEditFragment : Fragment() {
     private var _binding: FragmentActionEditBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = ActionEditFragmentDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,12 +23,12 @@ class ActionEditFragment : Fragment() {
     ): View? {
         _binding = FragmentActionEditBinding.inflate(inflater, container, false)
 
-        binding.cancelBtn.setOnClickListener { findNavController().navigate(R.id.action_global_actionFragment) }
+        binding.cancelBtn.setOnClickListener { findNavController().navigateSafe(directions.actionGlobalActionFragment()) }
 
-        binding.appTimeBtn.setOnClickListener { findNavController().navigate(R.id.action_actionEditFragment_to_appListConfirmFragment) }
-        binding.notificationBtn.setOnClickListener { findNavController().navigate(R.id.action_actionEditFragment_to_notiEditFragment) }
-        binding.dndBtn.setOnClickListener { findNavController().navigate(R.id.action_actionEditFragment_to_dndDialog) }
-        binding.ringerBtn.setOnClickListener { findNavController().navigate(R.id.action_actionEditFragment_to_ringerDialog) }
+        binding.appTimeBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToAppListConfirmFragment()) }
+        binding.notificationBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToNotiEditFragment()) }
+        binding.dndBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToDndDialog()) }
+        binding.ringerBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToRingerDialog()) }
 
         return binding.root
     }

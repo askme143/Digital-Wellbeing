@@ -8,10 +8,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.DialogNotiKeywordBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 
 class NotiKeywordDialog : DialogFragment() {
     private var _binding: DialogNotiKeywordBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = NotiKeywordDialogDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,8 +23,12 @@ class NotiKeywordDialog : DialogFragment() {
     ): View? {
         _binding = DialogNotiKeywordBinding.inflate(inflater, container, false)
 
-        binding.cancelBtn.setOnClickListener { findNavController().navigate(R.id.action_notiKeywordDialog_to_notiEditFragment) }
-        binding.completeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiKeywordDialog_to_notiEditFragment) }
+        binding.cancelBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotiEditFragment())
+        }
+        binding.completeBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotiEditFragment())
+        }
 
         return binding.root
     }

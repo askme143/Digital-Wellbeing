@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentTriggerEditBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 
 class TriggerEditFragment : Fragment() {
     private var _binding: FragmentTriggerEditBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = TriggerEditFragmentDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,10 +25,10 @@ class TriggerEditFragment : Fragment() {
         _binding = FragmentTriggerEditBinding.inflate(inflater, container, false)
 
         binding.cancelBtn.setOnClickListener { findNavController().navigate(R.id.action_global_triggerFragment) }
-        
-        binding.locationBtn.setOnClickListener { findNavController().navigate(R.id.action_triggerEditFragment_to_locationTriggerFragment) }
-        binding.timeBtn.setOnClickListener { findNavController().navigate(R.id.action_triggerEditFragment_to_timeTriggerDialog) }
-        binding.activityBtn.setOnClickListener { findNavController().navigate(R.id.action_triggerEditFragment_to_activityTriggerDialog) }
+
+        binding.locationBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerEditFragmentToLocationTriggerFragment()) }
+        binding.timeBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerEditFragmentToTimeTriggerDialog()) }
+        binding.activityBtn.setOnClickListener { findNavController().navigateSafe(directions.actionTriggerEditFragmentToActivityTriggerDialog()) }
 
         return binding.root
     }

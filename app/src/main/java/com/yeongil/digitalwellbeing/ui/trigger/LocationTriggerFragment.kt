@@ -23,6 +23,7 @@ import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.databinding.FragmentLocationTriggerBinding
 import com.yeongil.digitalwellbeing.utils.NetworkStatus
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModel.LocationTriggerViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
@@ -30,6 +31,8 @@ import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentLocationTriggerBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = LocationTriggerFragmentDirections
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
@@ -107,13 +110,16 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
                 locationTriggerViewModel.latLng.value = it
             }
 
-            binding.beforeBtn.setOnClickListener { findNavController().navigate(R.id.action_locationTriggerFragment_to_triggerEditFragment) }
+            binding.beforeBtn.setOnClickListener {
+                findNavController().navigateSafe(
+                    directions.actionLocationTriggerFragmentToTriggerEditFragment()
+                )
+            }
             binding.completeBtn.setOnClickListener {
                 locationTriggerViewModel.locationTrigger.value?.let {
                     ruleEditViewModel.addLocationTrigger(it)
-
                 }
-                findNavController().navigate(R.id.action_global_triggerFragment)
+                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             }
         } else {
             map.setOnMapLongClickListener {

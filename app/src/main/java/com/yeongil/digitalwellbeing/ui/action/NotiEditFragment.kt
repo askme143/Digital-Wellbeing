@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentNotiEditBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 
 class NotiEditFragment : Fragment() {
     private var _binding: FragmentNotiEditBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = NotiEditFragmentDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,10 +23,18 @@ class NotiEditFragment : Fragment() {
     ): View? {
         _binding = FragmentNotiEditBinding.inflate(inflater, container, false)
 
-        binding.addAppBtn.setOnClickListener { findNavController().navigate(R.id.action_notiEditFragment_to_notiAppListFragment) }
-        binding.addKeywordBtn.setOnClickListener { findNavController().navigate(R.id.action_notiEditFragment_to_notiKeywordDialog) }
-        binding.beforeBtn.setOnClickListener { findNavController().navigate(R.id.action_notiEditFragment_to_actionEditFragment) }
-        binding.completeBtn.setOnClickListener { findNavController().navigate(R.id.action_global_actionFragment) }
+        binding.addAppBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotiEditFragmentToNotiAppListFragment())
+        }
+        binding.addKeywordBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotiEditFragmentToNotiKeywordDialog())
+        }
+        binding.beforeBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotiEditFragmentToActionEditFragment())
+        }
+        binding.completeBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionGlobalActionFragment())
+        }
 
         return binding.root
     }

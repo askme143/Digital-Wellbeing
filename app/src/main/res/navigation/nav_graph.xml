@@ -44,8 +44,8 @@
             android:id="@+id/action_actionFragment_to_confirmFragment"
             app:destination="@id/confirmFragment" />
         <action
-            android:id="@+id/action_actionFragment_to_navigation"
-            app:destination="@id/navigation" />
+            android:id="@+id/action_actionFragment_to_actionNestedGraph"
+            app:destination="@id/actionNestedGraph" />
     </fragment>
     <fragment
         android:id="@+id/confirmFragment"
@@ -140,7 +140,7 @@
         </dialog>
     </navigation>
     <navigation
-        android:id="@+id/navigation"
+        android:id="@+id/actionNestedGraph"
         app:startDestination="@id/actionEditFragment">
         <fragment
             android:id="@+id/actionEditFragment"

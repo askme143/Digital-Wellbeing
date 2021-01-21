@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentConfirmBinding
+import com.yeongil.digitalwellbeing.utils.navigateSafe
 
 class ConfirmFragment : Fragment() {
     private var _binding: FragmentConfirmBinding? = null
     private val binding get() = _binding!!
+
+    private val directions = ConfirmFragmentDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,10 +24,11 @@ class ConfirmFragment : Fragment() {
         _binding = FragmentConfirmBinding.inflate(inflater, container, false)
 
         binding.addBtn.setOnClickListener { }
-        binding.beforeBtn.setOnClickListener { findNavController().navigate(R.id.action_confirmFragment_to_actionFragment) }
+        binding.beforeBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionConfirmFragmentToActionFragment())
+        }
         binding.nextBtn.setOnClickListener {
-            it.setOnClickListener(null)
-            findNavController().navigate(R.id.action_confirmFragment_to_confirmDialog)
+            findNavController().navigateSafe(directions.actionConfirmFragmentToConfirmDialog())
         }
 
         return binding.root
