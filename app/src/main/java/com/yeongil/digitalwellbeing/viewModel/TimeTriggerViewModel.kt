@@ -1,42 +1,40 @@
 package com.yeongil.digitalwellbeing.viewModel
 
-import android.util.Log
-import androidx.lifecycle.*
-import com.yeongil.digitalwellbeing.data.dto.rule.Rule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.liveData
 import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import java.util.*
-import kotlin.coroutines.coroutineContext
-import kotlin.math.min
 
 class TimeTriggerViewModel : ViewModel() {
     private var rid = TEMPORAL_RID
 
-    val startPickerVisible = MutableLiveData<Boolean>(true)
+    val startPickerVisible = MutableLiveData(true)
 
-    val startPickerHour = MutableLiveData<Int>(0)
-    val startPickerMin = MutableLiveData<Int>(0)
-    val endPickerHour = MutableLiveData<Int>(0)
-    val endPickerMin = MutableLiveData<Int>(0)
+    val startPickerHour = MutableLiveData(0)
+    val startPickerMin = MutableLiveData(0)
+    val endPickerHour = MutableLiveData(0)
+    val endPickerMin = MutableLiveData(0)
 
-    val repeatDay = (1..10).map { MutableLiveData<Boolean>(false) }
+    val repeatDay = (1..10).map { MutableLiveData(false) }
 
-    private val startTimeInMinutes = liveData<Int> {
+    private val startTimeInMinutes = liveData {
         startPickerHour.asFlow()
             .combine(startPickerMin.asFlow()) { hour, min -> hour * 60 + min }
             .collect { emit(it) }
     }
-    private val endTimeInMinutes = liveData<Int> {
+    private val endTimeInMinutes = liveData {
         endPickerHour.asFlow()
             .combine(endPickerMin.asFlow()) { hour, min -> hour * 60 + min }
             .collect { emit(it) }
     }
 
-    val timeText = liveData<String> {
+    val timeText = liveData {
         startTimeInMinutes.asFlow().combine(endTimeInMinutes.asFlow()) { start, end ->
             startEndMinutesToString(start, end)
         }.collect { emit(it) }

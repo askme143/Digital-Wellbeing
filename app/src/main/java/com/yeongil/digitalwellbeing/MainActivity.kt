@@ -1,11 +1,8 @@
 package com.yeongil.digitalwellbeing
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.appcompat.app.AppCompatActivity
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.data.dto.action.*
 import com.yeongil.digitalwellbeing.data.dto.rule.Rule
@@ -13,7 +10,10 @@ import com.yeongil.digitalwellbeing.data.dto.rule.RuleInfo
 import com.yeongil.digitalwellbeing.data.dto.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.CoroutineContext

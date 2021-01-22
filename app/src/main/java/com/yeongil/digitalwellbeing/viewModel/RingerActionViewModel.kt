@@ -12,7 +12,7 @@ class RingerActionViewModel : ViewModel() {
     val constRing = RING
     val constSilent = SILENT
 
-    val selectedMode = MutableLiveData<Int>(constVibrate)
+    val selectedMode = MutableLiveData(constVibrate)
 
     fun init(rid: Int) {
         this.rid = rid

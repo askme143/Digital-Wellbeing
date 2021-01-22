@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentNotiAppListBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 
@@ -20,7 +19,7 @@ class NotiAppListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNotiAppListBinding.inflate(inflater, container, false)
 
         binding.beforeBtn.setOnClickListener {

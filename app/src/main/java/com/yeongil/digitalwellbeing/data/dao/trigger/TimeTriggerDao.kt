@@ -2,7 +2,6 @@ package com.yeongil.digitalwellbeing.data.dao.trigger
 
 import androidx.room.*
 import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TimeTriggerDao {

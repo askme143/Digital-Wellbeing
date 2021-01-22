@@ -32,7 +32,7 @@ class RuleEditViewModel(
         null
     )
     var isNewRule: Boolean = true
-    val editingRule = MutableLiveData<Rule>(emptyRule)
+    val editingRule = MutableLiveData(emptyRule)
 
     private val _triggerItemList = MutableLiveData<List<RecyclerItem>>()
     val triggerItemList: LiveData<List<RecyclerItem>> get() = _triggerItemList

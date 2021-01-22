@@ -15,7 +15,7 @@ class Converters {
 
     @TypeConverter
     fun fromStringToAppList(value: String): List<String> {
-        return Json.decodeFromString<List<String>>(value)
+        return Json.decodeFromString(value)
     }
 
     @TypeConverter
@@ -25,7 +25,7 @@ class Converters {
 
     @TypeConverter
     fun fromStringToKeywordEntryList(value: String): List<KeywordEntry> {
-        return Json.decodeFromString<List<KeywordEntry>>(value)
+        return Json.decodeFromString(value)
     }
 
     @TypeConverter
@@ -35,7 +35,7 @@ class Converters {
 
     @TypeConverter
     fun fromStringToAppBlockEntryList(value: String): List<AppBlockEntry> {
-        return Json.decodeFromString<List<AppBlockEntry>>(value)
+        return Json.decodeFromString(value)
     }
 
     @TypeConverter

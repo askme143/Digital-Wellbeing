@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.DialogNotiKeywordBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 
@@ -20,7 +19,7 @@ class NotiKeywordDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogNotiKeywordBinding.inflate(inflater, container, false)
 
         binding.cancelBtn.setOnClickListener {

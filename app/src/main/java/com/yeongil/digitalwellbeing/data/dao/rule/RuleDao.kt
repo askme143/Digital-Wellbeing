@@ -1,14 +1,14 @@
 package com.yeongil.digitalwellbeing.data.dao.rule
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
 import com.yeongil.digitalwellbeing.data.dao.action.*
 import com.yeongil.digitalwellbeing.data.dao.trigger.ActivityTriggerDao
 import com.yeongil.digitalwellbeing.data.dao.trigger.LocationTriggerDao
 import com.yeongil.digitalwellbeing.data.dao.trigger.TimeTriggerDao
 import com.yeongil.digitalwellbeing.data.dao.trigger.TriggerDao
 import com.yeongil.digitalwellbeing.data.dto.rule.Rule
-import com.yeongil.digitalwellbeing.data.dto.trigger.Trigger
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RuleDao :

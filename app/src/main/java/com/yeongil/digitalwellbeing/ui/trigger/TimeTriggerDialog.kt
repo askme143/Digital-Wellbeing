@@ -9,9 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
-import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.databinding.DialogTimeTriggerBinding
-import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModel.TimeTriggerViewModel
@@ -37,7 +35,7 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogTimeTriggerBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = timeTriggerViewModel

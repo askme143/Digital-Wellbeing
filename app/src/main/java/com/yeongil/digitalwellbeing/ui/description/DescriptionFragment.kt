@@ -15,7 +15,7 @@ class DescriptionFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDescriptionBinding.inflate(inflater, container, false)
 
         return binding.root

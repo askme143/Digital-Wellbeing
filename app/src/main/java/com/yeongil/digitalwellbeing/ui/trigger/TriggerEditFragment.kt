@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentTriggerEditBinding
@@ -21,7 +20,7 @@ class TriggerEditFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTriggerEditBinding.inflate(inflater, container, false)
 
         binding.cancelBtn.setOnClickListener { findNavController().navigate(R.id.action_global_triggerFragment) }

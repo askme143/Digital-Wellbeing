@@ -1,7 +1,5 @@
 package com.yeongil.digitalwellbeing.utils
 
-import java.lang.IllegalArgumentException
-
 object TimeUtils {
     private fun minutesToString(timeInMinutes: Int): String {
         val hour = timeInMinutes / 60
