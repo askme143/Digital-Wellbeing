@@ -238,7 +238,7 @@ class RuleEditViewModel(
             override val layoutId = R.layout.item_action
 
             override fun delete(recyclerItem: RecyclerItem) {
-                _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
+                _actionItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(appBlockAction = null)
             }
 
@@ -254,7 +254,7 @@ class RuleEditViewModel(
             override val layoutId = R.layout.item_action
 
             override fun delete(recyclerItem: RecyclerItem) {
-                _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
+                _actionItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(notificationAction = null)
             }
 
@@ -270,7 +270,7 @@ class RuleEditViewModel(
             override val layoutId = R.layout.item_action
 
             override fun delete(recyclerItem: RecyclerItem) {
-                _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
+                _actionItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(dndAction = null)
             }
 
@@ -286,7 +286,7 @@ class RuleEditViewModel(
             override val layoutId = R.layout.item_action
 
             override fun delete(recyclerItem: RecyclerItem) {
-                _triggerItemList.value = triggerItemList.value?.minus(recyclerItem)
+                _actionItemList.value = triggerItemList.value?.minus(recyclerItem)
                 editingRule.value = editingRule.value?.copy(ringerAction = null)
             }
 
