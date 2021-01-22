@@ -282,7 +282,12 @@ class RuleEditViewModel(
     private fun ringerActionRuleItem(ringerAction: RingerAction): RuleMemberItem =
         object : RuleMemberItem {
             override val title = RINGER_ACTION_TITLE
-            override val description: String = ringerAction.ringerMode.toString()   //TODO: Mapping
+            override val description: String = when (ringerAction.ringerMode) {
+                VIBRATE -> "진동 모드로 변경"
+                RING -> "소리 모드로 변경"
+                SILENT -> "무음 모드로 변경"
+                else -> "ERROR"
+            }
             override val layoutId = R.layout.item_action
 
             override fun delete(recyclerItem: RecyclerItem) {
