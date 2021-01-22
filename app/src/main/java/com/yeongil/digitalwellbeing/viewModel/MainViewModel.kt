@@ -13,6 +13,7 @@ class MainViewModel(
         ruleDao.getRuleInfoListFlow().collect {
             it.map { ruleInfo ->
                 RuleInfoItemViewModel(
+                    ruleInfo.rid.toString(),
                     ruleInfo,
                     ruleDao,
                     viewModelScope

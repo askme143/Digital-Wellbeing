@@ -6,21 +6,21 @@
 
         <variable
             name="itemVM"
-            type="com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleMemberItemViewModel" />
+            type="com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_round_corner"
-        android:onClick="@{() -> itemVM.onClickItem()}"
+        android:onClick="@{() -> itemVM.onClick()}"
         android:padding="20dp">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{itemVM.ruleMemberItem.title}"
+            android:text="@{itemVM.triggerActionItem.title}"
             android:textSize="30sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{itemVM.ruleMemberItem.description}"
+            android:text="@{itemVM.triggerActionItem.description}"
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />

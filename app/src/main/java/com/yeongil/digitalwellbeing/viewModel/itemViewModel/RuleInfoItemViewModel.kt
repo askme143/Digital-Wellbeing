@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class RuleInfoItemViewModel(
+    override val id: String,
     val ruleInfo: RuleInfo,
     private val ruleDao: RuleDao,
     private val coroutineScope: CoroutineScope
