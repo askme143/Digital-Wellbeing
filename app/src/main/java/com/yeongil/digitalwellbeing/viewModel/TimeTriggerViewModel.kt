@@ -42,8 +42,8 @@ class TimeTriggerViewModel : ViewModel() {
         }.collect { emit(it) }
     }
 
-    fun init() {
-        rid = TEMPORAL_RID
+    fun init(rid: Int) {
+        this.rid = rid
 
         val calendar = Calendar.getInstance()
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)

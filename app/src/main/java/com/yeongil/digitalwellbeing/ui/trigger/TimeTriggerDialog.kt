@@ -59,10 +59,11 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
+        val rid = ruleEditViewModel.editingRule.value!!.ruleInfo.rid
         val trigger = ruleEditViewModel.editingRule.value?.timeTrigger
 
         if (trigger != null) {
             timeTriggerViewModel.init(trigger)
-        } else timeTriggerViewModel.init()
+        } else timeTriggerViewModel.init(rid)
     }
 }

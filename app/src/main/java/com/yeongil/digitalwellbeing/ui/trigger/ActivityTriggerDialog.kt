@@ -61,10 +61,11 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
+        val rid = ruleEditViewModel.editingRule.value!!.ruleInfo.rid
         val trigger = ruleEditViewModel.editingRule.value?.activityTrigger
 
         if (trigger != null) {
             activityTriggerViewModel.init(trigger)
-        } else activityTriggerViewModel.init()
+        } else activityTriggerViewModel.init(rid)
     }
 }

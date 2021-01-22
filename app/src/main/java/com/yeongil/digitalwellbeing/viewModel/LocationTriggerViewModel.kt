@@ -38,10 +38,10 @@ class LocationTriggerViewModel : ViewModel() {
         }.collect { emit(it) }
     }
 
-    fun init(newLatLng: LatLng) {
+    fun init(newLatLng: LatLng, rid: Int) {
+        this.rid = rid
         progress.value = 0
         latLng.value = newLatLng
-        rid = TEMPORAL_RID
     }
 
     fun init(locationTrigger: LocationTrigger) {

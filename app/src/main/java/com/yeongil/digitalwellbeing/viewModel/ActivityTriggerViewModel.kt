@@ -17,8 +17,8 @@ class ActivityTriggerViewModel : ViewModel() {
 
     val selectedActivity = MutableLiveData<String?>()
 
-    fun init() {
-        rid = TEMPORAL_RID
+    fun init(rid: Int) {
+        this.rid = rid
         selectedActivity.value = DRIVE
     }
 
