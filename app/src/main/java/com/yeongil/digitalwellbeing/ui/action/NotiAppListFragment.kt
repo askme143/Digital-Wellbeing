@@ -24,10 +24,10 @@ class NotiAppListFragment : Fragment() {
         _binding = FragmentNotiAppListBinding.inflate(inflater, container, false)
 
         binding.beforeBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotiEditFragment())
+            findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotiEditFragment())
+            findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
 
         return binding.root

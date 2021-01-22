@@ -263,6 +263,7 @@ class RuleEditViewModel(
             }
         }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun dndActionRuleItem(dndAction: DndAction): RuleMemberItem =
         object : RuleMemberItem {
             override val title = DND_ACTION_TITLE

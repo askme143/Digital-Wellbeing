@@ -2,19 +2,15 @@ package com.yeongil.digitalwellbeing.ui.action
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.database.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogRingerBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.DndActionViewModel
 import com.yeongil.digitalwellbeing.viewModel.RingerActionViewModel
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
@@ -51,8 +47,6 @@ class RingerDialog : BottomSheetDialogFragment() {
                 findNavController().navigateSafe(directions.actionRingerDialogToActionEditFragment())
         }
         binding.completeBtn.setOnClickListener {
-            val action = ringerActionViewModel.getRingerAction()
-            Log.e("hello", action.ringerMode.toString())
             ruleEditViewModel.addRingerAction(ringerActionViewModel.getRingerAction())
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }

@@ -24,10 +24,10 @@ class NotiKeywordDialog : DialogFragment() {
         _binding = DialogNotiKeywordBinding.inflate(inflater, container, false)
 
         binding.cancelBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotiEditFragment())
+            findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotiEditFragment())
+            findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotificationActionFragment())
         }
 
         return binding.root

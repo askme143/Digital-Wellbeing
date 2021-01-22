@@ -25,8 +25,8 @@ class ActionEditFragment : Fragment() {
 
         binding.cancelBtn.setOnClickListener { findNavController().navigateSafe(directions.actionGlobalActionFragment()) }
 
-        binding.appTimeBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToAppListConfirmFragment()) }
-        binding.notificationBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToNotiEditFragment()) }
+        binding.appTimeBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToAppBlockActionFragment()) }
+        binding.notificationBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToNotificationActionFragment()) }
         binding.dndBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToDndDialog()) }
         binding.ringerBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToRingerDialog()) }
 

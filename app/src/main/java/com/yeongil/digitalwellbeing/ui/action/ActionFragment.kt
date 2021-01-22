@@ -40,9 +40,9 @@ class ActionFragment : Fragment() {
             event.getContentIfNotHandled()?.let {
                 when (it) {
                     APP_BLOCK_ACTION_TITLE ->
-                        findNavController().navigateSafe(directions.actionActionFragmentToAppListConfirmFragment())
+                        findNavController().navigateSafe(directions.actionActionFragmentToAppBlockActionFragment())
                     NOTIFICATION_ACTION_TITLE ->
-                        findNavController().navigateSafe(directions.actionActionFragmentToNotiEditFragment())
+                        findNavController().navigateSafe(directions.actionActionFragmentToNotificationActionFragment())
                     DND_ACTION_TITLE ->
                         findNavController().navigateSafe(directions.actionActionFragmentToDndDialog())
                     RINGER_ACTION_TITLE ->

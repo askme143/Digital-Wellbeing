@@ -7,30 +7,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.R
-import com.yeongil.digitalwellbeing.databinding.FragmentAppListConfirmBinding
+import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockListBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 
-class AppListConfirmFragment : Fragment() {
-    private var _binding: FragmentAppListConfirmBinding? = null
+class AppBlockListFragment : Fragment() {
+    private var _binding: FragmentAppBlockListBinding? = null
     private val binding get() = _binding!!
 
-    private val directions = AppListConfirmFragmentDirections
+    private val directions = AppBlockListFragmentDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAppListConfirmBinding.inflate(inflater, container, false)
+        _binding = FragmentAppBlockListBinding.inflate(inflater, container, false)
 
-        binding.addBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionAppListConfirmFragmentToAppListFragment())
-        }
         binding.beforeBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionAppListConfirmFragmentToActionEditFragment())
+            findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionGlobalActionFragment())
+            findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
 
         return binding.root

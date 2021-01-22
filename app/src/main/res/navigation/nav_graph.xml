@@ -66,11 +66,11 @@
             android:id="@+id/action_actionFragment_to_actionEditFragment"
             app:destination="@id/actionEditFragment" />
         <action
-            android:id="@+id/action_actionFragment_to_appListConfirmFragment"
-            app:destination="@id/appListConfirmFragment" />
+            android:id="@+id/action_actionFragment_to_appBlockActionFragment"
+            app:destination="@id/appBlockActionFragment" />
         <action
-            android:id="@+id/action_actionFragment_to_notiEditFragment"
-            app:destination="@id/notiEditFragment" />
+            android:id="@+id/action_actionFragment_to_notificationActionFragment"
+            app:destination="@id/notificationActionFragment" />
         <action
             android:id="@+id/action_actionFragment_to_ringerDialog"
             app:destination="@id/ringerDialog" />
@@ -199,11 +199,11 @@
         android:name="com.yeongil.digitalwellbeing.ui.action.ActionEditFragment"
         android:label="ActionEditFragment">
         <action
-            android:id="@+id/action_actionEditFragment_to_appListConfirmFragment"
-            app:destination="@id/appListConfirmFragment" />
+            android:id="@+id/action_actionEditFragment_to_appBlockActionFragment"
+            app:destination="@id/appBlockActionFragment" />
         <action
-            android:id="@+id/action_actionEditFragment_to_notiEditFragment"
-            app:destination="@id/notiEditFragment" />
+            android:id="@+id/action_actionEditFragment_to_notificationActionFragment"
+            app:destination="@id/notificationActionFragment" />
         <action
             android:id="@+id/action_actionEditFragment_to_dndDialog"
             app:destination="@id/dndDialog" />
@@ -212,24 +212,24 @@
             app:destination="@id/ringerDialog" />
     </fragment>
     <fragment
-        android:id="@+id/appListFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.AppListFragment"
-        android:label="AppListFragment">
+        android:id="@+id/appBlockListFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.action.AppBlockListFragment"
+        android:label="AppBlockListFragment">
         <action
-            android:id="@+id/action_appListFragment_to_appListConfirmFragment"
-            app:destination="@id/appListConfirmFragment"
-            app:popUpTo="@+id/appListConfirmFragment"
+            android:id="@+id/action_appBlockListFragment_to_appBlockActionFragment"
+            app:destination="@id/appBlockActionFragment"
+            app:popUpTo="@+id/appBlockActionFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/appListConfirmFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.AppListConfirmFragment"
-        android:label="AppListEditFragment">
+        android:id="@+id/appBlockActionFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.action.AppBlockActionFragment"
+        android:label="AppBlockActionFragment">
         <action
-            android:id="@+id/action_appListConfirmFragment_to_appListFragment"
-            app:destination="@id/appListFragment" />
+            android:id="@+id/action_appBlockActionFragment_to_appBlockListFragment"
+            app:destination="@id/appBlockListFragment" />
         <action
-            android:id="@+id/action_appListConfirmFragment_to_actionEditFragment"
+            android:id="@+id/action_appBlockActionFragment_to_actionEditFragment"
             app:destination="@id/actionEditFragment"
             app:popUpTo="@+id/actionEditFragment"
             app:popUpToInclusive="true" />
@@ -239,9 +239,9 @@
         android:name="com.yeongil.digitalwellbeing.ui.action.NotiAppListFragment"
         android:label="NotiAppListFragment">
         <action
-            android:id="@+id/action_notiAppListFragment_to_notiEditFragment"
-            app:destination="@id/notiEditFragment"
-            app:popUpTo="@+id/notiEditFragment"
+            android:id="@+id/action_notiAppListFragment_to_notificationActionFragment"
+            app:destination="@id/notificationActionFragment"
+            app:popUpTo="@+id/notificationActionFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <dialog
@@ -249,23 +249,23 @@
         android:name="com.yeongil.digitalwellbeing.ui.action.NotiKeywordDialog"
         android:label="NotiKeywordDialog">
         <action
-            android:id="@+id/action_notiKeywordDialog_to_notiEditFragment"
-            app:destination="@id/notiEditFragment"
-            app:popUpTo="@+id/notiEditFragment"
+            android:id="@+id/action_notiKeywordDialog_to_notificationActionFragment"
+            app:destination="@id/notificationActionFragment"
+            app:popUpTo="@+id/notificationActionFragment"
             app:popUpToInclusive="true" />
     </dialog>
     <fragment
-        android:id="@+id/notiEditFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.NotiEditFragment"
-        android:label="NotiEditFragment">
+        android:id="@+id/notificationActionFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.action.NotificationActionFragment"
+        android:label="NotificationActionFragment">
         <action
-            android:id="@+id/action_notiEditFragment_to_notiAppListFragment"
+            android:id="@+id/action_notificationActionFragment_to_notiAppListFragment"
             app:destination="@id/notiAppListFragment" />
         <action
-            android:id="@+id/action_notiEditFragment_to_notiKeywordDialog"
+            android:id="@+id/action_notificationActionFragment_to_notiKeywordDialog"
             app:destination="@id/notiKeywordDialog" />
         <action
-            android:id="@+id/action_notiEditFragment_to_actionEditFragment"
+            android:id="@+id/action_notificationActionFragment_to_actionEditFragment"
             app:destination="@id/actionEditFragment"
             app:popUpTo="@+id/actionEditFragment"
             app:popUpToInclusive="true" />
