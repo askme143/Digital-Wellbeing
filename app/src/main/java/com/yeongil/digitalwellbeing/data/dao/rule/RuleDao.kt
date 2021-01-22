@@ -7,15 +7,13 @@ import com.yeongil.digitalwellbeing.data.dao.action.*
 import com.yeongil.digitalwellbeing.data.dao.trigger.ActivityTriggerDao
 import com.yeongil.digitalwellbeing.data.dao.trigger.LocationTriggerDao
 import com.yeongil.digitalwellbeing.data.dao.trigger.TimeTriggerDao
-import com.yeongil.digitalwellbeing.data.dao.trigger.TriggerDao
 import com.yeongil.digitalwellbeing.data.dto.rule.Rule
 
 @Dao
 interface RuleDao :
     RuleInfoDao,
     LocationTriggerDao, TimeTriggerDao, ActivityTriggerDao,
-    AppBlockActionDao, NotificationActionDao, DndActionDao, RingerActionDao,
-    TriggerDao, ActionDao {
+    AppBlockActionDao, NotificationActionDao, DndActionDao, RingerActionDao {
     @Transaction
     suspend fun insertRule(rule: Rule) {
         insertRuleInfo(rule.ruleInfo)
