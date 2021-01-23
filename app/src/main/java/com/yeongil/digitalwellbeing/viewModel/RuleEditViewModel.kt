@@ -1,15 +1,15 @@
 package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.*
-import com.yeongil.digitalwellbeing.data.dto.action.AppBlockAction
-import com.yeongil.digitalwellbeing.data.dto.action.DndAction
-import com.yeongil.digitalwellbeing.data.dto.action.NotificationAction
-import com.yeongil.digitalwellbeing.data.dto.action.RingerAction
-import com.yeongil.digitalwellbeing.data.dto.rule.Rule
-import com.yeongil.digitalwellbeing.data.dto.rule.RuleInfo
-import com.yeongil.digitalwellbeing.data.dto.trigger.ActivityTrigger
-import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
-import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.AppBlockAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.DndAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.RingerAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.Rule
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleInfo
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.*
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItem
@@ -264,5 +264,23 @@ class RuleEditViewModel(
             actionItemList.value?.filterNot {
                 (it.viewModel is RecyclerItemViewModel && it.viewModel.id == id)
             }
+
+        when (id) {
+            LOCATION_TRIGGER_TITLE ->
+                editingRule.value = editingRule.value!!.copy(locationTrigger = null)
+            TIME_TRIGGER_TITLE ->
+                editingRule.value = editingRule.value!!.copy(timeTrigger = null)
+            ACTIVITY_TRIGGER_TITLE ->
+                editingRule.value = editingRule.value!!.copy(activityTrigger = null)
+
+            APP_BLOCK_ACTION_TITLE ->
+                editingRule.value = editingRule.value!!.copy(appBlockAction = null)
+            NOTIFICATION_ACTION_TITLE ->
+                editingRule.value = editingRule.value!!.copy(notificationAction = null)
+            DND_ACTION_TITLE ->
+                editingRule.value = editingRule.value!!.copy(dndAction = null)
+            RINGER_ACTION_TITLE ->
+                editingRule.value = editingRule.value!!.copy(ringerAction = null)
+        }
     }
 }

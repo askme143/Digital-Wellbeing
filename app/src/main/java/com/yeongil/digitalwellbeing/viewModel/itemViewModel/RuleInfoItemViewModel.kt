@@ -2,8 +2,8 @@ package com.yeongil.digitalwellbeing.viewModel.itemViewModel
 
 import com.yeongil.digitalwellbeing.BR
 import com.yeongil.digitalwellbeing.R
-import com.yeongil.digitalwellbeing.data.dao.rule.RuleDao
-import com.yeongil.digitalwellbeing.data.dto.rule.RuleInfo
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.rule.RuleDao
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleInfo
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
 import kotlinx.coroutines.CoroutineScope

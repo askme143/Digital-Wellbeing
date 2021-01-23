@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.yeongil.digitalwellbeing.data.database.RuleDatabase
+import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogActivityTriggerBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.ActivityTriggerViewModel

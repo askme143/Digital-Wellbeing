@@ -1,7 +1,7 @@
 package com.yeongil.digitalwellbeing.repository
 
-import com.yeongil.digitalwellbeing.data.dao.rule.RuleDao
-import com.yeongil.digitalwellbeing.data.dto.rule.Rule
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.rule.RuleDao
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.Rule
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 import com.yeongil.digitalwellbeing.utils.SequenceNumber
 import java.lang.IllegalArgumentException

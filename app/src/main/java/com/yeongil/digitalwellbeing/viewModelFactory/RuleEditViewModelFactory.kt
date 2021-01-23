@@ -3,7 +3,7 @@ package com.yeongil.digitalwellbeing.viewModelFactory
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yeongil.digitalwellbeing.data.dao.rule.RuleDao
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.rule.RuleDao
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.SequenceNumber
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel

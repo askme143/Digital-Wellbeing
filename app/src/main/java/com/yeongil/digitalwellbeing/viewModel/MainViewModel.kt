@@ -1,7 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.*
-import com.yeongil.digitalwellbeing.data.dao.rule.RuleDao
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.rule.RuleDao
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleInfoItemViewModel
 import kotlinx.coroutines.flow.collect

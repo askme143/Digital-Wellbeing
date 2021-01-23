@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +20,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.yeongil.digitalwellbeing.R
-import com.yeongil.digitalwellbeing.data.database.RuleDatabase
-import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.databinding.FragmentLocationTriggerBinding
 import com.yeongil.digitalwellbeing.utils.NetworkStatus
 import com.yeongil.digitalwellbeing.utils.navigateSafe
@@ -87,8 +88,10 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         val trigger = ruleEditViewModel.editingRule.value?.locationTrigger
 
         if (trigger != null) {
+            Log.e("hello", "there is a pre-existing trigger")
             locationTriggerViewModel.init(trigger)
         } else {
+            Log.e("hello", "there is no pre-existing trigger")
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
                     locationTriggerViewModel.init(LatLng(it.latitude, it.longitude), rid)

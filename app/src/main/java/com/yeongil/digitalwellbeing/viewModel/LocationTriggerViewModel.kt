@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
 import com.google.android.gms.maps.model.LatLng
-import com.yeongil.digitalwellbeing.data.dto.trigger.LocationTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine

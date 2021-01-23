@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
-import com.yeongil.digitalwellbeing.data.dto.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import kotlinx.coroutines.flow.collect

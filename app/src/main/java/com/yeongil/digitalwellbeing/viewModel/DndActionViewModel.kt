@@ -1,7 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.data.dto.action.DndAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.DndAction
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 
 class DndActionViewModel : ViewModel() {

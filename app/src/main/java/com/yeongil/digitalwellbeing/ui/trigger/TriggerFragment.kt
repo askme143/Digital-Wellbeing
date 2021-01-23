@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.data.database.RuleDatabase
+import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentTriggerBinding
 import com.yeongil.digitalwellbeing.utils.ACTIVITY_TRIGGER_TITLE
 import com.yeongil.digitalwellbeing.utils.LOCATION_TRIGGER_TITLE

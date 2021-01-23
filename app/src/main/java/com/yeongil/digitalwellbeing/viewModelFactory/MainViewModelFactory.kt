@@ -2,7 +2,7 @@ package com.yeongil.digitalwellbeing.viewModelFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yeongil.digitalwellbeing.data.dao.rule.RuleDao
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.rule.RuleDao
 import com.yeongil.digitalwellbeing.viewModel.MainViewModel
 
 @Suppress("UNCHECKED_CAST")

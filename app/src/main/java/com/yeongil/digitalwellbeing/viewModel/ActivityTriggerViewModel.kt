@@ -2,7 +2,7 @@ package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.data.dto.trigger.ActivityTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.utils.BICYCLE
 import com.yeongil.digitalwellbeing.utils.DRIVE
 import com.yeongil.digitalwellbeing.utils.STILL
