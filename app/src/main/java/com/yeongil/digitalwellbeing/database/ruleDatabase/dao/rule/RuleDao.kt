@@ -23,7 +23,7 @@ interface RuleDao :
         ruleDto.activityTriggerDto?.let { insertActivityTrigger(it) }
 
         ruleDto.appBlockActionDto?.let { insertAppBlockAction(it) }
-        ruleDto.notificationAction?.let { insertNotificationAction(it) }
+        ruleDto.notificationActionDto?.let { insertNotificationAction(it) }
         ruleDto.dndActionDto?.let { insertDndAction(it) }
         ruleDto.ringerActionDto?.let { insertRingerAction(it) }
     }
@@ -37,7 +37,7 @@ interface RuleDao :
         ruleDto.activityTriggerDto?.let { updateActivityTrigger(it) }
 
         ruleDto.appBlockActionDto?.let { updateAppBlockAction(it) }
-        ruleDto.notificationAction?.let { updateNotificationAction(it) }
+        ruleDto.notificationActionDto?.let { updateNotificationAction(it) }
         ruleDto.dndActionDto?.let { updateDndAction(it) }
         ruleDto.ringerActionDto?.let { updateRingerAction(it) }
     }

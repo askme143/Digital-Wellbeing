@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val sampleActivityTrigger = ActivityTriggerDto(1, "Driving")
 
             val sampleAppBlockAction = AppBlockActionDto(1, listOf(AppBlockEntryDto("yotube", 0)), 1)
-            val sampleNotificationAction = NotificationAction(
+            val sampleNotificationAction = NotificationActionDto(
                 1,
                 listOf("youtube"),
                 listOf(

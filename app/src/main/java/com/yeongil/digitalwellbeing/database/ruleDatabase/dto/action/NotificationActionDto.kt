@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "notification_actions")
-data class NotificationAction(
+data class NotificationActionDto(
     @PrimaryKey val rid: Int,
     @ColumnInfo(name = "app_list") val appList: List<String>,
     @ColumnInfo(name = "keyword_list") val keywordList: List<KeywordEntryDto>,

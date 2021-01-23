@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.AppBlockActionDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.DndActionDto
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationActionDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.RingerActionDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTriggerDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTriggerDto
@@ -39,7 +39,7 @@ data class RuleDto(
         parentColumn = "rid",
         entityColumn = "rid",
     )
-    val notificationAction: NotificationAction?,
+    val notificationActionDto: NotificationActionDto?,
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",

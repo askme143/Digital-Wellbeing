@@ -1,7 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationActionDto
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 
 class NotificationActionViewModel : ViewModel() {
@@ -10,6 +10,6 @@ class NotificationActionViewModel : ViewModel() {
     fun init(rid: Int) {
         this.rid = rid
     }
-    fun init(notificationAction: NotificationAction) {
+    fun init(notificationActionDto: NotificationActionDto) {
     }
 }

@@ -3,7 +3,7 @@ package com.yeongil.digitalwellbeing.viewModel
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.AppBlockActionDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.DndActionDto
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationActionDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.RingerActionDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleInfoDto
@@ -77,7 +77,7 @@ class RuleEditViewModel(
             rule.activityTriggerDto?.let { addActivityTrigger(it) }
 
             rule.appBlockActionDto?.let { addAppBlockAction(it) }
-            rule.notificationAction?.let { addNotificationAction(it) }
+            rule.notificationActionDto?.let { addNotificationAction(it) }
             rule.dndActionDto?.let { addDndAction(it) }
             rule.ringerActionDto?.let { addRingerAction(it) }
         }
@@ -147,16 +147,16 @@ class RuleEditViewModel(
         }?.plus(newItem) ?: listOf(newItem)
     }
 
-    fun addNotificationAction(notificationAction: NotificationAction) {
+    fun addNotificationAction(notificationActionDto: NotificationActionDto) {
         val newItem =
             TriggerActionItemViewModel(
                 NOTIFICATION_ACTION_TITLE,
-                notificationActionRuleItem(notificationAction),
+                notificationActionRuleItem(notificationActionDto),
                 onClickItem,
                 onClickItemDelete
             ).toRecyclerItem()
 
-        editingRule.value = editingRule.value!!.copy(notificationAction = notificationAction)
+        editingRule.value = editingRule.value!!.copy(notificationActionDto = notificationActionDto)
         _actionItemList.value = _triggerItemList.value?.filterNot {
             val vm = it.viewModel
             vm is TriggerActionItemViewModel && vm.triggerActionItem.title == NOTIFICATION_ACTION_TITLE
@@ -227,10 +227,10 @@ class RuleEditViewModel(
             }
         }
 
-    private fun notificationActionRuleItem(notificationAction: NotificationAction): TriggerActionItem =
+    private fun notificationActionRuleItem(notificationActionDto: NotificationActionDto): TriggerActionItem =
         object : TriggerActionItem {
             override val title = NOTIFICATION_ACTION_TITLE
-            override val description = "${notificationAction.appList.joinToString("/")} 알림 숨김"
+            override val description = "${notificationActionDto.appList.joinToString("/")} 알림 숨김"
         }
 
     @Suppress("UNUSED_PARAMETER")
@@ -276,7 +276,7 @@ class RuleEditViewModel(
             APP_BLOCK_ACTION_TITLE ->
                 editingRule.value = editingRule.value!!.copy(appBlockActionDto = null)
             NOTIFICATION_ACTION_TITLE ->
-                editingRule.value = editingRule.value!!.copy(notificationAction = null)
+                editingRule.value = editingRule.value!!.copy(notificationActionDto = null)
             DND_ACTION_TITLE ->
                 editingRule.value = editingRule.value!!.copy(dndActionDto = null)
             RINGER_ACTION_TITLE ->

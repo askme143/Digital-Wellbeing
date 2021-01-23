@@ -20,7 +20,7 @@ class RuleRepository(
             ruleDto.timeTriggerDto?.copy(rid = rid),
             ruleDto.activityTriggerDto?.copy(rid = rid),
             ruleDto.appBlockActionDto?.copy(rid = rid),
-            ruleDto.notificationAction?.copy(rid = rid),
+            ruleDto.notificationActionDto?.copy(rid = rid),
             ruleDto.dndActionDto?.copy(rid = rid),
             ruleDto.ringerActionDto?.copy(rid = rid)
         )
