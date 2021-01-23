@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "dnd_actions")
-data class DndAction(
+data class DndActionDto(
     @PrimaryKey val rid: Int
 )

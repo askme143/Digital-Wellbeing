@@ -21,7 +21,7 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
 
     private val directions = TimeTriggerDialogDirections
     private val editing by lazy {
-        ruleEditViewModel.editingRule.value?.timeTrigger != null
+        ruleEditViewModel.editingRule.value?.timeTriggerDto != null
     }
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
@@ -57,8 +57,8 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfo.rid
-        val trigger = ruleEditViewModel.editingRule.value?.timeTrigger
+        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
+        val trigger = ruleEditViewModel.editingRule.value?.timeTriggerDto
 
         if (trigger != null) {
             timeTriggerViewModel.init(trigger)

@@ -40,7 +40,7 @@ class RingerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            val editing = ruleEditViewModel.editingRule.value!!.ringerAction != null
+            val editing = ruleEditViewModel.editingRule.value!!.ringerActionDto != null
             if (editing)
                 findNavController().navigateSafe(directions.actionGlobalActionFragment())
             else
@@ -55,8 +55,8 @@ class RingerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfo.rid
-        val action = ruleEditViewModel.editingRule.value?.ringerAction
+        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
+        val action = ruleEditViewModel.editingRule.value?.ringerActionDto
 
         if (action != null) {
             ringerActionViewModel.init(action)

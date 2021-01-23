@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "ringer_actions")
-data class RingerAction(
+data class RingerActionDto(
     @PrimaryKey val rid: Int,
     @ColumnInfo val ringerMode: Int,
 )

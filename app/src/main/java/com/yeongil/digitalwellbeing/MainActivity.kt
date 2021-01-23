@@ -5,11 +5,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.*
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.Rule
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleInfo
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTrigger
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTrigger
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleInfoDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTriggerDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTriggerDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.TimeTriggerDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,25 +38,25 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val dao = RuleDatabase.getInstance(applicationContext).ruleDao()
             val prettyJson = Json { prettyPrint = true }
 
-            val sampleRuleInfo = RuleInfo(1, "sample", activated = false, notiOnTrigger = false)
-            val sampleLocationTrigger = LocationTrigger(1, 1.0, 1.0, 1, "sample")
+            val sampleRuleInfo = RuleInfoDto(1, "sample", activated = false, notiOnTrigger = false)
+            val sampleLocationTrigger = LocationTriggerDto(1, 1.0, 1.0, 1, "sample")
             val sampleTimeTrigger =
-                TimeTrigger(1, 1, 1, listOf(false, false, false, false, false, false, true))
-            val sampleActivityTrigger = ActivityTrigger(1, "Driving")
+                TimeTriggerDto(1, 1, 1, listOf(false, false, false, false, false, false, true))
+            val sampleActivityTrigger = ActivityTriggerDto(1, "Driving")
 
-            val sampleAppBlockAction = AppBlockAction(1, listOf(AppBlockEntry("yotube", 0)), 1)
+            val sampleAppBlockAction = AppBlockActionDto(1, listOf(AppBlockEntryDto("yotube", 0)), 1)
             val sampleNotificationAction = NotificationAction(
                 1,
                 listOf("youtube"),
                 listOf(
-                    KeywordEntry("yeongil", true)
+                    KeywordEntryDto("yeongil", true)
                 ),
                 1
             )
-            val sampleDndAction = DndAction(1)
-            val sampleRingerAction = RingerAction(1, 1)
+            val sampleDndAction = DndActionDto(1)
+            val sampleRingerAction = RingerActionDto(1, 1)
 
-            val sampleRule = Rule(
+            val sampleRule = RuleDto(
                 sampleRuleInfo,
                 sampleLocationTrigger,
                 sampleTimeTrigger,
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val ruleList = dao.getRuleList()
             Log.d("json", prettyJson.encodeToString(ruleList[0]))
 
-            val sampleRuleInfo2 = RuleInfo(2, "sample", activated = false, notiOnTrigger = false)
+            val sampleRuleInfo2 = RuleInfoDto(2, "sample", activated = false, notiOnTrigger = false)
             dao.insertRuleInfo(sampleRuleInfo2)
         }
     }

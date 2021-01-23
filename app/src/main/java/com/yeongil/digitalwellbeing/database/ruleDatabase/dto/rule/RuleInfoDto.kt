@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "rule_info")
-data class RuleInfo(
+data class RuleInfoDto(
     @PrimaryKey val rid: Int,
     @ColumnInfo(name = "rule_name") val ruleName: String,
     val activated: Boolean,

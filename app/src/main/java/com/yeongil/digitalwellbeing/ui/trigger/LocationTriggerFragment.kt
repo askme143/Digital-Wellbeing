@@ -21,7 +21,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTriggerDto
 import com.yeongil.digitalwellbeing.databinding.FragmentLocationTriggerBinding
 import com.yeongil.digitalwellbeing.utils.NetworkStatus
 import com.yeongil.digitalwellbeing.utils.navigateSafe
@@ -35,7 +35,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
 
     private val directions = LocationTriggerFragmentDirections
     private val editing by lazy {
-        ruleEditViewModel.editingRule.value?.locationTrigger != null
+        ruleEditViewModel.editingRule.value?.locationTriggerDto != null
     }
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
@@ -84,14 +84,12 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfo.rid
-        val trigger = ruleEditViewModel.editingRule.value?.locationTrigger
+        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
+        val trigger = ruleEditViewModel.editingRule.value?.locationTriggerDto
 
         if (trigger != null) {
-            Log.e("hello", "there is a pre-existing trigger")
             locationTriggerViewModel.init(trigger)
         } else {
-            Log.e("hello", "there is no pre-existing trigger")
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
                     locationTriggerViewModel.init(LatLng(it.latitude, it.longitude), rid)
@@ -146,9 +144,9 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         marker = map.addMarker(newMarker)
     }
 
-    private fun drawCircle(locationTrigger: LocationTrigger) {
-        val latLng = LatLng(locationTrigger.latitude, locationTrigger.longitude)
-        val range = locationTrigger.range
+    private fun drawCircle(locationTriggerDto: LocationTriggerDto) {
+        val latLng = LatLng(locationTriggerDto.latitude, locationTriggerDto.longitude)
+        val range = locationTriggerDto.range
         val newCircle = CircleOptions().center(latLng).radius(range.toDouble())
 
         circle?.remove()

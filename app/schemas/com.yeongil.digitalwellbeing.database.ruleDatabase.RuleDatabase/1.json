@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b6705a8424f88dd4a85fce03d8bc9783",
+    "identityHash": "51c132062a0bb0be09edd32415e290fe",
     "entities": [
       {
         "tableName": "rule_info",
@@ -152,7 +152,7 @@
       },
       {
         "tableName": "app_block_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_block_entries` TEXT NOT NULL, `handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_block_entry_list` TEXT NOT NULL, `handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
         "fields": [
           {
             "fieldPath": "rid",
@@ -161,8 +161,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "AppBlockEntries",
-            "columnName": "app_block_entries",
+            "fieldPath": "appBlockEntryList",
+            "columnName": "app_block_entry_list",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -270,7 +270,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b6705a8424f88dd4a85fce03d8bc9783')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51c132062a0bb0be09edd32415e290fe')"
     ]
   }
 }

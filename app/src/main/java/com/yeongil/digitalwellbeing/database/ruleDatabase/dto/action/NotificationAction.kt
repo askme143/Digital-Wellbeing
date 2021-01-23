@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
 data class NotificationAction(
     @PrimaryKey val rid: Int,
     @ColumnInfo(name = "app_list") val appList: List<String>,
-    @ColumnInfo(name = "keyword_list") val keywordList: List<KeywordEntry>,
+    @ColumnInfo(name = "keyword_list") val keywordList: List<KeywordEntryDto>,
     @ColumnInfo(name = "handling_action") val handlingAction: Int,
 )

@@ -2,7 +2,7 @@ package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.RingerAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.RingerActionDto
 import com.yeongil.digitalwellbeing.utils.*
 
 class RingerActionViewModel : ViewModel() {
@@ -19,14 +19,14 @@ class RingerActionViewModel : ViewModel() {
         selectedMode.value = constVibrate
     }
 
-    fun init(ringerAction: RingerAction) {
-        rid = ringerAction.rid
-        selectedMode.value = ringerAction.ringerMode
+    fun init(ringerActionDto: RingerActionDto) {
+        rid = ringerActionDto.rid
+        selectedMode.value = ringerActionDto.ringerMode
     }
 
     fun onItemSelected(selected: Int) {
         selectedMode.value = selected
     }
 
-    fun getRingerAction() = RingerAction(rid, selectedMode.value!!)
+    fun getRingerAction() = RingerActionDto(rid, selectedMode.value!!)
 }

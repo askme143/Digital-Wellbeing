@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "activity_triggers")
-data class ActivityTrigger(
+data class ActivityTriggerDto(
     @PrimaryKey val rid: Int,
     val activity: String
 )

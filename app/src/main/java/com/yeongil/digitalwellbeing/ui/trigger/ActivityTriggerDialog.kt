@@ -29,7 +29,7 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
     private val activityTriggerViewModel by activityViewModels<ActivityTriggerViewModel>()
 
     private val editing by lazy {
-        ruleEditViewModel.editingRule.value?.activityTrigger != null
+        ruleEditViewModel.editingRule.value?.activityTriggerDto != null
     }
 
     override fun onCreateView(
@@ -58,8 +58,8 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfo.rid
-        val trigger = ruleEditViewModel.editingRule.value?.activityTrigger
+        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
+        val trigger = ruleEditViewModel.editingRule.value?.activityTriggerDto
 
         if (trigger != null) {
             activityTriggerViewModel.init(trigger)

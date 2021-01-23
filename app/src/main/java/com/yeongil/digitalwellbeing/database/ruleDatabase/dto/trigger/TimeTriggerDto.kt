@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "time_triggers")
-data class TimeTrigger(
+data class TimeTriggerDto(
     @PrimaryKey val rid: Int,
     @ColumnInfo(name="start_time_in_minutes") val startTimeInMinutes: Int,
     @ColumnInfo(name="end_time_in_minutes") val endTimeInMinutes: Int,

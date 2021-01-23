@@ -7,7 +7,7 @@ import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.action.*
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.trigger.ActivityTriggerDao
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.trigger.LocationTriggerDao
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.trigger.TimeTriggerDao
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.Rule
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleDto
 
 @Dao
 interface RuleDao :
@@ -15,31 +15,31 @@ interface RuleDao :
     LocationTriggerDao, TimeTriggerDao, ActivityTriggerDao,
     AppBlockActionDao, NotificationActionDao, DndActionDao, RingerActionDao {
     @Transaction
-    suspend fun insertRule(rule: Rule) {
-        insertRuleInfo(rule.ruleInfo)
+    suspend fun insertRule(ruleDto: RuleDto) {
+        insertRuleInfo(ruleDto.ruleInfoDto)
 
-        rule.locationTrigger?.let { insertLocationTrigger(it) }
-        rule.timeTrigger?.let { insertTimeTrigger(it) }
-        rule.activityTrigger?.let { insertActivityTrigger(it) }
+        ruleDto.locationTriggerDto?.let { insertLocationTrigger(it) }
+        ruleDto.timeTriggerDto?.let { insertTimeTrigger(it) }
+        ruleDto.activityTriggerDto?.let { insertActivityTrigger(it) }
 
-        rule.appBlockAction?.let { insertAppBlockAction(it) }
-        rule.notificationAction?.let { insertNotificationAction(it) }
-        rule.dndAction?.let { insertDndAction(it) }
-        rule.ringerAction?.let { insertRingerAction(it) }
+        ruleDto.appBlockActionDto?.let { insertAppBlockAction(it) }
+        ruleDto.notificationAction?.let { insertNotificationAction(it) }
+        ruleDto.dndActionDto?.let { insertDndAction(it) }
+        ruleDto.ringerActionDto?.let { insertRingerAction(it) }
     }
 
     @Transaction
-    suspend fun updateRule(rule: Rule) {
-        updateRuleInfo(rule.ruleInfo)
+    suspend fun updateRule(ruleDto: RuleDto) {
+        updateRuleInfo(ruleDto.ruleInfoDto)
 
-        rule.locationTrigger?.let { updateLocationTrigger(it) }
-        rule.timeTrigger?.let { updateTimeTrigger(it) }
-        rule.activityTrigger?.let { updateActivityTrigger(it) }
+        ruleDto.locationTriggerDto?.let { updateLocationTrigger(it) }
+        ruleDto.timeTriggerDto?.let { updateTimeTrigger(it) }
+        ruleDto.activityTriggerDto?.let { updateActivityTrigger(it) }
 
-        rule.appBlockAction?.let { updateAppBlockAction(it) }
-        rule.notificationAction?.let { updateNotificationAction(it) }
-        rule.dndAction?.let { updateDndAction(it) }
-        rule.ringerAction?.let { updateRingerAction(it) }
+        ruleDto.appBlockActionDto?.let { updateAppBlockAction(it) }
+        ruleDto.notificationAction?.let { updateNotificationAction(it) }
+        ruleDto.dndActionDto?.let { updateDndAction(it) }
+        ruleDto.ringerActionDto?.let { updateRingerAction(it) }
     }
 
     @Transaction
@@ -58,5 +58,5 @@ interface RuleDao :
 
     @Transaction
     @Query("SELECT * FROM rule_info")
-    suspend fun getRuleList(): List<Rule>
+    suspend fun getRuleList(): List<RuleDto>
 }

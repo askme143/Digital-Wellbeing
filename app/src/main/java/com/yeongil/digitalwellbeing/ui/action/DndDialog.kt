@@ -38,7 +38,7 @@ class DndDialog : DialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            val editing = ruleEditViewModel.editingRule.value?.dndAction != null
+            val editing = ruleEditViewModel.editingRule.value?.dndActionDto != null
             if (editing) {
                 findNavController().navigateSafe(directions.actionGlobalActionFragment())
             } else {
@@ -54,7 +54,7 @@ class DndDialog : DialogFragment() {
     }
 
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfo.rid
+        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
 
         dndActionViewModel.init(rid)
     }

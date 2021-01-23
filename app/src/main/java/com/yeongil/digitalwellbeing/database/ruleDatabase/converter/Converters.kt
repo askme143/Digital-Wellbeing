@@ -1,8 +1,8 @@
 package com.yeongil.digitalwellbeing.database.ruleDatabase.converter
 
 import androidx.room.TypeConverter
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.AppBlockEntry
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.KeywordEntry
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.AppBlockEntryDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.KeywordEntryDto
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -19,22 +19,22 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromKeywordEntryListToString(value: List<KeywordEntry>): String {
+    fun fromKeywordEntryListToString(value: List<KeywordEntryDto>): String {
         return Json.encodeToString(value)
     }
 
     @TypeConverter
-    fun fromStringToKeywordEntryList(value: String): List<KeywordEntry> {
+    fun fromStringToKeywordEntryList(value: String): List<KeywordEntryDto> {
         return Json.decodeFromString(value)
     }
 
     @TypeConverter
-    fun fromAppBlockEntryListToString(value: List<AppBlockEntry>): String {
+    fun fromAppBlockEntryListToString(value: List<AppBlockEntryDto>): String {
         return Json.encodeToString(value)
     }
 
     @TypeConverter
-    fun fromStringToAppBlockEntryList(value: String): List<AppBlockEntry> {
+    fun fromStringToAppBlockEntryList(value: String): List<AppBlockEntryDto> {
         return Json.decodeFromString(value)
     }
 

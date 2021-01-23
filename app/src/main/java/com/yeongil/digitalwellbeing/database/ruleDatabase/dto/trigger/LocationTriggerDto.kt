@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "location_triggers")
-data class LocationTrigger(
+data class LocationTriggerDto(
     @PrimaryKey val rid: Int,
     val latitude: Double,
     val longitude: Double,

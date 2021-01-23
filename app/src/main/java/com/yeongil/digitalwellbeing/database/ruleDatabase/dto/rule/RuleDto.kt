@@ -2,39 +2,39 @@ package com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.AppBlockAction
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.DndAction
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.AppBlockActionDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.DndActionDto
 import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.NotificationAction
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.RingerAction
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTrigger
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTrigger
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.action.RingerActionDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTriggerDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTriggerDto
+import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.TimeTriggerDto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Rule(
-    @Embedded val ruleInfo: RuleInfo,
+data class RuleDto(
+    @Embedded val ruleInfoDto: RuleInfoDto,
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
-    val locationTrigger: LocationTrigger?,
+    val locationTriggerDto: LocationTriggerDto?,
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
-    val timeTrigger: TimeTrigger?,
+    val timeTriggerDto: TimeTriggerDto?,
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
-    val activityTrigger: ActivityTrigger?,
+    val activityTriggerDto: ActivityTriggerDto?,
 
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
-    val appBlockAction: AppBlockAction?,
+    val appBlockActionDto: AppBlockActionDto?,
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
@@ -44,10 +44,10 @@ data class Rule(
         parentColumn = "rid",
         entityColumn = "rid",
     )
-    val dndAction: DndAction?,
+    val dndActionDto: DndActionDto?,
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
-    val ringerAction: RingerAction?,
+    val ringerActionDto: RingerActionDto?,
 )
