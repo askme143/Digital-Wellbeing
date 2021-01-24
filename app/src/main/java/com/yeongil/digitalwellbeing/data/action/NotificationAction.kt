@@ -1,10 +1,11 @@
 package com.yeongil.digitalwellbeing.data.action
 
+import androidx.room.ColumnInfo
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class NotificationAction(
-    val appList: List<String>,
-    val keywordList: List<KeywordEntry>,
-    val handlingAction: Int,
+    @ColumnInfo(name = "app_list") val appList: List<String>,
+    @ColumnInfo(name = "keyword_list") val keywordList: List<KeywordEntry>,
+    @ColumnInfo(name = "handling_action") val handlingAction: Int,
 )

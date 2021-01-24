@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogActivityTriggerBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.ActivityTriggerViewModel
@@ -22,15 +22,9 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
     private val directions = ActivityTriggerDialogDirections
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
-        val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        RuleEditViewModelFactory(ruleDao, sharedPref)
+        RuleEditViewModelFactory(requireContext())
     }
     private val activityTriggerViewModel by activityViewModels<ActivityTriggerViewModel>()
-
-    private val editing by lazy {
-        ruleEditViewModel.editingRule.value?.activityTriggerDto != null
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +38,7 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
+            val editing = ruleEditViewModel.editingRule.value?.activityTrigger != null
             if (editing)
                 findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             else
@@ -58,11 +53,10 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
-        val trigger = ruleEditViewModel.editingRule.value?.activityTriggerDto
+        val trigger = ruleEditViewModel.editingRule.value?.activityTrigger
 
         if (trigger != null) {
             activityTriggerViewModel.init(trigger)
-        } else activityTriggerViewModel.init(rid)
+        } else activityTriggerViewModel.init()
     }
 }

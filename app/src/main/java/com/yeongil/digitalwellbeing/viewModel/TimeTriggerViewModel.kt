@@ -4,16 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.TimeTriggerDto
-import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
+import com.yeongil.digitalwellbeing.data.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import java.util.*
 
 class TimeTriggerViewModel : ViewModel() {
-    private var rid = TEMPORAL_RID
-
     val startPickerVisible = MutableLiveData(true)
 
     val startPickerHour = MutableLiveData(0)
@@ -40,9 +37,7 @@ class TimeTriggerViewModel : ViewModel() {
         }.collect { emit(it) }
     }
 
-    fun init(rid: Int) {
-        this.rid = rid
-
+    fun init() {
         val calendar = Calendar.getInstance()
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMin = calendar.get(Calendar.MINUTE)
@@ -57,13 +52,11 @@ class TimeTriggerViewModel : ViewModel() {
         startPickerVisible.value = true
     }
 
-    fun init(timeTriggerDto: TimeTriggerDto) {
-        rid = timeTriggerDto.rid
+    fun init(timeTrigger: TimeTrigger) {
+        setStartPickerTime(timeTrigger.startTimeInMinutes)
+        setEndPickerTime(timeTrigger.endTimeInMinutes)
 
-        setStartPickerTime(timeTriggerDto.startTimeInMinutes)
-        setEndPickerTime(timeTriggerDto.endTimeInMinutes)
-
-        timeTriggerDto.repeatDay.mapIndexed { index, bool ->
+        timeTrigger.repeatDay.mapIndexed { index, bool ->
             repeatDay[index].value = bool
         }
 
@@ -86,8 +79,7 @@ class TimeTriggerViewModel : ViewModel() {
     }
 
     fun getTimeTrigger() =
-        TimeTriggerDto(
-            rid,
+        TimeTrigger(
             startTimeInMinutes.value!!,
             endTimeInMinutes.value!!,
             repeatDay.map { it.value!! })

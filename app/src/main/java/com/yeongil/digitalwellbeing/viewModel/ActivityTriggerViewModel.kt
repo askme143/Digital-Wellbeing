@@ -2,34 +2,29 @@ package com.yeongil.digitalwellbeing.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.ActivityTriggerDto
+import com.yeongil.digitalwellbeing.data.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.utils.BICYCLE
 import com.yeongil.digitalwellbeing.utils.DRIVE
 import com.yeongil.digitalwellbeing.utils.STILL
-import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
 
 class ActivityTriggerViewModel : ViewModel() {
-    var rid = TEMPORAL_RID
-
     val constDrive = DRIVE
     val constBicycle = BICYCLE
     val constStill = STILL
 
     val selectedActivity = MutableLiveData<String?>()
 
-    fun init(rid: Int) {
-        this.rid = rid
+    fun init() {
         selectedActivity.value = DRIVE
     }
 
-    fun init(activityTriggerDto: ActivityTriggerDto) {
-        rid = activityTriggerDto.rid
-        selectedActivity.value = activityTriggerDto.activity
+    fun init(activityTrigger: ActivityTrigger) {
+        selectedActivity.value = activityTrigger.activity
     }
 
     fun onItemSelected(selected: String) {
         selectedActivity.value = selected
     }
 
-    fun getActivityTrigger() = ActivityTriggerDto(rid, selectedActivity.value!!)
+    fun getActivityTrigger() = ActivityTrigger(selectedActivity.value!!)
 }

@@ -6,9 +6,8 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Entity(tableName = "rule_info")
 data class RuleInfo(
-    @PrimaryKey val rid: Int,
+    val ruleId: Int,
     @ColumnInfo(name = "rule_name") val ruleName: String,
     val activated: Boolean,
     @ColumnInfo(name = "noti_on_trigger") val notiOnTrigger: Boolean,

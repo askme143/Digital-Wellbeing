@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogRingerBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.RingerActionViewModel
@@ -22,9 +22,7 @@ class RingerDialog : BottomSheetDialogFragment() {
     private val directions = RingerDialogDirections
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
-        val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        RuleEditViewModelFactory(ruleDao, sharedPref)
+        RuleEditViewModelFactory(requireContext())
     }
     private val ringerActionViewModel by activityViewModels<RingerActionViewModel>()
 
@@ -40,7 +38,7 @@ class RingerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            val editing = ruleEditViewModel.editingRule.value!!.ringerActionDto != null
+            val editing = ruleEditViewModel.editingRule.value!!.ringerAction != null
             if (editing)
                 findNavController().navigateSafe(directions.actionGlobalActionFragment())
             else
@@ -55,11 +53,10 @@ class RingerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
-        val action = ruleEditViewModel.editingRule.value?.ringerActionDto
+        val action = ruleEditViewModel.editingRule.value?.ringerAction
 
         if (action != null) {
             ringerActionViewModel.init(action)
-        } else ringerActionViewModel.init(rid)
+        } else ringerActionViewModel.init()
     }
 }

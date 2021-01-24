@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentTriggerBinding
 import com.yeongil.digitalwellbeing.utils.ACTIVITY_TRIGGER_TITLE
 import com.yeongil.digitalwellbeing.utils.LOCATION_TRIGGER_TITLE
@@ -24,11 +24,8 @@ class TriggerFragment : Fragment() {
     private val directions = TriggerFragmentDirections
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
-        val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        RuleEditViewModelFactory(ruleDao, sharedPref)
+        RuleEditViewModelFactory(requireContext())
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

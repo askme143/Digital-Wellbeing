@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogTimeTriggerBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
@@ -20,14 +20,9 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val directions = TimeTriggerDialogDirections
-    private val editing by lazy {
-        ruleEditViewModel.editingRule.value?.timeTriggerDto != null
-    }
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
-        val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        RuleEditViewModelFactory(ruleDao, sharedPref)
+        RuleEditViewModelFactory(requireContext())
     }
     private val timeTriggerViewModel by activityViewModels<TimeTriggerViewModel>()
 
@@ -43,6 +38,7 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
+            val editing = ruleEditViewModel.editingRule.value?.timeTrigger != null
             if (editing)
                 findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             else
@@ -57,11 +53,10 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
     }
 
     private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
-        val trigger = ruleEditViewModel.editingRule.value?.timeTriggerDto
+        val trigger = ruleEditViewModel.editingRule.value?.timeTrigger
 
         if (trigger != null) {
             timeTriggerViewModel.init(trigger)
-        } else timeTriggerViewModel.init(rid)
+        } else timeTriggerViewModel.init()
     }
 }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "51c132062a0bb0be09edd32415e290fe",
+    "identityHash": "4ce2c981fbbf0dad64d3f6f64da49a17",
     "entities": [
       {
         "tableName": "rule_info",
@@ -53,25 +53,25 @@
             "notNull": true
           },
           {
-            "fieldPath": "latitude",
+            "fieldPath": "locationTrigger.latitude",
             "columnName": "latitude",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "longitude",
+            "fieldPath": "locationTrigger.longitude",
             "columnName": "longitude",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "range",
+            "fieldPath": "locationTrigger.range",
             "columnName": "range",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "locationName",
+            "fieldPath": "locationTrigger.locationName",
             "columnName": "locationName",
             "affinity": "TEXT",
             "notNull": true
@@ -97,7 +97,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "activity",
+            "fieldPath": "activityTrigger.activity",
             "columnName": "activity",
             "affinity": "TEXT",
             "notNull": true
@@ -123,19 +123,19 @@
             "notNull": true
           },
           {
-            "fieldPath": "startTimeInMinutes",
+            "fieldPath": "timeTrigger.startTimeInMinutes",
             "columnName": "start_time_in_minutes",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "endTimeInMinutes",
+            "fieldPath": "timeTrigger.endTimeInMinutes",
             "columnName": "end_time_in_minutes",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "repeatDay",
+            "fieldPath": "timeTrigger.repeatDay",
             "columnName": "repeat_day",
             "affinity": "TEXT",
             "notNull": true
@@ -161,13 +161,13 @@
             "notNull": true
           },
           {
-            "fieldPath": "appBlockEntryList",
+            "fieldPath": "appBlockAction.appBlockEntryList",
             "columnName": "app_block_entry_list",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "handlingAction",
+            "fieldPath": "appBlockAction.handlingAction",
             "columnName": "handling_action",
             "affinity": "INTEGER",
             "notNull": true
@@ -193,19 +193,19 @@
             "notNull": true
           },
           {
-            "fieldPath": "appList",
+            "fieldPath": "notificationAction.appList",
             "columnName": "app_list",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "keywordList",
+            "fieldPath": "notificationAction.keywordList",
             "columnName": "keyword_list",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "handlingAction",
+            "fieldPath": "notificationAction.handlingAction",
             "columnName": "handling_action",
             "affinity": "INTEGER",
             "notNull": true
@@ -222,11 +222,17 @@
       },
       {
         "tableName": "dnd_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `temp` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
         "fields": [
           {
             "fieldPath": "rid",
             "columnName": "rid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dndAction.temp",
+            "columnName": "temp",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -242,7 +248,7 @@
       },
       {
         "tableName": "ringer_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `ringerMode` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `rid` INTEGER NOT NULL, `ringer_mode` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
         "fields": [
           {
             "fieldPath": "rid",
@@ -251,8 +257,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "ringerMode",
-            "columnName": "ringerMode",
+            "fieldPath": "ringerAction.rid",
+            "columnName": "rid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ringerAction.ringerMode",
+            "columnName": "ringer_mode",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -270,7 +282,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51c132062a0bb0be09edd32415e290fe')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4ce2c981fbbf0dad64d3f6f64da49a17')"
     ]
   }
 }

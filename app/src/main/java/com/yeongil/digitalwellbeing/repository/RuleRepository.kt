@@ -1,35 +1,74 @@
 package com.yeongil.digitalwellbeing.repository
 
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dao.rule.RuleDao
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.rule.RuleDto
-import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
-import com.yeongil.digitalwellbeing.utils.SequenceNumber
-import java.lang.IllegalArgumentException
+import com.yeongil.digitalwellbeing.data.rule.Rule
+import com.yeongil.digitalwellbeing.data.rule.RuleInfo
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule.RuleDao
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleDto
+import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.AppBlockActionDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.DndActionDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.NotificationActionDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.RingerActionDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleInfoDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.ActivityTriggerDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.LocationTriggerDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.TimeTriggerDto
+import com.yeongil.digitalwellbeing.utils.TEMPORAL_RULE_ID
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class RuleRepository(
     private val sequenceNumber: SequenceNumber,
-    private val ruleDao: RuleDao,
+    val ruleDao: RuleDao,
 ) {
-    suspend fun insertNewRule(ruleDto: RuleDto) {
-        var rid = sequenceNumber.getAndIncreaseSeqNumber()
-        if (rid == TEMPORAL_RID) rid = sequenceNumber.getAndIncreaseSeqNumber()
+    suspend fun insertOrUpdateRule(rule: Rule) {
+        val rid =
+            if (rule.ruleInfo.ruleId != TEMPORAL_RULE_ID)
+                rule.ruleInfo.ruleId
+            else {
+                val temp = sequenceNumber.getAndIncreaseSeqNumber()
+                if (temp == TEMPORAL_RULE_ID)
+                    sequenceNumber.getAndIncreaseSeqNumber()
+                else
+                    temp
+            }
 
-        val saveRule = RuleDto(
-            ruleDto.ruleInfoDto.copy(rid = rid),
-            ruleDto.locationTriggerDto?.copy(rid = rid),
-            ruleDto.timeTriggerDto?.copy(rid = rid),
-            ruleDto.activityTriggerDto?.copy(rid = rid),
-            ruleDto.appBlockActionDto?.copy(rid = rid),
-            ruleDto.notificationActionDto?.copy(rid = rid),
-            ruleDto.dndActionDto?.copy(rid = rid),
-            ruleDto.ringerActionDto?.copy(rid = rid)
+        val ruleDto = RuleDto(
+            RuleInfoDto(rule.ruleInfo.ruleId, rule.ruleInfo),
+            rule.locationTrigger?.let { LocationTriggerDto(rid, it) },
+            rule.timeTrigger?.let { TimeTriggerDto(rid, it) },
+            rule.activityTrigger?.let { ActivityTriggerDto(rid, it) },
+            rule.appBlockAction?.let { AppBlockActionDto(rid, it) },
+            rule.notificationAction?.let { NotificationActionDto(rid, it) },
+            rule.dndAction?.let { DndActionDto(rid, it) },
+            rule.ringerAction?.let { RingerActionDto(rid, it) },
         )
 
-        ruleDao.insertRule((saveRule))
+        if (rule.ruleInfo.ruleId == TEMPORAL_RULE_ID) {
+            ruleDao.insertRule((ruleDto))
+        } else {
+            ruleDao.updateRule(ruleDto)
+        }
     }
 
-    suspend fun updateRule(ruleDto: RuleDto) {
-        if (ruleDto.ruleInfoDto.rid == TEMPORAL_RID) throw(IllegalArgumentException("RID should not be 0"))
-        ruleDao.updateRule(ruleDto)
+    suspend fun updateRuleInfo(ruleInfo: RuleInfo) {
+        ruleDao.updateRuleInfo(RuleInfoDto(ruleInfo.ruleId, ruleInfo))
+    }
+
+    fun getRuleInfoListFlow(): Flow<List<RuleInfo>> {
+        return ruleDao.getRuleInfoListFlow().map { it.map { ruleInfoDto -> ruleInfoDto.ruleInfo } }
+    }
+
+    private fun ruleDtoToRule(ruleDto: RuleDto): Rule {
+        return Rule(
+            ruleDto.ruleInfoDto.ruleInfo,
+            ruleDto.locationTriggerDto?.locationTrigger,
+            ruleDto.timeTriggerDto?.timeTrigger,
+            ruleDto.activityTriggerDto?.activityTrigger,
+            ruleDto.appBlockActionDto?.appBlockAction,
+            ruleDto.notificationActionDto?.notificationAction,
+            ruleDto.dndActionDto?.dndAction,
+            ruleDto.ringerActionDto?.ringerAction
+        )
     }
 }

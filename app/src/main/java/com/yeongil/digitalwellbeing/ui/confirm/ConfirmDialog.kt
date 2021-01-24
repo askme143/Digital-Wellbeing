@@ -10,7 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
@@ -23,9 +23,7 @@ class ConfirmDialog : BottomSheetDialogFragment() {
     private val directions = ConfirmDialogDirections
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
-        val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        RuleEditViewModelFactory(ruleDao, sharedPref)
+        RuleEditViewModelFactory(requireContext())
     }
 
     override fun onCreateView(

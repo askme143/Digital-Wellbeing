@@ -1,6 +1,6 @@
 package com.yeongil.digitalwellbeing.utils
 
-const val TEMPORAL_RID = 0
+const val TEMPORAL_RULE_ID = 0
 
 const val SUN = 0
 const val MON = 1

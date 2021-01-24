@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.database.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogDndBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.DndActionViewModel
@@ -22,9 +22,7 @@ class DndDialog : DialogFragment() {
     private val directions = DndDialogDirections
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
-        val ruleDao = RuleDatabase.getInstance(requireContext().applicationContext).ruleDao()
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        RuleEditViewModelFactory(ruleDao, sharedPref)
+        RuleEditViewModelFactory(requireContext())
     }
     private val dndActionViewModel by activityViewModels<DndActionViewModel>()
 
@@ -35,10 +33,8 @@ class DndDialog : DialogFragment() {
     ): View {
         _binding = DialogDndBinding.inflate(inflater, container, false)
 
-        initViewModel()
-
         binding.cancelBtn.setOnClickListener {
-            val editing = ruleEditViewModel.editingRule.value?.dndActionDto != null
+            val editing = ruleEditViewModel.editingRule.value?.dndAction != null
             if (editing) {
                 findNavController().navigateSafe(directions.actionGlobalActionFragment())
             } else {
@@ -51,11 +47,5 @@ class DndDialog : DialogFragment() {
         }
 
         return binding.root
-    }
-
-    private fun initViewModel() {
-        val rid = ruleEditViewModel.editingRule.value!!.ruleInfoDto.rid
-
-        dndActionViewModel.init(rid)
     }
 }

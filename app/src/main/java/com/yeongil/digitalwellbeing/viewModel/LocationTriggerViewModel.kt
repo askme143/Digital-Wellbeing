@@ -5,14 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
 import com.google.android.gms.maps.model.LatLng
-import com.yeongil.digitalwellbeing.database.ruleDatabase.dto.trigger.LocationTriggerDto
-import com.yeongil.digitalwellbeing.utils.TEMPORAL_RID
+import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 
 class LocationTriggerViewModel : ViewModel() {
-    private var rid = TEMPORAL_RID
-
     val progress = MutableLiveData(0)
 
     val latLng = MutableLiveData<LatLng>()
@@ -27,8 +24,7 @@ class LocationTriggerViewModel : ViewModel() {
     val locationTrigger = liveData {
         latLng.asFlow().combine(range.asFlow()) { latLng, range ->
             if (latLng != null) {
-                LocationTriggerDto(
-                    rid,
+                LocationTrigger(
                     latLng.latitude,
                     latLng.longitude,
                     range,
@@ -40,15 +36,13 @@ class LocationTriggerViewModel : ViewModel() {
         }.collect { emit(it) }
     }
 
-    fun init(newLatLng: LatLng, rid: Int) {
-        this.rid = rid
+    fun init(newLatLng: LatLng) {
         progress.value = 0
         latLng.value = newLatLng
     }
 
-    fun init(locationTriggerDto: LocationTriggerDto) {
-        progress.value = locationTriggerDto.range - 150
-        latLng.value = LatLng(locationTriggerDto.latitude, locationTriggerDto.longitude)
-        rid = locationTriggerDto.rid
+    fun init(locationTrigger: LocationTrigger) {
+        progress.value = locationTrigger.range - 150
+        latLng.value = LatLng(locationTrigger.latitude, locationTrigger.longitude)
     }
 }
