@@ -18,6 +18,9 @@ const val VIBRATE = 0
 const val RING = 1
 const val SILENT = 2
 
+const val CLOSE_IMMEDIATE = 0
+const val ALERT = 1
+
 const val LOCATION_TRIGGER_TITLE    = "장소"
 const val TIME_TRIGGER_TITLE        = "시간"
 const val ACTIVITY_TRIGGER_TITLE    = "활동"

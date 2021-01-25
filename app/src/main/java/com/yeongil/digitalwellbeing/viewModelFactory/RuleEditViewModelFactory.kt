@@ -8,6 +8,7 @@ import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule.RuleDao
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
+import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -18,7 +19,8 @@ class RuleEditViewModelFactory(private val context: Context) : ViewModelProvider
                 RuleRepository(
                     SequenceNumber(context.applicationContext),
                     RuleDatabase.getInstance(context.applicationContext).ruleDao()
-                )
+                ),
+                PackageManagerRepository(context.applicationContext.packageManager)
             ) as T
         } else {
             throw IllegalArgumentException("Unknown ViewModel class")

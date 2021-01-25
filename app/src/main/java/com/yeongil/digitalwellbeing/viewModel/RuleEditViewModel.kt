@@ -10,6 +10,7 @@ import com.yeongil.digitalwellbeing.data.rule.RuleInfo
 import com.yeongil.digitalwellbeing.data.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.*
 import com.yeongil.digitalwellbeing.viewModel.item.TriggerActionItem
@@ -19,7 +20,8 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewMode
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemViewModel
 
 class RuleEditViewModel(
-    private val ruleRepository: RuleRepository
+    private val ruleRepository: RuleRepository,
+    private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
     private val emptyRule = Rule(
         RuleInfo(TEMPORAL_RULE_ID, "규칙 이름", activated = true, notiOnTrigger = false),
@@ -123,6 +125,11 @@ class RuleEditViewModel(
     }
 
     fun addAppBlockAction(appBlockAction: AppBlockAction) {
+        if (appBlockAction.appBlockEntryList.isEmpty()) {
+            onClickItemDelete(APP_BLOCK_ACTION_TITLE)
+            return
+        }
+
         val newItem =
             TriggerActionItemViewModel(
                 APP_BLOCK_ACTION_TITLE,
@@ -132,7 +139,7 @@ class RuleEditViewModel(
             ).toRecyclerItem()
 
         editingRule.value = editingRule.value!!.copy(appBlockAction = appBlockAction)
-        _actionItemList.value = _triggerItemList.value?.filterNot {
+        _actionItemList.value = _actionItemList.value?.filterNot {
             val vm = it.viewModel
             vm is TriggerActionItemViewModel && vm.triggerActionItem.title == APP_BLOCK_ACTION_TITLE
         }?.plus(newItem) ?: listOf(newItem)
@@ -148,7 +155,7 @@ class RuleEditViewModel(
             ).toRecyclerItem()
 
         editingRule.value = editingRule.value!!.copy(notificationAction = notificationAction)
-        _actionItemList.value = _triggerItemList.value?.filterNot {
+        _actionItemList.value = _actionItemList.value?.filterNot {
             val vm = it.viewModel
             vm is TriggerActionItemViewModel && vm.triggerActionItem.title == NOTIFICATION_ACTION_TITLE
         }?.plus(newItem) ?: listOf(newItem)
@@ -164,7 +171,7 @@ class RuleEditViewModel(
             ).toRecyclerItem()
 
         editingRule.value = editingRule.value!!.copy(dndAction = dndAction)
-        _actionItemList.value = _triggerItemList.value?.filterNot {
+        _actionItemList.value = _actionItemList.value?.filterNot {
             val vm = it.viewModel
             vm is TriggerActionItemViewModel && vm.triggerActionItem.title == DND_ACTION_TITLE
         }?.plus(newItem) ?: listOf(newItem)
@@ -180,7 +187,7 @@ class RuleEditViewModel(
             ).toRecyclerItem()
 
         editingRule.value = editingRule.value!!.copy(ringerAction = ringerAction)
-        _actionItemList.value = _triggerItemList.value?.filterNot {
+        _actionItemList.value = _actionItemList.value?.filterNot {
             val vm = it.viewModel
             vm is TriggerActionItemViewModel && vm.triggerActionItem.title == RINGER_ACTION_TITLE
         }?.plus(newItem) ?: listOf(newItem)
@@ -214,7 +221,7 @@ class RuleEditViewModel(
         object : TriggerActionItem {
             override val title = APP_BLOCK_ACTION_TITLE
             override val description = appBlockAction.appBlockEntryList.joinToString(", ") {
-                "${it.appName} ${it.allowedTimeInMinutes}분 사용 시"
+                "${pmRepo.getLabel(it.packageName)} ${it.allowedTimeInMinutes}분 사용 시"
             }
         }
 

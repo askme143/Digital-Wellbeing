@@ -10,13 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockListBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerViewAdapter
 import com.yeongil.digitalwellbeing.viewModel.AppBlockActionViewModel
 import com.yeongil.digitalwellbeing.viewModel.AppListViewModel
-import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory
@@ -51,11 +49,12 @@ class AppBlockListFragment : Fragment() {
             }
         }
 
-        initViewModel()
-
-        appListViewModel.appItemAllChecked.observe(viewLifecycleOwner) { bool ->
-            appListViewModel.appItemList.value!!.forEach {
-                if (it.viewModel is AppItemViewModel) it.viewModel.appItem.checked.value = bool
+        appListViewModel.appItemAllChecked.observe(viewLifecycleOwner) { allChecked ->
+            if (allChecked != null) {
+                appListViewModel.appItemList.value!!
+                    .map { it.viewModel }
+                    .filterIsInstance<AppItemViewModel>()
+                    .forEach { it.appItem.checked.value = allChecked }
             }
         }
 
@@ -63,13 +62,10 @@ class AppBlockListFragment : Fragment() {
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
         binding.completeBtn.setOnClickListener {
+            appBlockActionViewModel.setAppList(appListViewModel.getCheckedAppList())
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
 
         return binding.root
-    }
-
-    private fun initViewModel() {
-        appListViewModel.init()
     }
 }
