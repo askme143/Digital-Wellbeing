@@ -25,16 +25,13 @@ class AppBlockActionFragment : Fragment() {
 
     private val directions = AppBlockActionFragmentDirections
 
-    private val appBlockActionViewModel by activityViewModels<AppBlockActionViewModel> {
-        AppBlockActionViewModelFactory(requireContext())
-    }
-    private val appListViewModel by activityViewModels<AppListViewModel> {
-        AppListViewModelFactory(requireContext())
-    }
-    private val appBlockEntryViewModel by activityViewModels<AppBlockEntryViewModel>()
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
     }
+    private val appBlockActionViewModel by activityViewModels<AppBlockActionViewModel> {
+        AppBlockActionViewModelFactory(requireContext())
+    }
+    private val appBlockEntryViewModel by activityViewModels<AppBlockEntryViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +41,8 @@ class AppBlockActionFragment : Fragment() {
         _binding = FragmentAppBlockActionBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = appBlockActionViewModel
+
+        initViewModel()
 
         appBlockActionViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { packageName ->
@@ -64,7 +63,6 @@ class AppBlockActionFragment : Fragment() {
         }
 
         binding.addBtn.setOnClickListener {
-            appListViewModel.init(appBlockActionViewModel.getAppBlockAction())
             findNavController().navigateSafe(directions.actionAppBlockActionFragmentToAppBlockListFragment())
         }
         binding.beforeBtn.setOnClickListener {
@@ -76,5 +74,13 @@ class AppBlockActionFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun initViewModel() {
+        val action = ruleEditViewModel.editingRule.value?.appBlockAction
+
+        if (action != null) {
+            appBlockActionViewModel.init(action)
+        } else appBlockActionViewModel.init()
     }
 }

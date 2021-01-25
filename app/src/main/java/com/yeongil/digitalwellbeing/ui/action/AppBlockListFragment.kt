@@ -49,6 +49,8 @@ class AppBlockListFragment : Fragment() {
             }
         }
 
+        initViewModel()
+
         appListViewModel.appItemAllChecked.observe(viewLifecycleOwner) { allChecked ->
             if (allChecked != null) {
                 appListViewModel.appItemList.value!!
@@ -67,5 +69,9 @@ class AppBlockListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun initViewModel() {
+        appListViewModel.init(appBlockActionViewModel.getAppBlockAction())
     }
 }

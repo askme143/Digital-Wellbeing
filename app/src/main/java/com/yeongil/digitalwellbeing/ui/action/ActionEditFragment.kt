@@ -18,10 +18,6 @@ class ActionEditFragment : Fragment() {
 
     private val directions = ActionEditFragmentDirections
 
-    private val appBlockActionViewModel by activityViewModels<AppBlockActionViewModel> {
-        AppBlockActionViewModelFactory(requireContext())
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,10 +27,7 @@ class ActionEditFragment : Fragment() {
 
         binding.cancelBtn.setOnClickListener { findNavController().navigateSafe(directions.actionGlobalActionFragment()) }
 
-        binding.appTimeBtn.setOnClickListener {
-            appBlockActionViewModel.init()
-            findNavController().navigateSafe(directions.actionActionEditFragmentToAppBlockActionFragment())
-        }
+        binding.appTimeBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToAppBlockActionFragment()) }
         binding.notificationBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToNotificationActionFragment()) }
         binding.dndBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToDndDialog()) }
         binding.ringerBtn.setOnClickListener { findNavController().navigateSafe(directions.actionActionEditFragmentToRingerDialog()) }

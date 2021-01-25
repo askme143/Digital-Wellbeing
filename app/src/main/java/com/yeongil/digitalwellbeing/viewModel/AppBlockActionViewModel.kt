@@ -48,6 +48,7 @@ class AppBlockActionViewModel(
     }
 
     fun init(appBlockAction: AppBlockAction) {
+        appBlockEntryList.value = appBlockAction.appBlockEntryList
     }
 
     fun setAppList(packageNameList: List<String>) {
