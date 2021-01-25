@@ -233,6 +233,9 @@
             app:destination="@id/actionEditFragment"
             app:popUpTo="@+id/actionEditFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_appBlockActionFragment_to_appBlockEntryDialog"
+            app:destination="@id/appBlockEntryDialog" />
     </fragment>
     <fragment
         android:id="@+id/notiAppListFragment"
@@ -288,6 +291,16 @@
             android:id="@+id/action_ringerDialog_to_actionEditFragment"
             app:destination="@id/actionEditFragment"
             app:popUpTo="@+id/actionEditFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/appBlockEntryDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.action.AppBlockEntryDialog"
+        android:label="AppBlockEntryDialog">
+        <action
+            android:id="@+id/action_appBlockEntryDialog_to_appBlockActionFragment"
+            app:destination="@id/appBlockActionFragment"
+            app:popUpTo="@+id/appBlockActionFragment"
             app:popUpToInclusive="true" />
     </dialog>
 
