@@ -12,9 +12,10 @@ class AppListViewModel(
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
     val appItemList = MutableLiveData<List<RecyclerItem>>()
-    val appItemAllChecked = MutableLiveData<Boolean?>()
+    val appItemAllChecked = MutableLiveData<Boolean>(null)
 
     fun init() {
+        // TODO: Initialize appItemAllChecked as null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
             .map {
@@ -26,9 +27,8 @@ class AppListViewModel(
             .map { AppItemViewModel(it.first, it.second).toRecyclerItem() }
     }
 
-    fun init(appBlockAction: AppBlockAction) {
-        val existingAppList = appBlockAction.appBlockEntryList.map { it.packageName }
-
+    fun init(appList: List<String>) {
+        // TODO: Initialize appItemAllChecked as null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
             .map {
@@ -36,7 +36,7 @@ class AppListViewModel(
                     it.packageName,
                     pmRepo.getLabel(it),
                     pmRepo.getIcon(it),
-                    MutableLiveData(existingAppList.contains(it.packageName))
+                    MutableLiveData(appList.contains(it.packageName))
                 )
             }
             .map { AppItemViewModel(it.packageName, it).toRecyclerItem() }

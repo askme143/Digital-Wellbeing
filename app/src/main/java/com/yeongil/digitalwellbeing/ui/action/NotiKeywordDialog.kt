@@ -26,6 +26,7 @@ class NotiKeywordDialog : DialogFragment() {
             findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
+            // TODO: Add (or update) a keyword
             findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotificationActionFragment())
         }
 
