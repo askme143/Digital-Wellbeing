@@ -1,13 +1,25 @@
 package com.yeongil.digitalwellbeing.ui.action
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockListBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
+import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerViewAdapter
+import com.yeongil.digitalwellbeing.viewModel.AppBlockActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.AppListViewModel
+import com.yeongil.digitalwellbeing.viewModel.item.AppItem
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
+import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory
 
 class AppBlockListFragment : Fragment() {
     private var _binding: FragmentAppBlockListBinding? = null
@@ -15,12 +27,37 @@ class AppBlockListFragment : Fragment() {
 
     private val directions = AppBlockListFragmentDirections
 
+    private val appBlockActionViewModel by activityViewModels<AppBlockActionViewModel> {
+        AppBlockActionViewModelFactory(requireContext())
+    }
+    private val appListViewModel by activityViewModels<AppListViewModel> {
+        AppListViewModelFactory(requireContext())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAppBlockListBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = appListViewModel
+
+        with(binding.recyclerView) {
+            if (this.adapter == null) {
+                this.layoutManager = LinearLayoutManager(context)
+                this.adapter = RecyclerViewAdapter(viewLifecycleOwner)
+                this.itemAnimator = null
+            }
+        }
+
+        initViewModel()
+
+        appListViewModel.appItemAllChecked.observe(viewLifecycleOwner) { bool ->
+            appListViewModel.appItemList.value!!.forEach {
+                if (it.viewModel is AppItemViewModel) it.viewModel.appItem.checked.value = bool
+            }
+        }
 
         binding.beforeBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
@@ -30,5 +67,9 @@ class AppBlockListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun initViewModel() {
+        appListViewModel.init()
     }
 }

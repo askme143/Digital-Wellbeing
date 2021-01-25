@@ -15,4 +15,10 @@ object RecyclerViewBindingAdapters {
         }
         (recyclerView.adapter as RecyclerViewAdapter).submitList(data)
     }
+
+    @BindingAdapter("recycler_item_list_with_lifecycle")
+    @JvmStatic
+    fun recyclerItemWithLifecycleBind(recyclerView: RecyclerView, data: List<RecyclerItem>?) {
+        (recyclerView.adapter as RecyclerViewAdapter).submitList(data)
+    }
 }

@@ -4,6 +4,7 @@ import com.yeongil.digitalwellbeing.BR
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
+import com.yeongil.digitalwellbeing.viewModel.item.TriggerActionItem
 
 class TriggerActionItemViewModel(
     override val id: String,

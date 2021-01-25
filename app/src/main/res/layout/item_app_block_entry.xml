@@ -2,23 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/item_barrier_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="app_icon, app_label, description, delete_btn" />
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_corner"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:paddingHorizontal="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/item_barrier_bottom"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:paddingHorizontal="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/item_barrier_top" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
@@ -30,7 +24,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintLeft_toRightOf="@id/app_icon"
-        app:layout_constraintTop_toTopOf="@id/item_barrier_top"
+        app:layout_constraintTop_toTopOf="@id/app_icon"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -39,7 +33,7 @@
         android:layout_height="wrap_content"
         android:text="0분 후 바로 종료"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/item_barrier_bottom"
+        app:layout_constraintBottom_toBottomOf="@id/app_icon"
         app:layout_constraintLeft_toRightOf="@id/app_icon"
         app:layout_constraintTop_toBottomOf="@id/app_label"
         app:layout_constraintVertical_chainStyle="packed" />
@@ -49,14 +43,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_garbage"
-        app:layout_constraintBottom_toBottomOf="@id/item_barrier_bottom"
+        app:layout_constraintBottom_toBottomOf="@id/app_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/item_barrier_top" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/item_barrier_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="app_icon, app_label, description, delete_btn" />
+        app:layout_constraintTop_toTopOf="@id/app_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

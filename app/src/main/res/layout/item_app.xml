@@ -1,49 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/item_barrier_top"
-        android:layout_width="wrap_content"
+    <data>
+
+        <variable
+            name="itemVM"
+            type="com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="app_icon, app_label, checkbox" />
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{() -> itemVM.onClickItem()}"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="5dp">
 
-    <ImageView
-        android:id="@+id/app_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:paddingHorizontal="5dp"
-        app:layout_constraintBottom_toTopOf="@id/item_barrier_bottom"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_barrier_top" />
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:paddingHorizontal="5dp"
+            image_drawable="@{itemVM.appItem.icon}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/app_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Youtube"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/item_barrier_bottom"
-        app:layout_constraintLeft_toRightOf="@id/app_icon"
-        app:layout_constraintTop_toBottomOf="@id/item_barrier_top" />
+        <TextView
+            android:id="@+id/app_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{itemVM.appItem.label}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/app_icon"
+            app:layout_constraintLeft_toRightOf="@id/app_icon"
+            app:layout_constraintTop_toTopOf="@id/app_icon" />
 
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toTopOf="@id/item_barrier_bottom"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_barrier_top" />
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:checked="@={itemVM.appItem.checked}"
+            app:layout_constraintBottom_toBottomOf="@id/app_icon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/app_icon" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/item_barrier_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="app_icon, app_label, checkbox" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

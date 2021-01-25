@@ -12,7 +12,7 @@ import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.*
-import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItem
+import com.yeongil.digitalwellbeing.viewModel.item.TriggerActionItem
 import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel

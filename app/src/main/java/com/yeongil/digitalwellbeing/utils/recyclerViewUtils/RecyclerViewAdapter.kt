@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewAdapter :
+class RecyclerViewAdapter(private val parentLifecycle: LifecycleOwner? = null) :
     ListAdapter<RecyclerItem, RecyclerViewAdapter.BindingViewHolder>(DiffCallback()) {
     override fun getItemViewType(position: Int): Int {
         return getItem(position).layoutId
@@ -17,6 +18,7 @@ class RecyclerViewAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
+        if (parentLifecycle != null) binding.lifecycleOwner = parentLifecycle
 
         return BindingViewHolder(binding)
     }
@@ -25,7 +27,6 @@ class RecyclerViewAdapter :
         getItem(position).bind(holder.binding)
         holder.binding.executePendingBindings()
     }
-
 
     class BindingViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root)
 
