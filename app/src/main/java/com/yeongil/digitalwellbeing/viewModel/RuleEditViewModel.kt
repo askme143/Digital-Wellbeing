@@ -175,7 +175,6 @@ class RuleEditViewModel(
                 editingRule.value!!.copy(timeTrigger = null)
             ACTIVITY_TRIGGER_TITLE -> editingRule.value =
                 editingRule.value!!.copy(activityTrigger = null)
-
             APP_BLOCK_ACTION_TITLE -> editingRule.value =
                 editingRule.value!!.copy(appBlockAction = null)
             NOTIFICATION_ACTION_TITLE -> editingRule.value =

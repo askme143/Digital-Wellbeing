@@ -2,9 +2,9 @@ package com.yeongil.digitalwellbeing.utils
 
 object TimeUtils {
     private fun minutesToString(timeInMinutes: Int): String {
-        val hour = timeInMinutes / 60
-        val minute = timeInMinutes % 60
-        val noon = if (timeInMinutes < 12) "오전" else "오후"
+        val hour = (timeInMinutes / 60).let { if (it < 10) "0$it" else "$it" }
+        val minute = (timeInMinutes % 60).let { if (it < 10) "0$it" else "$it" }
+        val noon = if (hour.toInt() < 12) "오전" else "오후"
 
         return "$noon $hour:$minute"
     }
