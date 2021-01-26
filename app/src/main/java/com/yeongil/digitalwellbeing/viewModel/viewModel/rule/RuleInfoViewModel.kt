@@ -1,8 +1,7 @@
-package com.yeongil.digitalwellbeing.viewModel
+package com.yeongil.digitalwellbeing.viewModel.viewModel.rule
 
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleInfoDto
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.Event
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
@@ -10,7 +9,7 @@ import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleInfoItemViewMode
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class RuleInfoViewModel(
     private val ruleRepo: RuleRepository
 ) : ViewModel() {
     val ruleInfoItemList: LiveData<List<RecyclerItem>> = liveData {

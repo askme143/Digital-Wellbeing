@@ -1,4 +1,4 @@
-package com.yeongil.digitalwellbeing.viewModel
+package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.data.action.AppBlockAction

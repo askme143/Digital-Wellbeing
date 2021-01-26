@@ -1,7 +1,6 @@
 package com.yeongil.digitalwellbeing.ui.action
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockActionBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.AppBlockActionViewModel
-import com.yeongil.digitalwellbeing.viewModel.AppBlockEntryViewModel
-import com.yeongil.digitalwellbeing.viewModel.AppListViewModel
-import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
-import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockEntryViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppListViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
@@ -30,9 +28,6 @@ class AppBlockActionFragment : Fragment() {
     }
     private val appBlockActionViewModel by activityViewModels<AppBlockActionViewModel> {
         AppBlockActionViewModelFactory(requireContext())
-    }
-    private val appListViewModel by activityViewModels<AppListViewModel> {
-        AppListViewModelFactory(requireContext())
     }
     private val appBlockEntryViewModel by activityViewModels<AppBlockEntryViewModel>()
 

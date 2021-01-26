@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yeongil.digitalwellbeing.databinding.DialogNotiKeywordBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.NotificationActionViewModel
-import com.yeongil.digitalwellbeing.viewModel.NotificationKeywordViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationKeywordViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.NotificationActionViewModelFactory
 
 class NotiKeywordDialog : BottomSheetDialogFragment() {

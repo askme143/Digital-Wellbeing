@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yeongil.digitalwellbeing.databinding.FragmentNotiAppListBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerViewAdapter
-import com.yeongil.digitalwellbeing.viewModel.AppListViewModel
-import com.yeongil.digitalwellbeing.viewModel.NotificationActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppListViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.NotificationActionViewModelFactory
 

@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.viewModel.item
 
+import android.annotation.SuppressLint
 import com.yeongil.digitalwellbeing.data.action.AppBlockAction
 import com.yeongil.digitalwellbeing.data.action.DndAction
 import com.yeongil.digitalwellbeing.data.action.NotificationAction
@@ -73,6 +74,7 @@ class TriggerActionItem(val title: String, val description: String) {
         notificationAction.appList.joinToString(" / ") { pmRepo.getLabel(it) }
     )
 
+    @Suppress("UNUSED_PARAMETER")
     constructor(dndAction: DndAction) : this(
         DND_ACTION_TITLE,
         "방해 금지 모드 실행"

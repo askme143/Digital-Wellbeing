@@ -1,6 +1,5 @@
 package com.yeongil.digitalwellbeing.ui.action
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogDndBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.DndActionViewModel
-import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.DndActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class DndDialog : DialogFragment() {

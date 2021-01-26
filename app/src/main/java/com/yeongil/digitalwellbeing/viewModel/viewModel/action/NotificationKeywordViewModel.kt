@@ -1,8 +1,8 @@
-package com.yeongil.digitalwellbeing.viewModel
+package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.viewModel.item.KeywordItem
+import com.yeongil.digitalwellbeing.viewModel.item.NotiKeywordItem
 
 class NotificationKeywordViewModel : ViewModel() {
     var id = ""
@@ -15,11 +15,11 @@ class NotificationKeywordViewModel : ViewModel() {
         keyword.value = ""
     }
 
-    fun init(keywordItem: KeywordItem) {
+    fun init(keywordItem: NotiKeywordItem) {
         id = keywordItem.id
         inclusion = keywordItem.inclusion.value!!
         keyword.value = keywordItem.keyword
     }
 
-    fun getKeywordItem() = KeywordItem(id, keyword.value!!, MutableLiveData(inclusion))
+    fun getKeywordItem() = NotiKeywordItem(id, keyword.value!!, MutableLiveData(inclusion))
 }

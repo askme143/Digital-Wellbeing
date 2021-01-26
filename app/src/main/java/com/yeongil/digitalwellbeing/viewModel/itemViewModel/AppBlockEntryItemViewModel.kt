@@ -6,6 +6,7 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.item.AppBlockEntryItem
 
+// ID is PackageName
 class AppBlockEntryItemViewModel(
     override val id: String,
     val appBlockEntryItem: AppBlockEntryItem,

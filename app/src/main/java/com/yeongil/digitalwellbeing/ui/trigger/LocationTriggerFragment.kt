@@ -2,7 +2,6 @@ package com.yeongil.digitalwellbeing.ui.trigger
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -20,12 +19,11 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentLocationTriggerBinding
 import com.yeongil.digitalwellbeing.utils.NetworkStatus
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
-import com.yeongil.digitalwellbeing.viewModel.LocationTriggerViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.LocationTriggerViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class LocationTriggerFragment : Fragment(), OnMapReadyCallback {

@@ -5,7 +5,7 @@
 
         <variable
             name="itemVM"
-            type="com.yeongil.digitalwellbeing.viewModel.itemViewModel.KeywordItemViewModel" />
+            type="com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiKeywordItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,7 +21,7 @@
             android:id="@+id/keyword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{itemVM.keywordItem.keyword}"
+            android:text="@{itemVM.notiKeywordItem.keyword}"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -31,7 +31,7 @@
             android:id="@+id/handling_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{itemVM.keywordItem.inclusion ? " - 포함할 때" : " - 포함하지 않을 때"}'
+            android:text='@{itemVM.notiKeywordItem.inclusion ? " - 포함할 때" : " - 포함하지 않을 때"}'
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/keyword"
@@ -41,7 +41,7 @@
             android:id="@+id/handling_checkbox"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:checked="@={itemVM.keywordItem.inclusion}"
+            android:checked="@={itemVM.notiKeywordItem.inclusion}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@id/delete_btn"
             app:layout_constraintTop_toTopOf="parent" />

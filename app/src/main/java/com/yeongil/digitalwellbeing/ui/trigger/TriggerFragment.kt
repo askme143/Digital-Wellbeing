@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.databinding.FragmentTriggerBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModel.item.ACTIVITY_TRIGGER_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.LOCATION_TRIGGER_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.TIME_TRIGGER_TITLE

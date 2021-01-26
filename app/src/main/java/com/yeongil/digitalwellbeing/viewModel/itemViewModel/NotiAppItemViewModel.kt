@@ -6,7 +6,7 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.item.NotiAppItem
 
-// id is packageName
+// ID is PackageName
 class NotiAppItemViewModel(
     override val id: String,
     val notiAppItem: NotiAppItem,

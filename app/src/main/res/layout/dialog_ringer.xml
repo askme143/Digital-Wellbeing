@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.RingerActionViewModel" />
+            type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.RingerActionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,6 +1,5 @@
 package com.yeongil.digitalwellbeing.ui.trigger
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.DialogActivityTriggerBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.ActivityTriggerViewModel
-import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.ActivityTriggerViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class ActivityTriggerDialog : BottomSheetDialogFragment() {

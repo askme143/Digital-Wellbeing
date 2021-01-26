@@ -5,12 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.databinding.FragmentActionEditBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.AppBlockActionViewModel
-import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 
 class ActionEditFragment : Fragment() {
     private var _binding: FragmentActionEditBinding? = null

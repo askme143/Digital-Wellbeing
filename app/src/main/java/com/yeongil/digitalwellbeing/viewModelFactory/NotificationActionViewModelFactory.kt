@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
-import com.yeongil.digitalwellbeing.viewModel.NotificationActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel
 
 @Suppress("UNCHECKED_CAST")
 class NotificationActionViewModelFactory(private val context: Context) : ViewModelProvider.Factory {

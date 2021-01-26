@@ -9,6 +9,7 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
 import kotlinx.coroutines.CoroutineScope
 
+// ID is RuleID
 class RuleInfoItemViewModel(
     override val id: String,
     val ruleInfo: RuleInfo,

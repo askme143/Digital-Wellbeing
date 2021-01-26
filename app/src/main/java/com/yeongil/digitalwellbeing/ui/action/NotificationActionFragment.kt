@@ -6,16 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yeongil.digitalwellbeing.databinding.FragmentNotificationActionBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerViewAdapter
-import com.yeongil.digitalwellbeing.viewModel.NotificationActionViewModel
-import com.yeongil.digitalwellbeing.viewModel.NotificationKeywordViewModel
-import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
-import com.yeongil.digitalwellbeing.viewModel.itemViewModel.KeywordItemViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationKeywordViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiKeywordItemViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.NotificationActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
@@ -52,13 +51,13 @@ class NotificationActionFragment : Fragment() {
 
         initViewModel()
 
-        notiActionViewModel.keywordItemClickEvent.observe(viewLifecycleOwner) { event ->
+        notiActionViewModel.notiKeywordItemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { id ->
-                val clickedItem = notiActionViewModel.keywordItemList.value!!
+                val clickedItem = notiActionViewModel.notiKeywordRecyclerItemList.value!!
                     .map { it.viewModel }
-                    .filterIsInstance<KeywordItemViewModel>()
+                    .filterIsInstance<NotiKeywordItemViewModel>()
                     .filter { it.id == id }[0]
-                    .keywordItem
+                    .notiKeywordItem
 
                 notiKeywordViewModel.init(clickedItem)
                 findNavController().navigateSafe(

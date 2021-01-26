@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
-import com.yeongil.digitalwellbeing.viewModel.AppBlockActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
 
 @Suppress("UNCHECKED_CAST")
 class AppBlockActionViewModelFactory(private val context: Context) : ViewModelProvider.Factory {

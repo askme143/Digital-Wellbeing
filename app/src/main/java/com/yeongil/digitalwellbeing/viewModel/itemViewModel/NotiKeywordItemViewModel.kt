@@ -4,11 +4,12 @@ import com.yeongil.digitalwellbeing.BR
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
-import com.yeongil.digitalwellbeing.viewModel.item.KeywordItem
+import com.yeongil.digitalwellbeing.viewModel.item.NotiKeywordItem
 
-class KeywordItemViewModel(
+// ID is EpochTime (or List Index of initialized item view models)
+class NotiKeywordItemViewModel(
     override val id: String,
-    val keywordItem: KeywordItem,
+    val notiKeywordItem: NotiKeywordItem,
     val onClickItem: (String) -> Unit,
     val onClickItemDelete: (String) -> Unit,
 ) : RecyclerItemViewModel {
@@ -16,17 +17,17 @@ class KeywordItemViewModel(
         if (this === other) return true
         if (javaClass != other.javaClass) return false
 
-        other as KeywordItemViewModel
-        return this.keywordItem == other.keywordItem
+        other as NotiKeywordItemViewModel
+        return this.notiKeywordItem == other.notiKeywordItem
     }
 
     override fun isSameContent(other: Any): Boolean {
-        other as KeywordItemViewModel
-        return this.keywordItem == other.keywordItem
+        other as NotiKeywordItemViewModel
+        return this.notiKeywordItem == other.notiKeywordItem
     }
 
     override fun toRecyclerItem(): RecyclerItem {
-        return RecyclerItem(this, R.layout.item_keyword, BR.itemVM)
+        return RecyclerItem(this, R.layout.item_noti_keyword, BR.itemVM)
     }
 
     fun onClick() = onClickItem(id)

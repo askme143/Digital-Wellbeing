@@ -1,9 +1,8 @@
-package com.yeongil.digitalwellbeing.viewModel
+package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.data.action.AppBlockAction
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppItem

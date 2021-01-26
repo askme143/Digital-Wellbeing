@@ -1,9 +1,7 @@
 package com.yeongil.digitalwellbeing.ui.action
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -13,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockListBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerViewAdapter
-import com.yeongil.digitalwellbeing.viewModel.AppBlockActionViewModel
-import com.yeongil.digitalwellbeing.viewModel.AppListViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppListViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory

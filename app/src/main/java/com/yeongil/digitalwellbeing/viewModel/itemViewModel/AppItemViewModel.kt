@@ -7,7 +7,7 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 
-// id is a package name
+// ID is PackageName
 class AppItemViewModel(
     override val id: String,
     val appItem: AppItem

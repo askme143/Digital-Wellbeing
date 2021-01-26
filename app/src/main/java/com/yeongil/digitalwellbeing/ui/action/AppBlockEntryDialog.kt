@@ -9,8 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yeongil.digitalwellbeing.databinding.DialogAppBlockEntryBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.AppBlockActionViewModel
-import com.yeongil.digitalwellbeing.viewModel.AppBlockEntryViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockEntryViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 
 class AppBlockEntryDialog : BottomSheetDialogFragment() {

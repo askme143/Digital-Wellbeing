@@ -1,6 +1,5 @@
 package com.yeongil.digitalwellbeing.ui.action
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentActionBinding
 import com.yeongil.digitalwellbeing.utils.*
-import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModel.item.APP_BLOCK_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.DND_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.NOTIFICATION_ACTION_TITLE

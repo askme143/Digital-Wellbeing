@@ -6,6 +6,7 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.item.TriggerActionItem
 
+// ID is Title of TriggerActionItem
 class TriggerActionItemViewModel(
     override val id: String,
     val layoutId: Int,

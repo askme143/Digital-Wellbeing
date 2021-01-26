@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.NotificationActionViewModel" />
+            type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -80,7 +80,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/keyword_recycler_view"
-            recycler_item_list_with_lifecycle="@{vm.keywordItemList}"
+            recycler_item_list_with_lifecycle="@{vm.notiKeywordRecyclerItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/handling_btn"

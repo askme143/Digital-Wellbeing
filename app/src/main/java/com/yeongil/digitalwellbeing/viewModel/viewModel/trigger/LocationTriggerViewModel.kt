@@ -1,4 +1,4 @@
-package com.yeongil.digitalwellbeing.viewModel
+package com.yeongil.digitalwellbeing.viewModel.viewModel.trigger
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

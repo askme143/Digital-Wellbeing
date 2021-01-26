@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.TimeTriggerViewModel" />
+            type="com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.TimeTriggerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yeongil.digitalwellbeing.databinding.DialogNotiHandlingBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.NotificationActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.NotificationActionViewModelFactory
 
 class NotiHandlingDialog : BottomSheetDialogFragment() {
