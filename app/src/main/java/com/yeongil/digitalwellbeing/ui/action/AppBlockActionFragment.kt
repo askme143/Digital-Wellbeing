@@ -31,6 +31,9 @@ class AppBlockActionFragment : Fragment() {
     private val appBlockActionViewModel by activityViewModels<AppBlockActionViewModel> {
         AppBlockActionViewModelFactory(requireContext())
     }
+    private val appListViewModel by activityViewModels<AppListViewModel> {
+        AppListViewModelFactory(requireContext())
+    }
     private val appBlockEntryViewModel by activityViewModels<AppBlockEntryViewModel>()
 
     override fun onCreateView(
@@ -66,9 +69,11 @@ class AppBlockActionFragment : Fragment() {
             findNavController().navigateSafe(directions.actionAppBlockActionFragmentToAppBlockListFragment())
         }
         binding.beforeBtn.setOnClickListener {
+            appBlockActionViewModel.editing = false
             findNavController().navigateSafe(directions.actionAppBlockActionFragmentToActionEditFragment())
         }
         binding.completeBtn.setOnClickListener {
+            appBlockActionViewModel.editing = false
             ruleEditViewModel.addAppBlockAction(appBlockActionViewModel.getAppBlockAction())
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
@@ -79,8 +84,10 @@ class AppBlockActionFragment : Fragment() {
     private fun initViewModel() {
         val action = ruleEditViewModel.editingRule.value?.appBlockAction
 
-        if (action != null) {
-            appBlockActionViewModel.init(action)
-        } else appBlockActionViewModel.init()
+        if (!appBlockActionViewModel.editing) {
+            if (action != null) {
+                appBlockActionViewModel.init(action)
+            } else appBlockActionViewModel.init()
+        }
     }
 }

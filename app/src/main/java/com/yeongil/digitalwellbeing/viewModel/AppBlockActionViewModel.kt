@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.collect
 class AppBlockActionViewModel(
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
+    var editing = false
+
     val appBlockEntryList = MutableLiveData<List<AppBlockEntry>>()
     val appBlockEntryItemList = liveData<List<RecyclerItem>> {
         appBlockEntryList.asFlow().collect { list ->

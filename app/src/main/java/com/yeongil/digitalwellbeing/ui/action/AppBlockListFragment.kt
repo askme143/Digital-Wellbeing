@@ -64,6 +64,7 @@ class AppBlockListFragment : Fragment() {
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
         binding.completeBtn.setOnClickListener {
+            appBlockActionViewModel.editing = true
             appBlockActionViewModel.setAppList(appListViewModel.getCheckedAppList())
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
