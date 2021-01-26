@@ -16,6 +16,7 @@ class AppListViewModel(
 
     fun init() {
         // TODO: Initialize appItemAllChecked as null
+        appItemAllChecked.value = null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
             .map {
@@ -29,6 +30,7 @@ class AppListViewModel(
 
     fun init(appList: List<String>) {
         // TODO: Initialize appItemAllChecked as null
+        appItemAllChecked.value = null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
             .map {

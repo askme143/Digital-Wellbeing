@@ -244,7 +244,8 @@ class RuleEditViewModel(
     private fun notificationActionRuleItem(notificationAction: NotificationAction): TriggerActionItem =
         object : TriggerActionItem {
             override val title = NOTIFICATION_ACTION_TITLE
-            override val description = "${notificationAction.appList.joinToString("/")} 알림 숨김"
+            override val description =
+                notificationAction.appList.joinToString(" / ") { pmRepo.getLabel(it) }
         }
 
     @Suppress("UNUSED_PARAMETER")

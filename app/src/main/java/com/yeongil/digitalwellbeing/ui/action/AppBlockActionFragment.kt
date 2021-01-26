@@ -82,9 +82,8 @@ class AppBlockActionFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        val action = ruleEditViewModel.editingRule.value?.appBlockAction
-
         if (!appBlockActionViewModel.editing) {
+            val action = ruleEditViewModel.editingRule.value?.appBlockAction
             if (action != null) {
                 appBlockActionViewModel.init(action)
             } else appBlockActionViewModel.init()

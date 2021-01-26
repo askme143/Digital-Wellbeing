@@ -22,7 +22,7 @@ class NotiAppListFragment : Fragment() {
 
     private val directions = NotiAppListFragmentDirections
 
-    private val notificationActionViewModel by activityViewModels<NotificationActionViewModel> {
+    private val notiActionViewModel by activityViewModels<NotificationActionViewModel> {
         NotificationActionViewModelFactory(requireContext())
     }
     private val appListViewModel by activityViewModels<AppListViewModel> {
@@ -52,7 +52,8 @@ class NotiAppListFragment : Fragment() {
             findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            notificationActionViewModel.setAppList(appListViewModel.getCheckedAppList())
+            notiActionViewModel.editing = true
+            notiActionViewModel.setAppList(appListViewModel.getCheckedAppList())
             findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
 
@@ -60,7 +61,7 @@ class NotiAppListFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        val appList = notificationActionViewModel.notiAppList.value ?: listOf()
+        val appList = notiActionViewModel.notiAppList.value ?: listOf()
         appListViewModel.init(appList)
     }
 }

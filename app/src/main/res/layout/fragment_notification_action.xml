@@ -79,6 +79,8 @@
             app:constraint_referenced_ids="add_keyword_text, add_keyword_btn" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/keyword_recycler_view"
+            recycler_item_list_with_lifecycle="@{vm.keywordItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"

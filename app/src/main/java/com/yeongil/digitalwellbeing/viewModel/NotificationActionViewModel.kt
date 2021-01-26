@@ -4,19 +4,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
-import com.yeongil.digitalwellbeing.data.action.AppBlockEntry
 import com.yeongil.digitalwellbeing.data.action.KeywordEntry
 import com.yeongil.digitalwellbeing.data.action.NotificationAction
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
-import com.yeongil.digitalwellbeing.utils.CLOSE_IMMEDIATE
+import com.yeongil.digitalwellbeing.utils.*
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
+import com.yeongil.digitalwellbeing.viewModel.item.KeywordItem
 import com.yeongil.digitalwellbeing.viewModel.item.NotiAppItem
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.KeywordItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiAppItemViewModel
 import kotlinx.coroutines.flow.collect
 
 class NotificationActionViewModel(
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
+    var editing = false
+
     val notiAppList = MutableLiveData<List<String>>()
     val notiAppItemList = liveData<List<RecyclerItem>> {
         notiAppList.asFlow().collect { list ->
@@ -27,49 +30,94 @@ class NotificationActionViewModel(
             )
         }
     }
-    private val onClickNotiAppItemDelete: (String) -> Unit = { id ->
-        val oldList = notiAppList.value ?: listOf()
-        notiAppList.value = oldList - id
-    }
 
     val keywordItemList = MutableLiveData<List<RecyclerItem>>()
-    // TODO: Make KeywordItem
-    // TODO: Make KeywordItemViewModel
-    // TODO: string to KeywordItem, to KeywordItemViewModel, to RecyclerItem
+    val keywordItemClickEvent = MutableLiveData<Event<String>>()
 
-    // TODO: Bind with fragment_notification_action
-    // TODO: Add keywordItemClickEvent
-    // TODO: Add keywordItemClickInclusionEvent
-    // TODO: Add keywordItemClickDeleteEvent
-
+    val constNotificationHide = NOTIFICATION_HIDE
+    val constNotificationVibrate = NOTIFICATION_VIBRATE
+    val constNotificationRing = NOTIFICATION_RING
+    val constNotificationSilent = NOTIFICATION_SILENT
     val handlingAction = MutableLiveData<Int>()
     // TODO: Bind with a spinner in fragment_notification_action
 
     fun init() {
         notiAppList.value = listOf()
         keywordItemList.value = listOf()
+        handlingAction.value = constNotificationHide
     }
 
-    fun init(notificationAction: NotificationAction) {
-        notificationAction.appList
-        notificationAction.keywordList
-        notificationAction.handlingAction
+    fun init(action: NotificationAction) {
+        notiAppList.value = action.appList
+        keywordItemList.value = action.keywordList
+            .mapIndexed { index, entry ->
+                KeywordItem(index.toString(), entry.keyword, MutableLiveData(entry.inclusion))
+            }
+            .map {
+                KeywordItemViewModel(
+                    it.id,
+                    it,
+                    onClickKeywordItem,
+                    onClickKeywordDelete
+                ).toRecyclerItem()
+            }
+        handlingAction.value = action.handlingAction
     }
 
-    fun getNotificationAction() {
+    fun getNotificationAction(): NotificationAction {
         val appList = notiAppList.value ?: listOf()
-//        val keywordEntryList = keywordList.value ?: listOf()
-        // TODO: keywordItemList to keywordEntryList
-        val handlingAction = this.handlingAction.value ?: 0
+        val keywordItemList = this.keywordItemList.value ?: listOf()
+        val keywordEntryList =
+            keywordItemList.map { it.viewModel }
+                .filterIsInstance<KeywordItemViewModel>()
+                .map { it.keywordItem }
+                .map { KeywordEntry(it.keyword, it.inclusion.value ?: true) }
+        val handlingAction = this.handlingAction.value ?: constNotificationHide
 
-//        return NotificationAction(appList, keywordList, handlingAction)
+        return NotificationAction(appList, keywordEntryList, handlingAction)
     }
 
     fun setAppList(packageNameList: List<String>) {
         notiAppList.value = packageNameList
     }
 
-    fun addKeyword(keyword: String) {
-        // TODO: Add or update a keyword
+    fun addKeywordItem(item: KeywordItem) {
+        val oldList = keywordItemList.value ?: listOf()
+        val index = oldList.map { it.viewModel }
+            .filterIsInstance<KeywordItemViewModel>()
+            .map { it.id }
+            .indexOf(item.id)
+        val newRecyclerItem =
+            KeywordItemViewModel(
+                item.id,
+                item,
+                onClickKeywordItem,
+                onClickKeywordDelete
+            ).toRecyclerItem()
+
+        if (index == -1) {
+            keywordItemList.value = oldList + newRecyclerItem
+        } else {
+            val size = oldList.size
+            keywordItemList.value =
+                oldList.subList(0, index) + newRecyclerItem + oldList.subList(index + 1, size)
+        }
+    }
+
+    private val onClickNotiAppItemDelete: (String) -> Unit = { id ->
+        val oldList = notiAppList.value ?: listOf()
+        notiAppList.value = oldList - id
+    }
+
+    private val onClickKeywordItem: (String) -> Unit = { keywordItemClickEvent.value = Event(it) }
+
+    private val onClickKeywordDelete: (String) -> Unit = { id ->
+        val oldList = keywordItemList.value ?: listOf()
+        val index = oldList.map { it.viewModel }
+            .filterIsInstance<KeywordItemViewModel>()
+            .map { it.id }
+            .indexOf(id)
+
+        keywordItemList.value = oldList - oldList[index]
     }
 }
