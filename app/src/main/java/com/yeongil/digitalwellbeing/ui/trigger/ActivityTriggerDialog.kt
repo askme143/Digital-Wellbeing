@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing.ui.trigger
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,11 +37,11 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            val editing = ruleEditViewModel.editingRule.value?.activityTrigger != null
-            if (editing)
-                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
-            else
+            val goToEditFragment = ruleEditViewModel.editingRule.value?.activityTrigger == null
+            if (goToEditFragment)
                 findNavController().navigateSafe(directions.actionActivityTriggerDialogToTriggerEditFragment())
+            else
+                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
         }
         binding.completeBtn.setOnClickListener {
             ruleEditViewModel.addTriggerAction(activityTriggerViewModel.getActivityTrigger())

@@ -65,7 +65,12 @@ class AppBlockActionFragment : Fragment() {
         }
         binding.beforeBtn.setOnClickListener {
             appBlockActionViewModel.editing = false
-            findNavController().navigateSafe(directions.actionAppBlockActionFragmentToActionEditFragment())
+            val goToEditFragment = ruleEditViewModel.editingRule.value?.appBlockAction == null
+            if (goToEditFragment) {
+                findNavController().navigateSafe(directions.actionAppBlockActionFragmentToActionEditFragment())
+            } else {
+                findNavController().navigateSafe(directions.actionGlobalActionFragment())
+            }
         }
         binding.completeBtn.setOnClickListener {
             appBlockActionViewModel.editing = false

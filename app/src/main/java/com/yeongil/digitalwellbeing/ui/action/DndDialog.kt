@@ -32,11 +32,11 @@ class DndDialog : DialogFragment() {
         _binding = DialogDndBinding.inflate(inflater, container, false)
 
         binding.cancelBtn.setOnClickListener {
-            val editing = ruleEditViewModel.editingRule.value?.dndAction != null
-            if (editing) {
-                findNavController().navigateSafe(directions.actionGlobalActionFragment())
-            } else {
+            val goToEditFragment = ruleEditViewModel.editingRule.value?.dndAction == null
+            if (goToEditFragment) {
                 findNavController().navigateSafe(directions.actionDndDialogToActionEditFragment())
+            } else {
+                findNavController().navigateSafe(directions.actionGlobalActionFragment())
             }
         }
         binding.completeBtn.setOnClickListener {

@@ -78,7 +78,13 @@ class NotificationActionFragment : Fragment() {
         }
         binding.beforeBtn.setOnClickListener {
             notiActionViewModel.editing = false
-            findNavController().navigateSafe(directions.actionNotificationActionFragmentToActionEditFragment())
+
+            val goToEditFragment = ruleEditViewModel.editingRule.value?.notificationAction == null
+            if (goToEditFragment) {
+                findNavController().navigateSafe(directions.actionNotificationActionFragmentToActionEditFragment())
+            } else {
+                findNavController().navigateSafe(directions.actionGlobalActionFragment())
+            }
         }
         binding.completeBtn.setOnClickListener {
             notiActionViewModel.editing = false

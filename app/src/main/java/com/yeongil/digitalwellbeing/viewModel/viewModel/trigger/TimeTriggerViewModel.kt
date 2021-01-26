@@ -44,7 +44,7 @@ class TimeTriggerViewModel : ViewModel() {
         val currentDay = calendar.get(Calendar.DAY_OF_WEEK) - 1
 
         setStartPickerTime(currentHour * 60 + currentMin)
-        setEndPickerTime(currentHour * 60 + currentMin + 60)
+        setEndPickerTime((currentHour * 60 + currentMin + 60) % (24 * 60))
 
         repeatDay.map { it.value = false }
         repeatDay[currentDay].value = true

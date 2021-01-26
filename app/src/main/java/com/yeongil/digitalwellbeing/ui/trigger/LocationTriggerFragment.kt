@@ -105,11 +105,11 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             }
 
             binding.beforeBtn.setOnClickListener {
-                val editing = ruleEditViewModel.editingRule.value?.locationTrigger != null
-                if (editing)
-                    findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
-                else
+                val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
+                if (goToEditFragment)
                     findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
+                else
+                    findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             }
             binding.completeBtn.setOnClickListener {
                 locationTriggerViewModel.locationTrigger.value?.let {

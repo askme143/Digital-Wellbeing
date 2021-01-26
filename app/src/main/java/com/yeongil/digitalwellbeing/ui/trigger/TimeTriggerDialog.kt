@@ -36,11 +36,11 @@ class TimeTriggerDialog : BottomSheetDialogFragment() {
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
-            val editing = ruleEditViewModel.editingRule.value?.timeTrigger != null
-            if (editing)
-                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
-            else
+            val goToEditFragment = ruleEditViewModel.editingRule.value?.timeTrigger == null
+            if (goToEditFragment)
                 findNavController().navigateSafe(directions.actionTimeTriggerDialogToTriggerEditFragment())
+            else
+                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
         }
         binding.completeBtn.setOnClickListener {
             ruleEditViewModel.addTriggerAction(timeTriggerViewModel.getTimeTrigger())
