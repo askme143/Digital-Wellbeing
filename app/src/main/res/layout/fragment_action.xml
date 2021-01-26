@@ -46,7 +46,7 @@
             app:constraint_referenced_ids="add_btn, description, title" />
 
         <androidx.recyclerview.widget.RecyclerView
-            recycler_item_list="@{vm.actionItemList}"
+            recycler_item_list="@{vm.actionRecyclerItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"

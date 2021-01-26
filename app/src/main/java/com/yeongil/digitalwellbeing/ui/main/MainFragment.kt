@@ -37,9 +37,7 @@ class MainFragment : Fragment() {
         binding.vm = mainViewModel
 
         mainViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { rid ->
-                ruleEditViewModel.init(rid)
-            }
+            event.getContentIfNotHandled()?.let {}
             findNavController().navigateSafe(directions.actionMainFragmentToDescriptionFragment())
         }
 

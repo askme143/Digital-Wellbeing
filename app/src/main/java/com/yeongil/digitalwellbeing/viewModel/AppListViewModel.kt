@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.viewModel
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yeongil.digitalwellbeing.data.action.AppBlockAction
@@ -14,8 +15,8 @@ class AppListViewModel(
     val appItemList = MutableLiveData<List<RecyclerItem>>()
     val appItemAllChecked = MutableLiveData<Boolean>(null)
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun init() {
-        // TODO: Initialize appItemAllChecked as null
         appItemAllChecked.value = null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
@@ -28,8 +29,8 @@ class AppListViewModel(
             .map { AppItemViewModel(it.first, it.second).toRecyclerItem() }
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun init(appList: List<String>) {
-        // TODO: Initialize appItemAllChecked as null
         appItemAllChecked.value = null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }

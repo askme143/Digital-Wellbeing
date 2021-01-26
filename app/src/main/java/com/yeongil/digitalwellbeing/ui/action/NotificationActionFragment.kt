@@ -83,7 +83,7 @@ class NotificationActionFragment : Fragment() {
         }
         binding.completeBtn.setOnClickListener {
             notiActionViewModel.editing = false
-            ruleEditViewModel.addNotificationAction(notiActionViewModel.getNotificationAction())
+            ruleEditViewModel.addTriggerAction(notiActionViewModel.getNotificationAction())
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
 

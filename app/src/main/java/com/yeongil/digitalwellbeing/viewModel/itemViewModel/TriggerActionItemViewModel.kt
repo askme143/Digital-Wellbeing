@@ -8,6 +8,7 @@ import com.yeongil.digitalwellbeing.viewModel.item.TriggerActionItem
 
 class TriggerActionItemViewModel(
     override val id: String,
+    val layoutId: Int,
     val triggerActionItem: TriggerActionItem,
     val onClickItem: (String) -> Unit,
     val onClickItemDelete: (String) -> Unit
@@ -26,7 +27,7 @@ class TriggerActionItemViewModel(
     }
 
     override fun toRecyclerItem(): RecyclerItem =
-        RecyclerItem(this, R.layout.item_trigger_action, BR.itemVM)
+        RecyclerItem(this, layoutId, BR.itemVM)
 
     fun onClick() = onClickItem(id)
     fun onClickDelete() = onClickItemDelete(id)

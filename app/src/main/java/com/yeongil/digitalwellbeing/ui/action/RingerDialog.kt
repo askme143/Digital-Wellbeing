@@ -45,7 +45,7 @@ class RingerDialog : BottomSheetDialogFragment() {
                 findNavController().navigateSafe(directions.actionRingerDialogToActionEditFragment())
         }
         binding.completeBtn.setOnClickListener {
-            ruleEditViewModel.addRingerAction(ringerActionViewModel.getRingerAction())
+            ruleEditViewModel.addTriggerAction(ringerActionViewModel.getRingerAction())
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
 

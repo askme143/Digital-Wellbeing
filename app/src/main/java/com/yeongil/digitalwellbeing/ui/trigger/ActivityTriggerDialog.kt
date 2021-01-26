@@ -45,7 +45,7 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
                 findNavController().navigateSafe(directions.actionActivityTriggerDialogToTriggerEditFragment())
         }
         binding.completeBtn.setOnClickListener {
-            ruleEditViewModel.addActivityTrigger(activityTriggerViewModel.getActivityTrigger())
+            ruleEditViewModel.addTriggerAction(activityTriggerViewModel.getActivityTrigger())
             findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
         }
 

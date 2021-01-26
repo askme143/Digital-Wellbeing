@@ -115,7 +115,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             }
             binding.completeBtn.setOnClickListener {
                 locationTriggerViewModel.locationTrigger.value?.let {
-                    ruleEditViewModel.addLocationTrigger(it)
+                    ruleEditViewModel.addTriggerAction(it)
                 }
                 findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             }

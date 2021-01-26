@@ -12,6 +12,10 @@ import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentActionBinding
 import com.yeongil.digitalwellbeing.utils.*
 import com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.item.APP_BLOCK_ACTION_TITLE
+import com.yeongil.digitalwellbeing.viewModel.item.DND_ACTION_TITLE
+import com.yeongil.digitalwellbeing.viewModel.item.NOTIFICATION_ACTION_TITLE
+import com.yeongil.digitalwellbeing.viewModel.item.RINGER_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class ActionFragment : Fragment() {
@@ -34,8 +38,8 @@ class ActionFragment : Fragment() {
         binding.vm = ruleEditViewModel
 
         ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                when (it) {
+            event.getContentIfNotHandled()?.let { title ->
+                when (title) {
                     APP_BLOCK_ACTION_TITLE ->
                         findNavController().navigateSafe(directions.actionActionFragmentToAppBlockActionFragment())
                     NOTIFICATION_ACTION_TITLE ->

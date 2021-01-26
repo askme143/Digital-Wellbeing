@@ -74,7 +74,7 @@ class AppBlockActionFragment : Fragment() {
         }
         binding.completeBtn.setOnClickListener {
             appBlockActionViewModel.editing = false
-            ruleEditViewModel.addAppBlockAction(appBlockActionViewModel.getAppBlockAction())
+            ruleEditViewModel.addTriggerAction(appBlockActionViewModel.getAppBlockAction())
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
 

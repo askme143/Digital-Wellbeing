@@ -42,7 +42,7 @@ class DndDialog : DialogFragment() {
             }
         }
         binding.completeBtn.setOnClickListener {
-            ruleEditViewModel.addDndAction(dndActionViewModel.getDndAction())
+            ruleEditViewModel.addTriggerAction(dndActionViewModel.getDndAction())
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
 
