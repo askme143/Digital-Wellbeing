@@ -34,7 +34,7 @@ class RuleRepository(
             }
 
         val ruleDto = RuleDto(
-            RuleInfoDto(rule.ruleInfo.ruleId, rule.ruleInfo),
+            RuleInfoDto(rid, rule.ruleInfo.copy(ruleId = rid)),
             rule.locationTrigger?.let { LocationTriggerDto(rid, it) },
             rule.timeTrigger?.let { TimeTriggerDto(rid, it) },
             rule.activityTrigger?.let { ActivityTriggerDto(rid, it) },
