@@ -74,6 +74,9 @@ class NotificationActionFragment : Fragment() {
             notiKeywordViewModel.init()
             findNavController().navigateSafe(directions.actionNotificationActionFragmentToNotiKeywordDialog())
         }
+        binding.handlingBtn.setOnClickListener {
+            findNavController().navigateSafe(directions.actionNotificationActionFragmentToNotiHandlingDialog())
+        }
         binding.beforeBtn.setOnClickListener {
             notiActionViewModel.editing = false
             findNavController().navigateSafe(directions.actionNotificationActionFragmentToActionEditFragment())

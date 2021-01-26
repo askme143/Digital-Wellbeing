@@ -39,7 +39,21 @@ class NotificationActionViewModel(
     val constNotificationRing = NOTIFICATION_RING
     val constNotificationSilent = NOTIFICATION_SILENT
     val handlingAction = MutableLiveData<Int>()
-    // TODO: Bind with a spinner in fragment_notification_action
+    val handlingActionText = liveData<String> {
+        handlingAction.asFlow().collect {
+            emit(
+                when (it) {
+                    NOTIFICATION_HIDE -> "숨김"
+                    NOTIFICATION_VIBRATE -> "진동"
+                    NOTIFICATION_RING -> "소리"
+                    NOTIFICATION_SILENT -> "무음"
+                    else -> ""
+                }
+            )
+        }
+    }
+
+    fun onHandlingSelected(action: Int) = run { handlingAction.value = action }
 
     fun init() {
         notiAppList.value = listOf()

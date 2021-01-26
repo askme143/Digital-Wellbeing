@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.yeongil.digitalwellbeing.viewModel.NotificationActionViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="알림 처리 방법"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title">
+
+            <RadioButton
+                android:id="@+id/hide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{vm.handlingAction == vm.constNotificationHide}"
+                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationHide)}"
+                android:text="알림 숨기기" />
+
+            <RadioButton
+                android:id="@+id/vibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{vm.handlingAction == vm.constNotificationVibrate}"
+                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationVibrate)}"
+                android:text="진동으로 받기" />
+
+            <RadioButton
+                android:id="@+id/ring"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{vm.handlingAction == vm.constNotificationRing}"
+                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationRing)}"
+                android:text="소리로 받기" />
+
+            <RadioButton
+                android:id="@+id/silent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{vm.handlingAction == vm.constNotificationSilent}"
+                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationSilent)}"
+                android:text="무음으로 받기" />
+        </RadioGroup>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/btn_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="cancel_btn, complete_btn" />
+
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_group"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.45" />
+
+        <Button
+            android:id="@+id/complete_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="완료"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_group"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.45" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

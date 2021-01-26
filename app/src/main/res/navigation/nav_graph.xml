@@ -272,6 +272,9 @@
             app:destination="@id/actionEditFragment"
             app:popUpTo="@+id/actionEditFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_notificationActionFragment_to_notiHandlingDialog"
+            app:destination="@id/notiHandlingDialog" />
     </fragment>
     <dialog
         android:id="@+id/dndDialog"
@@ -303,5 +306,15 @@
             app:popUpTo="@+id/appBlockActionFragment"
             app:popUpToInclusive="true" />
     </dialog>
+    <fragment
+        android:id="@+id/notiHandlingDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.action.NotiHandlingDialog"
+        android:label="NotiHandlingDialog">
+        <action
+            android:id="@+id/action_notiHandlingDialog_to_notificationActionFragment"
+            app:destination="@id/notificationActionFragment"
+            app:popUpTo="@+id/notificationActionFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>
