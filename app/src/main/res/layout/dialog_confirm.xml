@@ -2,21 +2,26 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.yeongil.digitalwellbeing.viewModel.RuleEditViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:paddingVertical="20dp"
-        >
+        android:paddingVertical="20dp">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_round_corner_2"
             android:padding="20dp"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/title"
@@ -39,9 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:autofillHints="password"
                 android:hint="규칙 이름"
-                android:inputType="textPassword"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@id/btn_barrier"
                 app:layout_constraintLeft_toLeftOf="parent"

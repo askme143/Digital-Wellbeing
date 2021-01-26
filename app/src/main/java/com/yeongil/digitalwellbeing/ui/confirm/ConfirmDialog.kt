@@ -32,6 +32,8 @@ class ConfirmDialog : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DialogConfirmBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = ruleEditViewModel
 
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
@@ -44,6 +46,7 @@ class ConfirmDialog : BottomSheetDialogFragment() {
             findNavController().navigateSafe(directions.actionConfirmDialogToConfirmFragment())
         }
         binding.completeBtn.setOnClickListener {
+            ruleEditViewModel.saveRule()
             if (ruleEditViewModel.isNewRule)
                 findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
             else

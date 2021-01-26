@@ -18,6 +18,8 @@ import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RuleEditViewModel(
     private val ruleRepository: RuleRepository,
@@ -44,9 +46,12 @@ class RuleEditViewModel(
 
     val itemClickEvent = MutableLiveData<Event<String>>()
 
+    val ruleName = MutableLiveData<String>()
+
     fun init(rule: Rule) {
         isNewRule = false
         editingRule.value = rule.copy()
+        ruleName.value = editingRule.value?.ruleInfo?.ruleName ?: "규칙 이름"
 
         initTriggerActionItemList()
     }
@@ -54,6 +59,7 @@ class RuleEditViewModel(
     fun init() {
         isNewRule = true
         editingRule.value = emptyRule.copy()
+        ruleName.value = editingRule.value?.ruleInfo?.ruleName ?: "규칙 이름"
 
         initTriggerActionItemList()
     }
@@ -73,6 +79,16 @@ class RuleEditViewModel(
             rule.notificationAction?.let { addNotificationAction(it) }
             rule.dndAction?.let { addDndAction(it) }
             rule.ringerAction?.let { addRingerAction(it) }
+        }
+    }
+
+    fun saveRule() {
+        val rule = editingRule.value ?: return
+        val ruleInfo = rule.ruleInfo.copy(ruleName = ruleName.value ?: "규칙 이름")
+        val savingRule = rule.copy(ruleInfo = ruleInfo)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            ruleRepository.insertOrUpdateRule(savingRule)
         }
     }
 
