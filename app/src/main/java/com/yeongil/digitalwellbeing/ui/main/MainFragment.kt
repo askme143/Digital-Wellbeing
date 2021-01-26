@@ -1,6 +1,5 @@
 package com.yeongil.digitalwellbeing.ui.main
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.databinding.FragmentMainBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.MainViewModel
@@ -19,6 +17,8 @@ import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+
+    val directions = MainFragmentDirections
 
     private val mainViewModel by activityViewModels<MainViewModel> {
         MainViewModelFactory(requireContext())
@@ -36,9 +36,16 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = mainViewModel
 
+        mainViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { rid ->
+                ruleEditViewModel.init(rid)
+            }
+            findNavController().navigateSafe(directions.actionMainFragmentToDescriptionFragment())
+        }
+
         binding.addBtn.setOnClickListener {
             ruleEditViewModel.init()
-            findNavController().navigateSafe(MainFragmentDirections.actionMainFragmentToTriggerFragment())
+            findNavController().navigateSafe(directions.actionMainFragmentToTriggerFragment())
         }
 
         return binding.root

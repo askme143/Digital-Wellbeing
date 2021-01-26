@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule
 
 import androidx.room.Dao
+import androidx.room.Query
 import androidx.room.Transaction
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.action.*
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.trigger.ActivityTriggerDao
@@ -54,4 +55,8 @@ interface RuleDao :
         deleteDndActionByRid(rid)
         deleteRingerActionByRid(rid)
     }
+
+    @Transaction
+    @Query("SELECT * FROM rule_info WHERE rid = :rid")
+    suspend fun getRuleByRid(rid: Int): RuleDto
 }

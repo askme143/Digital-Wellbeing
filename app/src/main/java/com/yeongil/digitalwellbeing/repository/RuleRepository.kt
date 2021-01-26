@@ -55,6 +55,10 @@ class RuleRepository(
         ruleDao.updateRuleInfo(RuleInfoDto(ruleInfo.ruleId, ruleInfo))
     }
 
+    suspend fun getRuleByRid(rid: Int): Rule {
+        return ruleDtoToRule(ruleDao.getRuleByRid(rid))
+    }
+
     fun getRuleInfoListFlow(): Flow<List<RuleInfo>> {
         return ruleDao.getRuleInfoListFlow().map { it.map { ruleInfoDto -> ruleInfoDto.ruleInfo } }
     }

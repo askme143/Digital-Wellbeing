@@ -20,9 +20,10 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewMode
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RuleEditViewModel(
-    private val ruleRepository: RuleRepository,
+    private val ruleRepo: RuleRepository,
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
     private val emptyRule = Rule(
@@ -47,6 +48,13 @@ class RuleEditViewModel(
     val itemClickEvent = MutableLiveData<Event<String>>()
 
     val ruleName = MutableLiveData<String>()
+
+    fun init(rid: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val rule = ruleRepo.getRuleByRid(rid)
+            launch(Dispatchers.Main) { init(rule) }
+        }
+    }
 
     fun init(rule: Rule) {
         isNewRule = false
@@ -88,7 +96,7 @@ class RuleEditViewModel(
         val savingRule = rule.copy(ruleInfo = ruleInfo)
 
         viewModelScope.launch(Dispatchers.IO) {
-            ruleRepository.insertOrUpdateRule(savingRule)
+            ruleRepo.insertOrUpdateRule(savingRule)
         }
     }
 
