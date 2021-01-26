@@ -15,10 +15,20 @@
 
 
         <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앱 사용 제한"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/add_btn"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/add_btn" />
+
+        <TextView
             android:id="@+id/add_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="앱 추가하기"
+            android:text="앱 추가"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/add_btn"
             app:layout_constraintRight_toLeftOf="@id/add_btn"
@@ -37,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="add_btn, add_text" />
+            app:constraint_referenced_ids="title, add_btn, add_text" />
 
         <androidx.recyclerview.widget.RecyclerView
             recycler_item_list="@{vm.appBlockEntryItemList}"
