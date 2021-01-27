@@ -42,6 +42,8 @@ class AppBlockActionFragment : Fragment() {
 
         initViewModel()
 
+        // TODO: If there is no selected app, invalidate completeBtn
+
         appBlockActionViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { packageName ->
                 val entry = appBlockActionViewModel.appBlockEntryList.value!!

@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.rule
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.action.AppBlockAction
@@ -20,6 +21,8 @@ import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemVie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class RuleEditViewModel(
     private val ruleRepo: RuleRepository,
@@ -113,6 +116,7 @@ class RuleEditViewModel(
         val rule = editingRule.value ?: return
         val ruleInfo = rule.ruleInfo.copy(ruleName = ruleName.value ?: "규칙 이름")
         val savingRule = rule.copy(ruleInfo = ruleInfo)
+        editingRule.value = savingRule
 
         viewModelScope.launch(Dispatchers.IO) {
             ruleRepo.insertOrUpdateRule(savingRule)

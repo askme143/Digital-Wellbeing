@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.repository
 
+import android.util.Log
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule.RuleDao
@@ -16,6 +17,8 @@ import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.TimeTrig
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RULE_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class RuleRepository(
     private val sequenceNumber: SequenceNumber,
@@ -51,12 +54,22 @@ class RuleRepository(
         }
     }
 
+    suspend fun deleteRuleByRid(rid: Int) {
+        ruleDao.deleteRuleByRid(rid)
+    }
+
     suspend fun updateRuleInfo(ruleInfo: RuleInfo) {
         ruleDao.updateRuleInfo(RuleInfoDto(ruleInfo.ruleId, ruleInfo))
     }
 
     suspend fun getRuleByRid(rid: Int): Rule {
         return ruleDtoToRule(ruleDao.getRuleByRid(rid))
+    }
+
+    fun getRuleListAsFlow(): Flow<List<Rule>> {
+        return ruleDao.getRuleListAsFlowByRid().map { list ->
+            list.map { ruleDtoToRule(it) }
+        }
     }
 
     fun getRuleInfoListFlow(): Flow<List<RuleInfo>> {

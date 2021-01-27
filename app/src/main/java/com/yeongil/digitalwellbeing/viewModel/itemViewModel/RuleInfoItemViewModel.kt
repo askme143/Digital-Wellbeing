@@ -3,11 +3,8 @@ package com.yeongil.digitalwellbeing.viewModel.itemViewModel
 import com.yeongil.digitalwellbeing.BR
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule.RuleDao
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleInfoDto
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewModel
-import kotlinx.coroutines.CoroutineScope
 
 // ID is RuleID
 class RuleInfoItemViewModel(

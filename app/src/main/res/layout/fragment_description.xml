@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel" />
+            type="com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/rule_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{vm.ruleName}"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="title, edit_btn, delete_btn" />
+            app:constraint_referenced_ids="rule_name, edit_btn, delete_btn" />
 
         <TextView
             android:id="@+id/text_trigger"
@@ -54,6 +54,7 @@
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 
         <androidx.recyclerview.widget.RecyclerView
+            recycler_item_list="@{vm.triggerRecyclerItemList}"
             android:id="@+id/recycler_trigger"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -69,6 +70,7 @@
             app:layout_constraintTop_toBottomOf="@id/recycler_trigger" />
 
         <androidx.recyclerview.widget.RecyclerView
+            recycler_item_list="@{vm.actionRecyclerItemList}"
             android:id="@+id/recycler_action"
             android:layout_width="match_parent"
             android:layout_height="0dp"

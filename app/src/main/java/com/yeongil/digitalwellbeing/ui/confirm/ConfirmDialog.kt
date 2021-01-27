@@ -2,6 +2,7 @@ package com.yeongil.digitalwellbeing.ui.confirm
 
 import android.app.Service
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yeongil.digitalwellbeing.databinding.DialogConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.DescriptionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class ConfirmDialog : BottomSheetDialogFragment() {
     private var _binding: DialogConfirmBinding? = null
@@ -22,6 +27,9 @@ class ConfirmDialog : BottomSheetDialogFragment() {
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
+    }
+    private val descriptionViewModel by activityViewModels<DescriptionViewModel> {
+        DescriptionViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
@@ -45,10 +53,13 @@ class ConfirmDialog : BottomSheetDialogFragment() {
         }
         binding.completeBtn.setOnClickListener {
             ruleEditViewModel.saveRule()
-            if (ruleEditViewModel.isNewRule)
+            if (ruleEditViewModel.isNewRule) {
                 findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
-            else
+            }
+            else {
+                descriptionViewModel.init(ruleEditViewModel.editingRule.value!!)
                 findNavController().navigateSafe(directions.actionConfirmDialogToDescriptionFragment())
+            }
         }
 
         return binding.root

@@ -11,13 +11,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Rule(
-    val ruleInfo: RuleInfo,
-    val locationTrigger: LocationTrigger?,
-    val timeTrigger: TimeTrigger?,
-    val activityTrigger: ActivityTrigger?,
+    val ruleInfo: RuleInfo = RuleInfo(),
+    val locationTrigger: LocationTrigger? = null,
+    val timeTrigger: TimeTrigger? = null,
+    val activityTrigger: ActivityTrigger? = null,
 
-    val appBlockAction: AppBlockAction?,
-    val notificationAction: NotificationAction?,
-    val dndAction: DndAction?,
-    val ringerAction: RingerAction?,
+    val appBlockAction: AppBlockAction? = null,
+    val notificationAction: NotificationAction? = null,
+    val dndAction: DndAction? = null,
+    val ringerAction: RingerAction? = null,
 )

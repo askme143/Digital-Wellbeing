@@ -33,6 +33,8 @@ class TriggerFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ruleEditViewModel
 
+        // TODO: If there is no trigger, show explanation of the behavior.
+
         ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 when (it) {

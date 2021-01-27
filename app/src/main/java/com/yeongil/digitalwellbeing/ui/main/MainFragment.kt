@@ -9,8 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.databinding.FragmentMainBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleInfoViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.DescriptionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.MainViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
@@ -26,7 +28,9 @@ class MainFragment : Fragment() {
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
     }
-    // TODO: RuleDescrViewModel
+    private val descriptionViewModel by activityViewModels<DescriptionViewModel> {
+        DescriptionViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +42,8 @@ class MainFragment : Fragment() {
         binding.vm = mainViewModel
 
         mainViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                // TODO: RuleDescrViewModel initialization
+            event.getContentIfNotHandled()?.let { rid ->
+                descriptionViewModel.init(rid)
                 findNavController().navigateSafe(directions.actionMainFragmentToDescriptionFragment())
             }
         }

@@ -8,6 +8,7 @@ import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.trigger.Activity
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.trigger.LocationTriggerDao
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.trigger.TimeTriggerDao
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleDto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RuleDao :
@@ -32,14 +33,22 @@ interface RuleDao :
     suspend fun updateRule(ruleDto: RuleDto) {
         updateRuleInfo(ruleDto.ruleInfoDto)
 
-        ruleDto.locationTriggerDto?.let { updateLocationTrigger(it) }
-        ruleDto.timeTriggerDto?.let { updateTimeTrigger(it) }
-        ruleDto.activityTriggerDto?.let { updateActivityTrigger(it) }
+        val rid = ruleDto.ruleInfoDto.rid
 
+        ruleDto.locationTriggerDto?.let { updateLocationTrigger(it) }
+            ?: deleteLocationTriggerByRid(rid)
+        ruleDto.timeTriggerDto?.let { updateTimeTrigger(it) }
+            ?: deleteTimeTriggerByRid(rid)
+        ruleDto.activityTriggerDto?.let { updateActivityTrigger(it) }
+            ?: deleteActivityTriggerByRid(rid)
         ruleDto.appBlockActionDto?.let { updateAppBlockAction(it) }
+            ?: deleteAppBlockActionByRid(rid)
         ruleDto.notificationActionDto?.let { updateNotificationAction(it) }
+            ?: deleteNotificationActionByRid(rid)
         ruleDto.dndActionDto?.let { updateDndAction(it) }
+            ?: deleteDndActionByRid(rid)
         ruleDto.ringerActionDto?.let { updateRingerAction(it) }
+            ?: deleteRingerActionByRid(rid)
     }
 
     @Transaction
@@ -59,4 +68,8 @@ interface RuleDao :
     @Transaction
     @Query("SELECT * FROM rule_info WHERE rid = :rid")
     suspend fun getRuleByRid(rid: Int): RuleDto
+
+    @Transaction
+    @Query("SELECT * FROM rule_info")
+    fun getRuleListAsFlowByRid(): Flow<List<RuleDto>>
 }

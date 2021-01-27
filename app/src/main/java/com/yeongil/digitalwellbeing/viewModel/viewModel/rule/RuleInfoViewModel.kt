@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.rule
 
 import androidx.lifecycle.*
+import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.Event
@@ -29,13 +30,11 @@ class RuleInfoViewModel(
     val itemClickEvent = MutableLiveData<Event<Int>>()
 
     private val onClickActivate: (RuleInfo) -> Unit = {
-        val newRuleInfo =
-            RuleInfo(it.ruleId, it.ruleName, !it.activated, it.notiOnTrigger)
+        val newRuleInfo = it.copy(activated = !it.activated)
         viewModelScope.launch { ruleRepo.updateRuleInfo(newRuleInfo) }
     }
     private val onClickNotiOnTrigger: (RuleInfo) -> Unit = {
-        val newRuleInfo =
-            RuleInfo(it.ruleId, it.ruleName, it.activated, !it.notiOnTrigger)
+        val newRuleInfo = it.copy(notiOnTrigger = !it.notiOnTrigger)
         viewModelScope.launch { ruleRepo.updateRuleInfo(newRuleInfo) }
     }
     private val onClickDelete: (Int) -> Unit = { ruleId ->

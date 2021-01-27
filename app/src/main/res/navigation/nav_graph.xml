@@ -108,6 +108,12 @@
         <action
             android:id="@+id/action_descriptionFragment_to_triggerFragment"
             app:destination="@id/triggerFragment" />
+        <action
+            android:id="@+id/action_descriptionFragment_to_deleteConfirmDialog"
+            app:destination="@id/deleteConfirmDialog" />
+        <action
+            android:id="@+id/action_descriptionFragment_to_ruleNameEditDialog"
+            app:destination="@id/ruleNameEditDialog" />
     </fragment>
     <dialog
         android:id="@+id/confirmDialog"
@@ -316,5 +322,30 @@
             app:popUpTo="@+id/notificationActionFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <dialog
+        android:id="@+id/deleteConfirmDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.description.DeleteConfirmDialog"
+        android:label="DeleteConfirmDialog">
+        <action
+            android:id="@+id/action_deleteConfirmDialog_to_descriptionFragment"
+            app:destination="@id/descriptionFragment"
+            app:popUpTo="@+id/descriptionFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_deleteConfirmDialog_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/ruleNameEditDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.description.RuleNameEditDialog"
+        android:label="RuleNameEditDialog">
+        <action
+            android:id="@+id/action_ruleNameEditDialog_to_descriptionFragment"
+            app:destination="@id/descriptionFragment"
+            app:popUpTo="@+id/descriptionFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
 
 </navigation>
