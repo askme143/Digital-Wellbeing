@@ -168,6 +168,9 @@
             app:destination="@id/triggerFragment"
             app:popUpTo="@+id/triggerFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_locationTriggerFragment_to_locationSearchFragment"
+            app:destination="@id/locationSearchFragment" />
     </fragment>
     <dialog
         android:id="@+id/timeTriggerDialog"
@@ -347,5 +350,9 @@
             app:popUpTo="@+id/descriptionFragment"
             app:popUpToInclusive="true" />
     </dialog>
+    <fragment
+        android:id="@+id/locationSearchFragment"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.LocationSearchFragment"
+        android:label="LocationSearchFragment" />
 
 </navigation>

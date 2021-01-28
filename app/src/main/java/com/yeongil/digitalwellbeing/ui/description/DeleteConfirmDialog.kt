@@ -35,7 +35,6 @@ class DeleteConfirmDialog : DialogFragment() {
             findNavController().navigateSafe(directions.actionDeleteConfirmDialogToDescriptionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            // TODO: Check if the rule is deleted correctly
             descriptionViewModel.deleteRule()
             findNavController().navigateSafe(directions.actionDeleteConfirmDialogToMainFragment())
         }

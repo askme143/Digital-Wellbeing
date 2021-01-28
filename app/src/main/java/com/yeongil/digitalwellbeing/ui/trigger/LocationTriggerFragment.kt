@@ -55,6 +55,19 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = viewLifecycleOwner
 
         checkPermission()
+
+        binding.beforeBtn.setOnClickListener {
+            val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
+            if (goToEditFragment)
+                findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
+            else
+                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
+        }
+        binding.searchBar.setOnClickListener {
+            // TODO: Navigate to Location Search Fragment
+            findNavController().navigateSafe(directions.actionLocationTriggerFragmentToLocationSearchFragment())
+        }
+
         return binding.root
     }
 

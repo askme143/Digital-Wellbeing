@@ -77,6 +77,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
 }
