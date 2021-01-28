@@ -51,8 +51,6 @@ class NotificationActionFragment : Fragment() {
 
         initViewModel()
 
-        // TODO: If there is no app or no keyword, invalidate completeBtn
-
         notiActionViewModel.notiKeywordItemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { id ->
                 val clickedItem = notiActionViewModel.notiKeywordRecyclerItemList.value!!

@@ -35,8 +35,6 @@ class ActionFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ruleEditViewModel
 
-        // TODO: If there is no action, invalidate NextBtn
-
         ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { title ->
                 when (title) {

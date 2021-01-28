@@ -38,7 +38,7 @@ class RuleInfoViewModel(
         viewModelScope.launch { ruleRepo.updateRuleInfo(newRuleInfo) }
     }
     private val onClickDelete: (Int) -> Unit = { ruleId ->
-        viewModelScope.launch { ruleRepo.ruleDao.deleteRuleByRid(ruleId) }
+        viewModelScope.launch { ruleRepo.deleteRuleByRid(ruleId) }
     }
     private val onClickItem: (Int) -> Unit = { ruleId ->
         itemClickEvent.value = Event(ruleId)

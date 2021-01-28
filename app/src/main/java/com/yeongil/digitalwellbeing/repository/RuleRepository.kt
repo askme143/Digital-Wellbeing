@@ -22,7 +22,7 @@ import kotlinx.serialization.json.Json
 
 class RuleRepository(
     private val sequenceNumber: SequenceNumber,
-    val ruleDao: RuleDao,
+    private val ruleDao: RuleDao,
 ) {
     suspend fun insertOrUpdateRule(rule: Rule) {
         val rid =

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,10 @@ import com.yeongil.digitalwellbeing.databinding.FragmentLocationTriggerBinding
 import com.yeongil.digitalwellbeing.utils.NetworkStatus
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.LocationSearchViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.LocationTriggerViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.LocationSearchViewModelFactory
+import com.yeongil.digitalwellbeing.viewModelFactory.LocationTriggerViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
@@ -35,7 +39,12 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
     }
-    private val locationTriggerViewModel by activityViewModels<LocationTriggerViewModel>()
+    private val locationTriggerViewModel by activityViewModels<LocationTriggerViewModel> {
+        LocationTriggerViewModelFactory()
+    }
+    private val locationSearchViewModel by activityViewModels<LocationSearchViewModel> {
+        LocationSearchViewModelFactory()
+    }
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -55,18 +64,6 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = viewLifecycleOwner
 
         checkPermission()
-
-        binding.beforeBtn.setOnClickListener {
-            val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
-            if (goToEditFragment)
-                findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
-            else
-                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
-        }
-        binding.searchBar.setOnClickListener {
-            // TODO: Navigate to Location Search Fragment
-            findNavController().navigateSafe(directions.actionLocationTriggerFragmentToLocationSearchFragment())
-        }
 
         return binding.root
     }
@@ -89,16 +86,18 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun initViewModel() {
-        val trigger = ruleEditViewModel.editingRule.value?.locationTrigger
-
-        if (trigger != null) {
-            locationTriggerViewModel.init(trigger)
-        } else {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                location?.let {
-                    locationTriggerViewModel.init(LatLng(it.latitude, it.longitude))
+        if (!locationTriggerViewModel.editing) {
+            val trigger = ruleEditViewModel.editingRule.value?.locationTrigger
+            if (trigger != null) {
+                locationTriggerViewModel.init(trigger)
+            } else {
+                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    location?.let {
+                        locationTriggerViewModel.init(LatLng(it.latitude, it.longitude))
+                    }
                 }
             }
+            locationTriggerViewModel.editing = true
         }
     }
 
@@ -115,9 +114,17 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             }
             map.setOnMapLongClickListener {
                 locationTriggerViewModel.latLng.value = it
+                locationTriggerViewModel.doReverseGeocoding()
             }
 
+            binding.searchBar.setOnClickListener {
+                val latLng = locationTriggerViewModel.latLng.value
+                val keyword = locationTriggerViewModel.locationName.value!!
+                locationSearchViewModel.init(latLng, keyword)
+                findNavController().navigateSafe(directions.actionLocationTriggerFragmentToLocationSearchFragment())
+            }
             binding.beforeBtn.setOnClickListener {
+                locationTriggerViewModel.editing = false
                 val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
                 if (goToEditFragment)
                     findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
@@ -125,12 +132,21 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
                     findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             }
             binding.completeBtn.setOnClickListener {
+                locationTriggerViewModel.editing = false
                 locationTriggerViewModel.locationTrigger.value?.let {
                     ruleEditViewModel.addTriggerAction(it)
                 }
                 findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             }
         } else {
+            binding.beforeBtn.setOnClickListener {
+                locationTriggerViewModel.editing = false
+                val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
+                if (goToEditFragment)
+                    findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
+                else
+                    findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
+            }
             map.setOnMapLongClickListener {
                 Toast.makeText(requireContext(), "연결된 인터넷이 없습니다.", Toast.LENGTH_LONG).show()
             }
@@ -139,7 +155,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
 
     private fun moveCamera(latLng: LatLng) {
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16F)
-        map.moveCamera(cameraUpdate)
+        map.animateCamera(cameraUpdate)
     }
 
     private fun drawMarker(latLng: LatLng) {
@@ -152,7 +168,11 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
     private fun drawCircle(locationTrigger: LocationTrigger) {
         val latLng = LatLng(locationTrigger.latitude, locationTrigger.longitude)
         val range = locationTrigger.range
-        val newCircle = CircleOptions().center(latLng).radius(range.toDouble())
+        val newCircle = CircleOptions()
+            .center(latLng)
+            .radius(range.toDouble())
+            .fillColor(0x30ff0000)
+            .strokeWidth(0f)
 
         circle?.remove()
         circle = map.addCircle(newCircle)

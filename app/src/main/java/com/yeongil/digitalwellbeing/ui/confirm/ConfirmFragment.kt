@@ -22,7 +22,6 @@ class ConfirmFragment : Fragment() {
     ): View {
         _binding = FragmentConfirmBinding.inflate(inflater, container, false)
 
-        binding.addBtn.setOnClickListener { }
         binding.beforeBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionConfirmFragmentToActionFragment())
         }
