@@ -63,8 +63,11 @@ class TimeTriggerViewModel : ViewModel() {
         startPickerVisible.value = true
     }
 
-    fun onClickTabChange() {
-        startPickerVisible.value = !startPickerVisible.value!!
+    fun onClickStartTab() {
+        startPickerVisible.value = true
+    }
+    fun onClickFinishTab() {
+        startPickerVisible.value = false
     }
 
     fun onClickRepeatDay(index: Int) {

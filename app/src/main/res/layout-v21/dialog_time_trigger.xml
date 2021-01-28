@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="com.yeongil.digitalwellbeing.R" />
 
         <variable
             name="vm"
@@ -20,20 +21,28 @@
 
         <Button
             android:id="@+id/start_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.onClickTabChange()}"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.45"
+            android:background="@{vm.startPickerVisible ?@drawable/bg_round_corner_color_btn : @drawable/bg_round_corner_transparent_btn}"
+            android:onClick="@{() -> vm.onClickStartTab()}"
             android:text="시작"
+            android:textColor="@color/purple_200"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/end_btn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/end_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.45"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.onClickTabChange()}"
+            android:background="@{!vm.startPickerVisible ?@drawable/bg_round_corner_color_btn : @drawable/bg_round_corner_transparent_btn}"
+            android:onClick="@{() -> vm.onClickFinishTab()}"
             android:text="종료"
+            android:textColor="@color/purple_200"
             app:layout_constraintLeft_toRightOf="@id/start_btn"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,8 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="top"
-            app:constraint_referenced_ids="start_time_picker, end_time_picker"
-            />
+            app:constraint_referenced_ids="start_time_picker, end_time_picker" />
 
         <TimePicker
             android:id="@+id/start_time_picker"
@@ -103,8 +111,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="일"
             android:onClick="@{() -> vm.onClickRepeatDay(0)}"
+            android:text="일"
             android:textColor="@{vm.repeatDay[0] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/mon"
@@ -117,8 +125,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="월"
             android:onClick="@{() -> vm.onClickRepeatDay(1)}"
+            android:text="월"
             android:textColor="@{vm.repeatDay[1] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/sun"
             app:layout_constraintRight_toLeftOf="@id/tue"
@@ -131,8 +139,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="화"
             android:onClick="@{() -> vm.onClickRepeatDay(2)}"
+            android:text="화"
             android:textColor="@{vm.repeatDay[2] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/mon"
             app:layout_constraintRight_toLeftOf="@id/wed"
@@ -145,8 +153,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="수"
             android:onClick="@{() -> vm.onClickRepeatDay(3)}"
+            android:text="수"
             android:textColor="@{vm.repeatDay[3] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/tue"
             app:layout_constraintRight_toLeftOf="@id/thu"
@@ -159,8 +167,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="목"
             android:onClick="@{() -> vm.onClickRepeatDay(4)}"
+            android:text="목"
             android:textColor="@{vm.repeatDay[4] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/wed"
             app:layout_constraintRight_toLeftOf="@id/fri"
@@ -173,8 +181,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="금"
             android:onClick="@{() -> vm.onClickRepeatDay(5)}"
+            android:text="금"
             android:textColor="@{vm.repeatDay[5] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/thu"
             app:layout_constraintRight_toLeftOf="@id/sat"
@@ -187,8 +195,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="토"
             android:onClick="@{() -> vm.onClickRepeatDay(6)}"
+            android:text="토"
             android:textColor="@{vm.repeatDay[6] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/fri"
             app:layout_constraintRight_toRightOf="parent"

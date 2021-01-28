@@ -1,14 +1,15 @@
 package com.yeongil.digitalwellbeing.ui.trigger
 
 import android.app.Service
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.yeongil.digitalwellbeing.databinding.FragmentLocationSearchBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.LocationSearchViewModel
@@ -38,6 +39,13 @@ class LocationSearchFragment : Fragment() {
         _binding = FragmentLocationSearchBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = locationSearchViewModel
+
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            activity?.window?.decorView?.getWindowVisibleDisplayFrame(rect).also {
+                binding.root.layoutParams = FrameLayout.LayoutParams(rect.width(), rect.height())
+            }
+        }
 
         binding.resultRecyclerView.addItemDecoration(DividerItemDecoration(context, 1))
 
