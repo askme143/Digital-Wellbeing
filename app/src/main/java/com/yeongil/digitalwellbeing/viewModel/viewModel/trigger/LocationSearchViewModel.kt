@@ -50,5 +50,6 @@ class LocationSearchViewModel(
     fun init(latLng: LatLng?, keyword: String) {
         this.latLng = latLng
         this.keyword.value = keyword
+        locationList.value = listOf()
     }
 }

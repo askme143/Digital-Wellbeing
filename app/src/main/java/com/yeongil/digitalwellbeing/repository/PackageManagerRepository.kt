@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.repository
 
+import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -7,6 +8,7 @@ import android.graphics.drawable.Drawable
 class PackageManagerRepository(
     private val pm: PackageManager
 ) {
+    @SuppressLint("QueryPermissionsNeeded")
     fun getAppInfoList(): MutableList<ApplicationInfo> {
         return pm.getInstalledApplications(0)
     }

@@ -16,10 +16,11 @@ class LocationRepository(
                 kakaoApiService.getKeywordLocations(keyword, latLng?.latitude, latLng?.longitude)
                     .await()
             response.documents.map {
+                val address = if (it.roadAddressName != "") it.roadAddressName else it.addressName
                 Location(
                     it.id,
                     it.placeName,
-                    it.roadAddressName,
+                    address,
                     LatLng(it.y, it.x)
                 )
             }
@@ -38,8 +39,10 @@ class LocationRepository(
                 "주소 알 수 없음"
             } else {
                 val doc = response.documents[0]
-                if (doc.roadAddress != null) doc.roadAddress.buildingName
-                else doc.address.addressName
+                if (doc.roadAddress != null) {
+                    if (doc.roadAddress.buildingName.isNotEmpty()) doc.roadAddress.buildingName
+                    else doc.roadAddress.addressName
+                } else doc.address.addressName
             }
         } catch (error: Exception) {
             Log.e("hello", "latLngToAddress $error")

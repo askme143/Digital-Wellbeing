@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.yeongil.digitalwellbeing.data.Location
 import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.repository.LocationRepository
+import com.yeongil.digitalwellbeing.utils.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -14,6 +15,8 @@ class LocationTriggerViewModel(
     private val locationRepo: LocationRepository
 ) : ViewModel() {
     var editing = false
+    var cameraMoveFast = Event(true)
+        private set
 
     val progress = MutableLiveData(0)
     val latLng = MutableLiveData<LatLng>()
@@ -43,6 +46,8 @@ class LocationTriggerViewModel(
     }
 
     fun init(newLatLng: LatLng) {
+        cameraMoveFast = Event(true)
+
         progress.value = 0
         latLng.value = newLatLng
         locationName.value = ""
@@ -50,12 +55,15 @@ class LocationTriggerViewModel(
     }
 
     fun init(locationTrigger: LocationTrigger) {
+        cameraMoveFast = Event(true)
+
         progress.value = locationTrigger.range - 150
         latLng.value = LatLng(locationTrigger.latitude, locationTrigger.longitude)
         locationName.value = locationTrigger.locationName
     }
 
     fun submitSearchResult(location: Location) {
+        cameraMoveFast = Event(true)
         latLng.value = location.latLng
         locationName.value = location.locationName
     }

@@ -2,15 +2,13 @@ package com.yeongil.digitalwellbeing.ui.trigger
 
 import android.app.Service
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.yeongil.digitalwellbeing.databinding.FragmentLocationSearchBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.LocationSearchViewModel
