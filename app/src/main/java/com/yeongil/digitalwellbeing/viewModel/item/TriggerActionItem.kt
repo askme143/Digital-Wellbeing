@@ -44,7 +44,7 @@ class TriggerActionItem(val title: String, val description: String) {
 
     constructor(locationTrigger: LocationTrigger) : this(
         LOCATION_TRIGGER_TITLE,
-        locationTrigger.locationName
+        "${locationTrigger.locationName} (${locationTrigger.range}m)"
     )
 
     constructor(timeTrigger: TimeTrigger) : this(
