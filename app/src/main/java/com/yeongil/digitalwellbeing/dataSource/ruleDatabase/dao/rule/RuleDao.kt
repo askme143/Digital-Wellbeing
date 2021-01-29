@@ -35,19 +35,19 @@ interface RuleDao :
 
         val rid = ruleDto.ruleInfoDto.rid
 
-        ruleDto.locationTriggerDto?.let { updateLocationTrigger(it) }
+        ruleDto.locationTriggerDto?.let { insertLocationTrigger(it) }
             ?: deleteLocationTriggerByRid(rid)
-        ruleDto.timeTriggerDto?.let { updateTimeTrigger(it) }
+        ruleDto.timeTriggerDto?.let { insertTimeTrigger(it) }
             ?: deleteTimeTriggerByRid(rid)
-        ruleDto.activityTriggerDto?.let { updateActivityTrigger(it) }
+        ruleDto.activityTriggerDto?.let { insertActivityTrigger(it) }
             ?: deleteActivityTriggerByRid(rid)
-        ruleDto.appBlockActionDto?.let { updateAppBlockAction(it) }
+        ruleDto.appBlockActionDto?.let { insertAppBlockAction(it) }
             ?: deleteAppBlockActionByRid(rid)
-        ruleDto.notificationActionDto?.let { updateNotificationAction(it) }
+        ruleDto.notificationActionDto?.let { insertNotificationAction(it) }
             ?: deleteNotificationActionByRid(rid)
-        ruleDto.dndActionDto?.let { updateDndAction(it) }
+        ruleDto.dndActionDto?.let { insertDndAction(it) }
             ?: deleteDndActionByRid(rid)
-        ruleDto.ringerActionDto?.let { updateRingerAction(it) }
+        ruleDto.ringerActionDto?.let { insertRingerAction(it) }
             ?: deleteRingerActionByRid(rid)
     }
 
