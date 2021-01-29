@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yeongil.digitalwellbeing.databinding.FragmentNotiAppListBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerViewAdapter
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppListViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory
@@ -47,6 +48,15 @@ class NotiAppListFragment : Fragment() {
         }
 
         initViewModel()
+
+        appListViewModel.appItemAllChecked.observe(viewLifecycleOwner) { allChecked: Boolean? ->
+            if (allChecked != null) {
+                appListViewModel.appItemList.value!!
+                    .map { it.viewModel }
+                    .filterIsInstance<AppItemViewModel>()
+                    .forEach { it.appItem.checked.value = allChecked }
+            }
+        }
 
         binding.beforeBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())

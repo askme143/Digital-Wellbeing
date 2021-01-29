@@ -50,7 +50,6 @@ class RuleRepository(
         if (rule.ruleInfo.ruleId == TEMPORAL_RULE_ID) {
             ruleDao.insertRule(ruleDto)
         } else {
-            Log.e("hello", Json.encodeToString(ruleDto))
             ruleDao.updateRule(ruleDto)
         }
     }

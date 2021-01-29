@@ -37,11 +37,6 @@ class NotiKeywordDialog : BottomSheetDialogFragment() {
 
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        binding.keyword.requestFocus()
-        val inputMethodManager =
-            dialog?.context?.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(binding.keyword, 0)
-
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotificationActionFragment())
         }
@@ -52,5 +47,14 @@ class NotiKeywordDialog : BottomSheetDialogFragment() {
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.keyword.requestFocus()
+        binding.keyword.selectAll()
+        val inputMethodManager =
+            dialog?.context?.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(binding.keyword, 0)
     }
 }

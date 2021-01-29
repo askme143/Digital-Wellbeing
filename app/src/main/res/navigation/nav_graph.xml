@@ -315,7 +315,7 @@
             app:popUpTo="@+id/appBlockActionFragment"
             app:popUpToInclusive="true" />
     </dialog>
-    <fragment
+    <dialog
         android:id="@+id/notiHandlingDialog"
         android:name="com.yeongil.digitalwellbeing.ui.action.NotiHandlingDialog"
         android:label="NotiHandlingDialog">
@@ -324,7 +324,7 @@
             app:destination="@id/notificationActionFragment"
             app:popUpTo="@+id/notificationActionFragment"
             app:popUpToInclusive="true" />
-    </fragment>
+    </dialog>
     <dialog
         android:id="@+id/deleteConfirmDialog"
         android:name="com.yeongil.digitalwellbeing.ui.description.DeleteConfirmDialog"
