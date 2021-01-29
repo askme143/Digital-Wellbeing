@@ -94,7 +94,9 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             } else {
                 fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                     location?.let {
-                        locationTriggerViewModel.init(LatLng(it.latitude, it.longitude))
+                        val latLng = LatLng(it.latitude, it.longitude)
+                        locationTriggerViewModel.init(latLng)
+                        locationSearchViewModel.init(latLng)
                     }
                 }
             }
@@ -119,9 +121,8 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             }
 
             binding.searchBar.setOnClickListener {
-                val latLng = locationTriggerViewModel.latLng.value
                 val keyword = locationTriggerViewModel.locationName.value!!
-                locationSearchViewModel.init(latLng, keyword)
+                locationSearchViewModel.setKeyword(keyword)
                 findNavController().navigateSafe(directions.actionLocationTriggerFragmentToLocationSearchFragment())
             }
             binding.beforeBtn.setOnClickListener {
