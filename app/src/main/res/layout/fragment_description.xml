@@ -54,8 +54,8 @@
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 
         <androidx.recyclerview.widget.RecyclerView
-            recycler_item_list="@{vm.triggerRecyclerItemList}"
             android:id="@+id/recycler_trigger"
+            recycler_item_list="@{vm.triggerRecyclerItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/text_action"
@@ -70,27 +70,12 @@
             app:layout_constraintTop_toBottomOf="@id/recycler_trigger" />
 
         <androidx.recyclerview.widget.RecyclerView
-            recycler_item_list="@{vm.actionRecyclerItemList}"
             android:id="@+id/recycler_action"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/text_release"
-            app:layout_constraintTop_toBottomOf="@id/text_action" />
-
-        <TextView
-            android:id="@+id/text_release"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="추가 해제 조건"
-            app:layout_constraintBottom_toTopOf="@id/recycler_release"
-            app:layout_constraintTop_toBottomOf="@id/recycler_action" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_release"
+            recycler_item_list="@{vm.actionRecyclerItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/finish_btn"
-            app:layout_constraintTop_toBottomOf="@id/text_release" />
+            app:layout_constraintTop_toBottomOf="@id/text_action" />
 
         <Button
             android:id="@+id/finish_btn"
