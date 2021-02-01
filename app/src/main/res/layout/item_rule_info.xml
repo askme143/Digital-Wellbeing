@@ -47,8 +47,8 @@
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"
             android:checked="@{itemVM.ruleInfo.activated}"
             android:onClick="@{() -> itemVM.onClickActivate()}"
-            android:text="활성화"
-            android:textSize="20sp"
+            android:text="규칙 활성화"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 
@@ -59,7 +59,7 @@
             android:checked="@{itemVM.ruleInfo.notiOnTrigger}"
             android:onClick="@{() -> itemVM.onClickNotiOnTrigger()}"
             android:text="사용자 확인 후 액션 수행"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 

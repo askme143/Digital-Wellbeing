@@ -1,5 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.rule
 
+import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
@@ -11,8 +13,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RuleInfoViewModel(
-    private val ruleRepo: RuleRepository
-) : ViewModel() {
+    private val ruleRepo: RuleRepository, application: Application
+) : AndroidViewModel(application) {
+    private val context = getApplication<Application>().applicationContext
+
     val ruleInfoItemList: LiveData<List<RecyclerItem>> = liveData {
         ruleRepo.getRuleInfoListFlow().collect {
             it.map { ruleInfo ->
@@ -38,6 +42,11 @@ class RuleInfoViewModel(
     }
     private val onClickNotiOnTrigger: (RuleInfo) -> Unit = {
         val newRuleInfo = it.copy(notiOnTrigger = !it.notiOnTrigger)
+        if (newRuleInfo.notiOnTrigger) {
+            Toast.makeText(context, "규칙의 조건이 만족되면 사용자 확인 후 액션이 실행됩니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "규칙의 조건이 만족되면 액션이 바로 실행됩니다.", Toast.LENGTH_SHORT).show()
+        }
         viewModelScope.launch { ruleRepo.updateRuleInfo(newRuleInfo) }
     }
     private val onClickDelete: (ruleId: Int, ruleName: String) -> Unit = { ruleId, ruleName ->

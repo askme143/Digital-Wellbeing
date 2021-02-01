@@ -23,7 +23,7 @@ class MainFragment : Fragment() {
     val directions = MainFragmentDirections
 
     private val ruleInfoViewModel by activityViewModels<RuleInfoViewModel> {
-        RuleInfoViewModelFactory(requireContext())
+        RuleInfoViewModelFactory(requireContext(), requireActivity().application)
     }
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
