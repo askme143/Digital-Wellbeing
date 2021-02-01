@@ -42,8 +42,6 @@ class ActionFragment : Fragment() {
                         findNavController().navigateSafe(directions.actionActionFragmentToAppBlockActionFragment())
                     NOTIFICATION_ACTION_TITLE ->
                         findNavController().navigateSafe(directions.actionActionFragmentToNotificationActionFragment())
-                    DND_ACTION_TITLE ->
-                        findNavController().navigateSafe(directions.actionActionFragmentToDndDialog())
                     RINGER_ACTION_TITLE ->
                         findNavController().navigateSafe(directions.actionActionFragmentToRingerDialog())
                 }
