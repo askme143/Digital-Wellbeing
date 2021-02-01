@@ -43,9 +43,6 @@ class DescriptionFragment : Fragment() {
             ruleEditViewModel.init(descriptionViewModel.getRule())
             findNavController().navigateSafe(directions.actionDescriptionFragmentToTriggerFragment())
         }
-        binding.deleteBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionDescriptionFragmentToDeleteConfirmDialog())
-        }
         binding.finishBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionDescriptionFragmentToMainFragment())
         }

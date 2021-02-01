@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel" />
+            type="com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleInfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,7 +18,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{"정말 \"" + vm.ruleName + "\"을(를)\n지우시겠습니까?" }'
+            android:text='@{"정말 \"" + vm.deletingRuleName + "\"을(를)\n지우시겠습니까?" }'
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

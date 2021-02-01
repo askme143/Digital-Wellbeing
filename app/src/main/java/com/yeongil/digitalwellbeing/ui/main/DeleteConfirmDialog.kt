@@ -1,4 +1,4 @@
-package com.yeongil.digitalwellbeing.ui.description
+package com.yeongil.digitalwellbeing.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.databinding.DialogDeleteConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
-import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel
-import com.yeongil.digitalwellbeing.viewModelFactory.DescriptionViewModelFactory
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleInfoViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.RuleInfoViewModelFactory
 
 class DeleteConfirmDialog : DialogFragment() {
     private var _binding: DialogDeleteConfirmBinding? = null
@@ -18,24 +18,24 @@ class DeleteConfirmDialog : DialogFragment() {
 
     private val directions = DeleteConfirmDialogDirections
 
-    private val descriptionViewModel by activityViewModels<DescriptionViewModel> {
-        DescriptionViewModelFactory(requireContext())
+    private val ruleInfoViewModel by activityViewModels<RuleInfoViewModel> {
+        RuleInfoViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogDeleteConfirmBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.vm = descriptionViewModel
+        binding.vm = ruleInfoViewModel
 
         binding.cancelBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionDeleteConfirmDialogToDescriptionFragment())
+            findNavController().navigateSafe(directions.actionDeleteConfirmDialogToMainFragment())
         }
         binding.completeBtn.setOnClickListener {
-            descriptionViewModel.deleteRule()
+            ruleInfoViewModel.deleteRule()
             findNavController().navigateSafe(directions.actionDeleteConfirmDialogToMainFragment())
         }
 

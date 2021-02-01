@@ -12,7 +12,7 @@ class RuleInfoItemViewModel(
     val ruleInfo: RuleInfo,
     private val onClickActivate: (RuleInfo) -> Unit,
     private val onClickNotiOnTrigger: (RuleInfo) -> Unit,
-    private val onClickDelete: (Int) -> Unit,
+    private val onClickDelete: (Int, String) -> Unit,
     private val onClickItem: (Int) -> Unit,
 ) :
     RecyclerItemViewModel {
@@ -35,6 +35,6 @@ class RuleInfoItemViewModel(
 
     fun onClickActivate() = onClickActivate(ruleInfo)
     fun onClickNotiOnTrigger() = onClickNotiOnTrigger(ruleInfo)
-    fun onClickDelete() = onClickDelete(ruleInfo.ruleId)
+    fun onClickDelete() = onClickDelete(ruleInfo.ruleId, ruleInfo.ruleName)
     fun onClickItem() = onClickItem(ruleInfo.ruleId)
 }

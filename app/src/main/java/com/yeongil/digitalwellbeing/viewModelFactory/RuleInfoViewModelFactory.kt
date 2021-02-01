@@ -9,7 +9,7 @@ import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleInfoViewModel
 
 @Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class RuleInfoViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(RuleInfoViewModel::class.java)) {
             RuleInfoViewModel(

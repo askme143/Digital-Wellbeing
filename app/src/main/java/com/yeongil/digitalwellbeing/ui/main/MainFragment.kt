@@ -13,7 +13,7 @@ import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewMode
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleInfoViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.DescriptionViewModelFactory
-import com.yeongil.digitalwellbeing.viewModelFactory.MainViewModelFactory
+import com.yeongil.digitalwellbeing.viewModelFactory.RuleInfoViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class MainFragment : Fragment() {
@@ -22,8 +22,8 @@ class MainFragment : Fragment() {
 
     val directions = MainFragmentDirections
 
-    private val mainViewModel by activityViewModels<RuleInfoViewModel> {
-        MainViewModelFactory(requireContext())
+    private val ruleInfoViewModel by activityViewModels<RuleInfoViewModel> {
+        RuleInfoViewModelFactory(requireContext())
     }
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
@@ -39,12 +39,17 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.vm = mainViewModel
+        binding.vm = ruleInfoViewModel
 
-        mainViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
+        ruleInfoViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { rid ->
                 descriptionViewModel.init(rid)
                 findNavController().navigateSafe(directions.actionMainFragmentToDescriptionFragment())
+            }
+        }
+        ruleInfoViewModel.itemDeleteEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                findNavController().navigateSafe(directions.actionMainFragmentToDeleteConfirmDialog())
             }
         }
 
