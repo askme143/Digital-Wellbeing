@@ -7,6 +7,7 @@ import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.ALERT
 import com.yeongil.digitalwellbeing.utils.CLOSE_IMMEDIATE
 import com.yeongil.digitalwellbeing.utils.Event
+import com.yeongil.digitalwellbeing.utils.TimeUtils.minutesToTimeMinute
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppBlockEntryItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppBlockEntryItemViewModel
@@ -88,7 +89,7 @@ class AppBlockActionViewModel(
             ALERT -> "경고 알림"
             else -> ""
         }
-        val description = "${entry.allowedTimeInMinutes} 분 후 $action"
+        val description = "${minutesToTimeMinute(entry.allowedTimeInMinutes)} 후 $action"
 
         return AppBlockEntryItem(packageName, label, icon, description)
     }
