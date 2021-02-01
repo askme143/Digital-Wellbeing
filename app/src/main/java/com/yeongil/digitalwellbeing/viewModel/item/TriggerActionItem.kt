@@ -44,7 +44,7 @@ class TriggerActionItem(val title: String, val description: String) {
 
     constructor(locationTrigger: LocationTrigger) : this(
         LOCATION_TRIGGER_TITLE,
-        "${locationTrigger.locationName} (${locationTrigger.range}m)"
+        "${locationTrigger.locationName} ${locationTrigger.range}m 내에 있을 때"
     )
 
     constructor(timeTrigger: TimeTrigger) : this(

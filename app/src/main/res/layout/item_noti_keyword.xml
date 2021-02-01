@@ -31,8 +31,8 @@
             android:id="@+id/handling_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{itemVM.notiKeywordItem.inclusion ? " - 포함할 때" : " - 포함하지 않을 때"}'
-            android:textSize="16sp"
+            android:text='@{itemVM.notiKeywordItem.inclusion ? "을(를) 메시지에 포함한 알림" : "을(를) 메시지에 포함하지 않은 알림"}'
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/keyword"
             app:layout_constraintTop_toTopOf="parent" />
