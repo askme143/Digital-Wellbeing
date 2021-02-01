@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockActionBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
@@ -63,15 +67,8 @@ class AppBlockActionFragment : Fragment() {
         binding.addBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionAppBlockActionFragmentToAppBlockListFragment())
         }
-        binding.beforeBtn.setOnClickListener {
-            appBlockActionViewModel.editing = false
-            val goToEditFragment = ruleEditViewModel.editingRule.value?.appBlockAction == null
-            if (goToEditFragment) {
-                findNavController().navigateSafe(directions.actionAppBlockActionFragmentToActionEditFragment())
-            } else {
-                findNavController().navigateSafe(directions.actionGlobalActionFragment())
-            }
-        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { onStartGoBack() }
+        binding.beforeBtn.setOnClickListener { onStartGoBack() }
         binding.completeBtn.setOnClickListener {
             appBlockActionViewModel.editing = false
             ruleEditViewModel.addTriggerAction(appBlockActionViewModel.getAppBlockAction())
@@ -87,6 +84,34 @@ class AppBlockActionFragment : Fragment() {
             if (action != null) {
                 appBlockActionViewModel.init(action)
             } else appBlockActionViewModel.init()
+        }
+    }
+
+    private fun onStartGoBack() {
+        if (appBlockActionViewModel.appBlockEntryList.value?.isNotEmpty() == true) {
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+            bottomSheetDialog.setContentView(R.layout.dialog_cancel_confirm)
+            bottomSheetDialog.show()
+
+            bottomSheetDialog.findViewById<Button>(R.id.complete_btn)!!
+                .setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                    goBack()
+                }
+            bottomSheetDialog.findViewById<Button>(R.id.cancel_btn)!!
+                .setOnClickListener { bottomSheetDialog.dismiss() }
+        } else {
+            goBack()
+        }
+    }
+
+    private fun goBack() {
+        appBlockActionViewModel.editing = false
+        val goToEditFragment = ruleEditViewModel.editingRule.value?.appBlockAction == null
+        if (goToEditFragment) {
+            findNavController().navigateSafe(directions.actionAppBlockActionFragmentToActionEditFragment())
+        } else {
+            findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
     }
 }

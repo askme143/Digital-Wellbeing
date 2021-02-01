@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.databinding.FragmentNotificationActionBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerViewAdapter
@@ -76,16 +80,8 @@ class NotificationActionFragment : Fragment() {
         binding.handlingBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionNotificationActionFragmentToNotiHandlingDialog())
         }
-        binding.beforeBtn.setOnClickListener {
-            notiActionViewModel.editing = false
-
-            val goToEditFragment = ruleEditViewModel.editingRule.value?.notificationAction == null
-            if (goToEditFragment) {
-                findNavController().navigateSafe(directions.actionNotificationActionFragmentToActionEditFragment())
-            } else {
-                findNavController().navigateSafe(directions.actionGlobalActionFragment())
-            }
-        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { onStartGoBack() }
+        binding.beforeBtn.setOnClickListener { onStartGoBack() }
         binding.completeBtn.setOnClickListener {
             notiActionViewModel.editing = false
             ruleEditViewModel.addTriggerAction(notiActionViewModel.getNotificationAction())
@@ -101,6 +97,37 @@ class NotificationActionFragment : Fragment() {
             if (action != null) {
                 notiActionViewModel.init(action)
             } else notiActionViewModel.init()
+        }
+    }
+
+    private fun onStartGoBack() {
+        if (notiActionViewModel.notiAppItemList.value?.isNotEmpty() == true ||
+            notiActionViewModel.notiKeywordRecyclerItemList.value?.isNotEmpty() == true
+        ) {
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+            bottomSheetDialog.setContentView(R.layout.dialog_cancel_confirm)
+            bottomSheetDialog.show()
+
+            bottomSheetDialog.findViewById<Button>(R.id.complete_btn)!!
+                .setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                    goBack()
+                }
+            bottomSheetDialog.findViewById<Button>(R.id.cancel_btn)!!
+                .setOnClickListener { bottomSheetDialog.dismiss() }
+        } else {
+            goBack()
+        }
+    }
+
+    private fun goBack() {
+        notiActionViewModel.editing = false
+
+        val goToEditFragment = ruleEditViewModel.editingRule.value?.notificationAction == null
+        if (goToEditFragment) {
+            findNavController().navigateSafe(directions.actionNotificationActionFragmentToActionEditFragment())
+        } else {
+            findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
     }
 }
