@@ -1,12 +1,13 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 
 class AppListViewModel(
     private val pmRepo: PackageManagerRepository
@@ -14,8 +15,15 @@ class AppListViewModel(
     val appItemList = MutableLiveData<List<RecyclerItem>>()
     val appItemAllChecked = MutableLiveData<Boolean>(null)
 
+    val onClickItem: (Boolean) -> Unit = {
+        itemCount.value = itemCount.value?.plus(if (it) 1 else -1)
+    }
+    val itemCount = MutableLiveData<Int>(0)
+
     @SuppressLint("NullSafeMutableLiveData")
     fun init() {
+        itemCount.value = 0
+
         appItemAllChecked.value = null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
@@ -25,11 +33,14 @@ class AppListViewModel(
                     AppItem(it.packageName, pmRepo.getLabel(it), pmRepo.getIcon(it))
                 )
             }
-            .map { AppItemViewModel(it.first, it.second).toRecyclerItem() }
+            .sortedBy { it.second.label }
+            .map { AppItemViewModel(it.first, it.second, onClickItem).toRecyclerItem() }
     }
 
     @SuppressLint("NullSafeMutableLiveData")
     fun init(appList: List<String>) {
+        itemCount.value = appList.size
+
         appItemAllChecked.value = null
         appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
@@ -41,7 +52,8 @@ class AppListViewModel(
                     MutableLiveData(appList.contains(it.packageName))
                 )
             }
-            .map { AppItemViewModel(it.packageName, it).toRecyclerItem() }
+            .sortedBy { it.label }
+            .map { AppItemViewModel(it.packageName, it, onClickItem).toRecyclerItem() }
     }
 
     fun getCheckedAppList(): List<String> {

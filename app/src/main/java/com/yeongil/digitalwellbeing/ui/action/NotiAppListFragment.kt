@@ -52,6 +52,7 @@ class NotiAppListFragment : Fragment() {
         appListViewModel.appItemAllChecked.observe(viewLifecycleOwner) { allChecked: Boolean? ->
             if (allChecked != null) {
                 appListViewModel.appItemList.value!!
+                    .also { appListViewModel.itemCount.value = if (allChecked) it.size else 0 }
                     .map { it.viewModel }
                     .filterIsInstance<AppItemViewModel>()
                     .forEach { it.appItem.checked.value = allChecked }

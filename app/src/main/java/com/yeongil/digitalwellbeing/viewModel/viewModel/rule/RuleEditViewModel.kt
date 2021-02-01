@@ -74,8 +74,14 @@ class RuleEditViewModel(
         }
     }
     val itemClickEvent = MutableLiveData<Event<String>>()
+
     val itemDeleteEvent = MutableLiveData<Event<Boolean>>()
     var deletingItemId = ""
+
+    val isActionItemEmpty = liveData<Boolean> {
+        actionRecyclerItemList.asFlow().collect { emit(it.isEmpty()) }
+    }
+
     val ruleName = MutableLiveData<String>()
 
     fun init(rule: Rule) {
@@ -184,7 +190,8 @@ class RuleEditViewModel(
                 editingRule.value!!.copy(ringerAction = null)
         }
 
-        triggerActionItemList.value = triggerActionItemList.value?.filterNot { it.title == deletingItemId }
+        triggerActionItemList.value =
+            triggerActionItemList.value?.filterNot { it.title == deletingItemId }
     }
 
     private val onClickItem: (String) -> Unit = { id ->

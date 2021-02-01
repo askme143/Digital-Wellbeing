@@ -47,7 +47,7 @@ class ActionFragment : Fragment() {
                 }
             }
         }
-        ruleEditViewModel.itemDeleteEvent.observe(viewLifecycleOwner) {event ->
+        ruleEditViewModel.itemDeleteEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 findNavController().navigateSafe(directions.actionActionFragmentToActionDeleteConfirmDialog())
             }

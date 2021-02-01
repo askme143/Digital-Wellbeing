@@ -10,7 +10,8 @@ import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 // ID is PackageName
 class AppItemViewModel(
     override val id: String,
-    val appItem: AppItem
+    val appItem: AppItem,
+    val onClickItem: (Boolean) -> Unit,
 ) : RecyclerItemViewModel {
     override fun isSameItem(other: Any): Boolean {
         if (this === other) return true
@@ -31,5 +32,10 @@ class AppItemViewModel(
 
     fun onClickItem() {
         appItem.checked.value = !appItem.checked.value!!
+        onClickItem(appItem.checked.value!!)
+    }
+
+    fun onClickCheckbox() {
+        onClickItem(appItem.checked.value!!)
     }
 }
