@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yeongil.digitalwellbeing.databinding.DialogDndBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.DndActionViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
-class DndDialog : DialogFragment() {
+class DndDialog : BottomSheetDialogFragment() {
     private var _binding: DialogDndBinding? = null
     private val binding get() = _binding!!
 

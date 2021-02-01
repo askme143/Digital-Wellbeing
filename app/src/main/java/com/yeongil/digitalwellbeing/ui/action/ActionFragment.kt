@@ -47,6 +47,12 @@ class ActionFragment : Fragment() {
                 }
             }
         }
+        ruleEditViewModel.itemDeleteEvent.observe(viewLifecycleOwner) {event ->
+            event.getContentIfNotHandled()?.let {
+                findNavController().navigateSafe(directions.actionActionFragmentToActionDeleteConfirmDialog())
+            }
+        }
+
         binding.addBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionActionFragmentToActionEditFragment())
         }

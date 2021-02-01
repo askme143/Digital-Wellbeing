@@ -31,7 +31,7 @@ object MainNotification {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                 CHANNEL_ID,
-                "Digitall Wellbeing Channel", // 채널표시명
+                "Digitall Wellbeing Channel",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
                 description = "Digital Wellbeing Background"

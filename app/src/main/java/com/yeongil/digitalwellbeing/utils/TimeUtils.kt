@@ -44,12 +44,7 @@ object TimeUtils {
 
     fun minutesToTimeMinute(minutes: Int): String {
         val hour = "${minutes / 60}"
-        val min = (minutes % 60).let {
-            when (it) {
-                in 0..9 -> "0$it"
-                else -> "$it"
-            }
-        }
+        val min = "${minutes % 60}"
 
         return if (hour == "0") "${min}분" else "${hour}시간 ${min}분"
     }

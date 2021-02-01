@@ -1,6 +1,5 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.rule
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.action.AppBlockAction
@@ -21,8 +20,6 @@ import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemVie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class RuleEditViewModel(
     private val ruleRepo: RuleRepository,
@@ -77,6 +74,8 @@ class RuleEditViewModel(
         }
     }
     val itemClickEvent = MutableLiveData<Event<String>>()
+    val itemDeleteEvent = MutableLiveData<Event<Boolean>>()
+    var deletingItemId = ""
     val ruleName = MutableLiveData<String>()
 
     fun init(rule: Rule) {
@@ -167,12 +166,8 @@ class RuleEditViewModel(
         }
     }
 
-    private val onClickItem: (String) -> Unit = { id ->
-        itemClickEvent.value = Event(id)
-    }
-
-    private val onClickItemDelete: (String) -> Unit = { id ->
-        when (id) {
+    fun deleteItem() {
+        when (deletingItemId) {
             LOCATION_TRIGGER_TITLE -> editingRule.value =
                 editingRule.value!!.copy(locationTrigger = null)
             TIME_TRIGGER_TITLE -> editingRule.value =
@@ -189,6 +184,15 @@ class RuleEditViewModel(
                 editingRule.value!!.copy(ringerAction = null)
         }
 
-        triggerActionItemList.value = triggerActionItemList.value?.filterNot { it.title == id }
+        triggerActionItemList.value = triggerActionItemList.value?.filterNot { it.title == deletingItemId }
+    }
+
+    private val onClickItem: (String) -> Unit = { id ->
+        itemClickEvent.value = Event(id)
+    }
+
+    private val onClickItemDelete: (String) -> Unit = { id ->
+        deletingItemId = id
+        itemDeleteEvent.value = Event(true)
     }
 }

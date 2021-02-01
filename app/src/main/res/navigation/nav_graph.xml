@@ -47,6 +47,12 @@
         <action
             android:id="@+id/action_triggerFragment_to_activityTriggerDialog"
             app:destination="@id/activityTriggerDialog" />
+        <action
+            android:id="@+id/action_triggerFragment_to_emptyTriggerDialog"
+            app:destination="@id/emptyTriggerDialog" />
+        <action
+            android:id="@+id/action_triggerFragment_to_triggerDeleteConfirmDialog"
+            app:destination="@id/triggerDeleteConfirmDialog" />
     </fragment>
     <action
         android:id="@+id/action_global_triggerFragment"
@@ -77,6 +83,9 @@
         <action
             android:id="@+id/action_actionFragment_to_ringerDialog"
             app:destination="@id/ringerDialog" />
+        <action
+            android:id="@+id/action_actionFragment_to_actionDeleteConfirmDialog"
+            app:destination="@id/actionDeleteConfirmDialog" />
     </fragment>
     <action
         android:id="@+id/action_global_actionFragment"
@@ -344,12 +353,47 @@
     </fragment>
     <dialog
         android:id="@+id/deleteConfirmDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.main.DeleteConfirmDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.main.RuleDeleteConfirmDialog"
         android:label="DeleteConfirmDialog">
         <action
             android:id="@+id/action_deleteConfirmDialog_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/emptyTriggerDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.EmptyTriggerDialog"
+        android:label="EmptyTriggerDialog">
+        <action
+            android:id="@+id/action_emptyTriggerDialog_to_actionFragment"
+            app:destination="@id/actionFragment"
+            app:popUpTo="@+id/triggerFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_emptyTriggerDialog_to_triggerFragment"
+            app:destination="@id/triggerFragment"
+            app:popUpTo="@+id/triggerFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/triggerDeleteConfirmDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.trigger.TriggerDeleteConfirmDialog"
+        android:label="TriggerDeleteConfirmDialog">
+        <action
+            android:id="@+id/action_triggerDeleteConfirmDialog_to_triggerFragment"
+            app:destination="@id/triggerFragment"
+            app:popUpTo="@+id/triggerFragment"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/actionDeleteConfirmDialog"
+        android:name="com.yeongil.digitalwellbeing.ui.action.ActionDeleteConfirmDialog"
+        android:label="ActionDeleteConfirmDialog">
+        <action
+            android:id="@+id/action_actionDeleteConfirmDialog_to_actionFragment"
+            app:destination="@id/actionFragment"
+            app:popUpTo="@+id/actionFragment"
             app:popUpToInclusive="true" />
     </dialog>
 

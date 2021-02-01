@@ -22,7 +22,7 @@ class AppBlockActionViewModel(
     val appBlockEntryItemList = liveData<List<RecyclerItem>> {
         appBlockEntryList.asFlow().collect { list ->
             emit(
-                list.map { appBlockEntryItem(it) }
+                list.map { AppBlockEntryItem(it, pmRepo) }
                     .map {
                         AppBlockEntryItemViewModel(
                             it.packageName,
@@ -79,18 +79,4 @@ class AppBlockActionViewModel(
     }
 
     fun getAppBlockAction() = AppBlockAction(appBlockEntryList.value!!)
-
-    private fun appBlockEntryItem(entry: AppBlockEntry): AppBlockEntryItem {
-        val packageName = entry.packageName
-        val label = pmRepo.getLabel(packageName)
-        val icon = pmRepo.getIcon(packageName)
-        val action = when (entry.handlingAction) {
-            CLOSE_IMMEDIATE -> "바로 종료"
-            ALERT -> "경고 알림"
-            else -> ""
-        }
-        val description = "${minutesToTimeMinute(entry.allowedTimeInMinutes)} 후 $action"
-
-        return AppBlockEntryItem(packageName, label, icon, description)
-    }
 }

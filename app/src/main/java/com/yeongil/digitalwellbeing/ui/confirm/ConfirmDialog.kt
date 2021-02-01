@@ -46,8 +46,6 @@ class ConfirmDialog : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ruleEditViewModel
 
-        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionConfirmDialogToConfirmFragment())
         }

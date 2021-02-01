@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.yeongil.digitalwellbeing.databinding.DialogDeleteConfirmBinding
+import com.yeongil.digitalwellbeing.databinding.DialogRuleDeleteConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleInfoViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleInfoViewModelFactory
 
-class DeleteConfirmDialog : DialogFragment() {
-    private var _binding: DialogDeleteConfirmBinding? = null
+class RuleDeleteConfirmDialog : DialogFragment() {
+    private var _binding: DialogRuleDeleteConfirmBinding? = null
     private val binding get() = _binding!!
 
-    private val directions = DeleteConfirmDialogDirections
+    private val directions = RuleDeleteConfirmDialogDirections
 
     private val ruleInfoViewModel by activityViewModels<RuleInfoViewModel> {
         RuleInfoViewModelFactory(requireContext(), requireActivity().application)
@@ -27,7 +27,7 @@ class DeleteConfirmDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DialogDeleteConfirmBinding.inflate(inflater, container, false)
+        _binding = DialogRuleDeleteConfirmBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ruleInfoViewModel
 
