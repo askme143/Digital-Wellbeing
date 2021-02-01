@@ -74,9 +74,6 @@
         <action
             android:id="@+id/action_actionFragment_to_ringerDialog"
             app:destination="@id/ringerDialog" />
-        <action
-            android:id="@+id/action_actionFragment_to_dndDialog"
-            app:destination="@id/dndDialog" />
     </fragment>
     <action
         android:id="@+id/action_global_actionFragment"
@@ -95,6 +92,11 @@
         <action
             android:id="@+id/action_confirmFragment_to_confirmDialog"
             app:destination="@id/confirmDialog" />
+        <action
+            android:id="@+id/action_confirmFragment_to_descriptionFragment"
+            app:destination="@id/descriptionFragment"
+            app:popUpTo="@+id/descriptionFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/descriptionFragment"
@@ -128,11 +130,6 @@
             android:id="@+id/action_confirmDialog_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@+id/mainFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_confirmDialog_to_descriptionFragment"
-            app:destination="@id/descriptionFragment"
-            app:popUpTo="@+id/descriptionFragment"
             app:popUpToInclusive="true" />
     </dialog>
     <fragment
@@ -353,13 +350,12 @@
     <fragment
         android:id="@+id/locationSearchFragment"
         android:name="com.yeongil.digitalwellbeing.ui.trigger.LocationSearchFragment"
-        android:label="LocationSearchFragment" >
+        android:label="LocationSearchFragment">
         <action
             android:id="@+id/action_locationSearchFragment_to_locationTriggerFragment"
             app:destination="@id/locationTriggerFragment"
             app:popUpTo="@+id/locationTriggerFragment"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

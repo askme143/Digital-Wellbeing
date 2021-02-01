@@ -36,9 +36,6 @@ class ConfirmDialog : BottomSheetDialogFragment() {
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
     }
-    private val descriptionViewModel by activityViewModels<DescriptionViewModel> {
-        DescriptionViewModelFactory(requireContext())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,11 +72,6 @@ class ConfirmDialog : BottomSheetDialogFragment() {
 
     private fun onComplete() {
         ruleEditViewModel.saveRule()
-        if (ruleEditViewModel.isNewRule) {
-            findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
-        } else {
-            descriptionViewModel.init(ruleEditViewModel.editingRule.value!!)
-            findNavController().navigateSafe(directions.actionConfirmDialogToDescriptionFragment())
-        }
+        findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
     }
 }

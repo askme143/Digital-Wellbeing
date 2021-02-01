@@ -5,15 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yeongil.digitalwellbeing.databinding.FragmentConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.DescriptionViewModelFactory
+import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class ConfirmFragment : Fragment() {
     private var _binding: FragmentConfirmBinding? = null
     private val binding get() = _binding!!
 
     private val directions = ConfirmFragmentDirections
+
+    private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
+        RuleEditViewModelFactory(requireContext())
+    }
+    private val descriptionViewModel by activityViewModels<DescriptionViewModel> {
+        DescriptionViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +38,12 @@ class ConfirmFragment : Fragment() {
             findNavController().navigateSafe(directions.actionConfirmFragmentToActionFragment())
         }
         binding.nextBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionConfirmFragmentToConfirmDialog())
+            if (ruleEditViewModel.isNewRule) {
+                findNavController().navigateSafe(directions.actionConfirmFragmentToConfirmDialog())
+            } else {
+                descriptionViewModel.init(ruleEditViewModel.editingRule.value!!)
+                findNavController().navigateSafe(directions.actionConfirmFragmentToDescriptionFragment())
+            }
         }
 
         return binding.root
