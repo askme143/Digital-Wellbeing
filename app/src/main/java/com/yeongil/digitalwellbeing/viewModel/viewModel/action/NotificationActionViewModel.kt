@@ -43,10 +43,10 @@ class NotificationActionViewModel(
         handlingAction.asFlow().collect {
             emit(
                 when (it) {
-                    NOTIFICATION_HIDE -> "숨김"
-                    NOTIFICATION_VIBRATE -> "진동"
-                    NOTIFICATION_RING -> "소리"
-                    NOTIFICATION_SILENT -> "무음"
+                    NOTIFICATION_HIDE -> "알림 숨기기"
+                    NOTIFICATION_VIBRATE -> "진동으로 받기"
+                    NOTIFICATION_RING -> "소리로 받기"
+                    NOTIFICATION_SILENT -> "무음으로 받기"
                     else -> ""
                 }
             )
