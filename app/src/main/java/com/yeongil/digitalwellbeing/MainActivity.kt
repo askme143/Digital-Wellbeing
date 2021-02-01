@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
@@ -17,5 +18,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         job = Job()
+
+        val intent = Intent(this, MainService::class.java)
+        startService(intent)
     }
 }
