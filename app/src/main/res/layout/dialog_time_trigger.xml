@@ -104,6 +104,26 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="start_time_picker, end_time_picker" />
 
+        <TextView
+            android:id="@+id/repeat_day_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="반복 설정"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/day_btn_barrier_top"
+            />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/day_btn_barrier_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="sun, mon, tue, wed, thu, fri, sat"
+            app:barrierDirection="top"
+            />
+
         <Button
             android:id="@+id/sun"
             android:layout_width="wrap_content"
@@ -116,7 +136,7 @@
             android:textColor="@{vm.repeatDay[0] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/mon"
-            app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
+            app:layout_constraintTop_toBottomOf="@id/repeat_day_title" />
 
         <Button
             android:id="@+id/mon"
@@ -130,7 +150,7 @@
             android:textColor="@{vm.repeatDay[1] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/sun"
             app:layout_constraintRight_toLeftOf="@id/tue"
-            app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
+            app:layout_constraintTop_toBottomOf="@id/repeat_day_title" />
 
         <Button
             android:id="@+id/tue"
@@ -144,7 +164,7 @@
             android:textColor="@{vm.repeatDay[2] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/mon"
             app:layout_constraintRight_toLeftOf="@id/wed"
-            app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
+            app:layout_constraintTop_toBottomOf="@id/repeat_day_title" />
 
         <Button
             android:id="@+id/wed"
@@ -158,7 +178,7 @@
             android:textColor="@{vm.repeatDay[3] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/tue"
             app:layout_constraintRight_toLeftOf="@id/thu"
-            app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
+            app:layout_constraintTop_toBottomOf="@id/repeat_day_title" />
 
         <Button
             android:id="@+id/thu"
@@ -172,7 +192,7 @@
             android:textColor="@{vm.repeatDay[4] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/wed"
             app:layout_constraintRight_toLeftOf="@id/fri"
-            app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
+            app:layout_constraintTop_toBottomOf="@id/repeat_day_title" />
 
         <Button
             android:id="@+id/fri"
@@ -186,7 +206,7 @@
             android:textColor="@{vm.repeatDay[5] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/thu"
             app:layout_constraintRight_toLeftOf="@id/sat"
-            app:layout_constraintTop_toBottomOf="@id/picker_barrier_bot" />
+            app:layout_constraintTop_toBottomOf="@id/repeat_day_title" />
 
         <Button
             android:id="@+id/sat"
@@ -200,10 +220,10 @@
             android:textColor="@{vm.repeatDay[6] ? @color/purple_200 : @color/black}"
             app:layout_constraintLeft_toRightOf="@id/fri"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/start_time_picker" />
+            app:layout_constraintTop_toBottomOf="@id/repeat_day_title" />
 
         <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/day_btn_barrier"
+            android:id="@+id/day_btn_barrier_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
@@ -216,7 +236,7 @@
             android:layout_height="wrap_content"
             android:text="취소"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/day_btn_barrier"
+            app:layout_constraintTop_toBottomOf="@id/day_btn_barrier_bottom"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.45" />
 
@@ -226,7 +246,7 @@
             android:layout_height="wrap_content"
             android:text="완료"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/day_btn_barrier"
+            app:layout_constraintTop_toBottomOf="@id/day_btn_barrier_bottom"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.45" />
 
