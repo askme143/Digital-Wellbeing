@@ -73,12 +73,6 @@ class DescriptionViewModel(
         }
     }
 
-    fun deleteRule() = run {
-        viewModelScope.launch(Dispatchers.IO) {
-            ruleRepo.deleteRuleByRid(rid)
-        }
-    }
-
     fun init(rid: Int) = run {
         this.rid = rid
         currentRule.value = Rule()
