@@ -30,6 +30,9 @@ class NotificationActionViewModel(
             )
         }
     }
+    val isNotiAppListEmpty = liveData<Boolean> {
+        notiAppList.asFlow().collect { emit(it.isEmpty()) }
+    }
 
     val notiKeywordRecyclerItemList = MutableLiveData<List<RecyclerItem>>()
     val notiKeywordItemClickEvent = MutableLiveData<Event<String>>()
@@ -123,7 +126,8 @@ class NotificationActionViewModel(
         notiAppList.value = oldList - id
     }
 
-    private val onClickKeywordItem: (String) -> Unit = { notiKeywordItemClickEvent.value = Event(it) }
+    private val onClickKeywordItem: (String) -> Unit =
+        { notiKeywordItemClickEvent.value = Event(it) }
 
     private val onClickKeywordDelete: (String) -> Unit = { id ->
         val oldList = notiKeywordRecyclerItemList.value ?: listOf()

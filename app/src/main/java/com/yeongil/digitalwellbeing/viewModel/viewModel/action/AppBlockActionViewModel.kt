@@ -36,6 +36,10 @@ class AppBlockActionViewModel(
         }
     }
 
+    val isAppBlockListEmpty = liveData<Boolean> {
+        appBlockEntryList.asFlow().collect { emit(it.isEmpty()) }
+    }
+
     val itemClickDeleteEvent = MutableLiveData<Event<String>>()
     private val onClickEntryItemDelete: (String) -> Unit = { packageName ->
         itemClickDeleteEvent.value = Event(packageName)
