@@ -13,21 +13,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <CheckBox
-            android:id="@+id/select_all"
+        <TextView
+            android:id="@+id/select_all_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="@={vm.appItemAllChecked}"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="모든 앱 제한하기"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/select_all_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="전체\n선택"
-            app:layout_constraintLeft_toLeftOf="@id/select_all"
-            app:layout_constraintRight_toRightOf="@id/select_all"
+        <CheckBox
+            android:id="@+id/select_all"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:checked="@={vm.appItemAllChecked}"
+            android:onClick="@{()->vm.onClickAll()}"
+            app:layout_constraintBottom_toBottomOf="@id/select_all_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/select_all_title" />
+
+        <View
+            android:id="@+id/header_line"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="12dp"
+            android:background="#454545"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/select_all" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -35,11 +50,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="select_all, select_all_text" />
+            app:constraint_referenced_ids="select_all, select_all_title, header_line" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
-            recycler_item_list_with_lifecycle="@{vm.appItemList}"
+            recycler_item_list_with_lifecycle="@{vm.appRecyclerItemList}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"
@@ -66,8 +81,8 @@
             android:id="@+id/complete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="완료"
             android:enabled="@{vm.itemCount > 0}"
+            android:text="완료"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

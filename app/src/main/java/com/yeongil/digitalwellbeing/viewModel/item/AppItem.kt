@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel.item
 
 import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
 
 data class AppItem(

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ed21b531948f7948a3b7cdfe73500b1e",
+    "identityHash": "f72800a1c5ae1ddf09fd9532968b4cb2",
     "entities": [
       {
         "tableName": "rule_info",
@@ -158,7 +158,7 @@
       },
       {
         "tableName": "app_block_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_block_entry_list` TEXT NOT NULL, PRIMARY KEY(`rid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_block_entry_list` TEXT NOT NULL, `all_app_block` INTEGER NOT NULL, `all_app_handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
         "fields": [
           {
             "fieldPath": "rid",
@@ -170,6 +170,18 @@
             "fieldPath": "appBlockAction.appBlockEntryList",
             "columnName": "app_block_entry_list",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appBlockAction.allAppBlock",
+            "columnName": "all_app_block",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appBlockAction.allAppHandlingAction",
+            "columnName": "all_app_handling_action",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -184,7 +196,7 @@
       },
       {
         "tableName": "notification_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_list` TEXT NOT NULL, `keyword_list` TEXT NOT NULL, `handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_list` TEXT NOT NULL, `all_app` INTEGER NOT NULL, `keyword_list` TEXT NOT NULL, `handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
         "fields": [
           {
             "fieldPath": "rid",
@@ -196,6 +208,12 @@
             "fieldPath": "notificationAction.appList",
             "columnName": "app_list",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notificationAction.allApp",
+            "columnName": "all_app",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -276,7 +294,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ed21b531948f7948a3b7cdfe73500b1e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f72800a1c5ae1ddf09fd9532968b4cb2')"
     ]
   }
 }

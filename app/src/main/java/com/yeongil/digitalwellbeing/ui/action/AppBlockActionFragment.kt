@@ -48,19 +48,16 @@ class AppBlockActionFragment : Fragment() {
 
         appBlockActionViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { packageName ->
-                val entry = appBlockActionViewModel.appBlockEntryList.value!!
-                    .filter { it.packageName == packageName }[0]
+                val entry =
+                    appBlockActionViewModel.appBlockEntryList.value!!.last { it.packageName == packageName }
                 appBlockEntryViewModel.init(entry)
                 findNavController().navigateSafe(directions.actionAppBlockActionFragmentToAppBlockEntryDialog())
             }
         }
-        appBlockActionViewModel.itemClickDeleteEvent.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { packageName ->
-                with(appBlockActionViewModel.appBlockEntryList) {
-                    val oldEntryList = this.value ?: listOf()
-                    val index = oldEntryList.map { it.packageName }.indexOf(packageName)
-                    this.value = oldEntryList - oldEntryList[index]
-                }
+
+        appBlockActionViewModel.allItemClickEvent.observe(viewLifecycleOwner) {event ->
+            event.getContentIfNotHandled()?.let {
+
             }
         }
 

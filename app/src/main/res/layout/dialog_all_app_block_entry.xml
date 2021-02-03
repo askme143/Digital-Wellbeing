@@ -3,8 +3,6 @@
 
     <data>
 
-        <import type="com.yeongil.digitalwellbeing.utils.ConstantsKt" />
-
         <variable
             name="vm"
             type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockEntryViewModel" />
@@ -20,32 +18,10 @@
             android:id="@+id/time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="허용시간"
+            android:text="제한 방법을 선택하세요."
             android:textSize="24sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TimePicker
-            android:id="@+id/time_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hour="@={vm.pickerHour}"
-            android:minute="@={vm.pickerMinute}"
-            android:timePickerMode="spinner"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time_title" />
-
-        <View
-            android:id="@+id/line"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="#454545"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time_picker"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.8" />
 
         <RadioGroup
             android:id="@+id/radio_group"
@@ -55,20 +31,16 @@
             app:layout_constraintBottom_toTopOf="@id/btn_barrier"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/line">
+            app:layout_constraintTop_toBottomOf="@id/time_title">
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.handlingAction == vm.constCloseImmediate}"
-                android:onClick="@{() -> vm.onItemSelected(vm.constCloseImmediate)}"
                 android:text="바로 종료" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.handlingAction == vm.constAlert}"
-                android:onClick="@{() -> vm.onItemSelected(vm.constAlert)}"
                 android:text="경고 알림" />
         </RadioGroup>
 

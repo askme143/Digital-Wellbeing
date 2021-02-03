@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel" />
@@ -53,6 +55,17 @@
             recycler_item_list="@{vm.appBlockEntryItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="@{vm.allAppBlock ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@id/footer_barrier"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_btn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            recycler_item_list="@{vm.allAppBlockEntryItemList}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{vm.allAppBlock ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

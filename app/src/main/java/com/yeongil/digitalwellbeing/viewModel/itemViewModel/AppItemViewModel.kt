@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel.itemViewModel
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.yeongil.digitalwellbeing.BR
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
@@ -11,6 +12,7 @@ import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 class AppItemViewModel(
     override val id: String,
     val appItem: AppItem,
+    val isAllAppClicked: MutableLiveData<Boolean>,
     val onClickItem: (Boolean) -> Unit,
 ) : RecyclerItemViewModel {
     override fun isSameItem(other: Any): Boolean {
@@ -31,11 +33,9 @@ class AppItemViewModel(
     }
 
     fun onClickItem() {
-        appItem.checked.value = !appItem.checked.value!!
-        onClickItem(appItem.checked.value!!)
-    }
-
-    fun onClickCheckbox() {
-        onClickItem(appItem.checked.value!!)
+        if (isAllAppClicked.value != true) {
+            appItem.checked.value = !appItem.checked.value!!
+            onClickItem(appItem.checked.value!!)
+        }
     }
 }

@@ -7,11 +7,12 @@ import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.ALERT
 import com.yeongil.digitalwellbeing.utils.CLOSE_IMMEDIATE
 import com.yeongil.digitalwellbeing.utils.Event
-import com.yeongil.digitalwellbeing.utils.TimeUtils.minutesToTimeMinute
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppBlockEntryItem
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AllAppBlockEntryItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppBlockEntryItemViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 
 class AppBlockActionViewModel(
     private val pmRepo: PackageManagerRepository
@@ -19,6 +20,27 @@ class AppBlockActionViewModel(
     var editing = false
 
     val appBlockEntryList = MutableLiveData<List<AppBlockEntry>>()
+    val allAppBlock = MutableLiveData<Boolean>(false)
+    val allAppHandlingAction = MutableLiveData<Int>(CLOSE_IMMEDIATE)
+
+    val allAppBlockEntryItemList = liveData<List<RecyclerItem>> {
+        allAppHandlingAction.asFlow().collect {
+            val description = when (it) {
+                CLOSE_IMMEDIATE -> "바로 종료"
+                ALERT -> "경고 알림"
+                else -> ""
+            }
+            emit(
+                listOf(
+                    AllAppBlockEntryItemViewModel(
+                        description = description,
+                        onClickItem = onAllItemClick,
+                        onClickDeleteItem = onAllItemDelete
+                    ).toRecyclerItem()
+                )
+            )
+        }
+    }
     val appBlockEntryItemList = liveData<List<RecyclerItem>> {
         appBlockEntryList.asFlow().collect { list ->
             emit(
@@ -40,9 +62,10 @@ class AppBlockActionViewModel(
         appBlockEntryList.asFlow().collect { emit(it.isEmpty()) }
     }
 
-    val itemClickDeleteEvent = MutableLiveData<Event<String>>()
     private val onClickEntryItemDelete: (String) -> Unit = { packageName ->
-        itemClickDeleteEvent.value = Event(packageName)
+        val oldEntryList = appBlockEntryList.value ?: listOf()
+        val index = oldEntryList.map { it.packageName }.indexOf(packageName)
+        appBlockEntryList.value = oldEntryList - oldEntryList[index]
     }
 
     val itemClickEvent = MutableLiveData<Event<String>>()
@@ -50,11 +73,19 @@ class AppBlockActionViewModel(
         itemClickEvent.value = Event(packageName)
     }
 
+    val allItemClickEvent = MutableLiveData<Event<Unit>>()
+    private val onAllItemClick: () -> Unit = { allItemClickEvent.value = Event(Unit) }
+    private val onAllItemDelete: () -> Unit = { allAppBlock.value = false }
+
     fun init() {
+        allAppBlock.value = false
+        allAppHandlingAction.value = CLOSE_IMMEDIATE
         appBlockEntryList.value = listOf()
     }
 
     fun init(appBlockAction: AppBlockAction) {
+        allAppBlock.value = appBlockAction.allAppBlock
+        allAppHandlingAction.value = appBlockAction.allAppHandlingAction
         appBlockEntryList.value = appBlockAction.appBlockEntryList
     }
 
@@ -67,6 +98,12 @@ class AppBlockActionViewModel(
             .map { AppBlockEntry(it, 0, CLOSE_IMMEDIATE) }
 
         appBlockEntryList.value = subtractedEntryList + additionEntryList
+    }
+
+    fun setAllApp() {
+        allAppBlock.value = true
+        allAppHandlingAction.value = CLOSE_IMMEDIATE
+        appBlockEntryList.value = listOf()
     }
 
     fun addAppBlockEntry(entry: AppBlockEntry) {
@@ -82,5 +119,6 @@ class AppBlockActionViewModel(
         }
     }
 
-    fun getAppBlockAction() = AppBlockAction(appBlockEntryList.value!!)
+    fun getAppBlockAction() =
+        AppBlockAction(appBlockEntryList.value!!, allAppBlock.value!!, allAppHandlingAction.value!!)
 }

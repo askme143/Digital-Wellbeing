@@ -49,21 +49,13 @@ class AppBlockListFragment : Fragment() {
 
         initViewModel()
 
-        appListViewModel.appItemAllChecked.observe(viewLifecycleOwner) { allChecked: Boolean? ->
-            if (allChecked != null) {
-                appListViewModel.appItemList.value!!
-                    .also { appListViewModel.itemCount.value = if (allChecked) it.size else 0 }
-                    .map { it.viewModel }
-                    .filterIsInstance<AppItemViewModel>()
-                    .forEach { it.appItem.checked.value = allChecked }
-            }
-        }
-
         binding.beforeBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
         binding.completeBtn.setOnClickListener {
             appBlockActionViewModel.editing = true
+            val allApp = appListViewModel.isAllAppChecked()
+
             appBlockActionViewModel.setAppList(appListViewModel.getCheckedAppList())
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }

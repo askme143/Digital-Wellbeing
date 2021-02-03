@@ -81,6 +81,8 @@ class NotificationActionViewModel(
         handlingAction.value = action.handlingAction
     }
 
+    /* TODO: Apply all item checking*/
+
     fun getNotificationAction(): NotificationAction {
         val appList = notiAppList.value ?: listOf()
         val keywordItemList = this.notiKeywordRecyclerItemList.value ?: listOf()
@@ -91,7 +93,7 @@ class NotificationActionViewModel(
                 .map { KeywordEntry(it.keyword, it.inclusion.value ?: true) }
         val handlingAction = this.handlingAction.value ?: constNotificationHide
 
-        return NotificationAction(appList, keywordEntryList, handlingAction)
+        return NotificationAction(appList, false, keywordEntryList, handlingAction)
     }
 
     fun setAppList(packageNameList: List<String>) {
