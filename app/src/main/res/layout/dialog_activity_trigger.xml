@@ -36,7 +36,7 @@
                 android:id="@+id/drive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.selectedActivity == vm.constDrive}"
+                android:checked="@{vm.selectedActivity.equals(vm.constDrive)}"
                 android:onClick="@{() -> vm.onItemSelected(vm.constDrive)}"
                 android:text="자동차 운전 중" />
 
@@ -44,7 +44,7 @@
                 android:id="@+id/bicycle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.selectedActivity == vm.constBicycle}"
+                android:checked="@{vm.selectedActivity.equals(vm.constBicycle)}"
                 android:onClick="@{() -> vm.onItemSelected(vm.constBicycle)}"
                 android:text="자전거 운전 중" />
 
@@ -52,7 +52,7 @@
                 android:id="@+id/still"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.selectedActivity == vm.constStill}"
+                android:checked="@{vm.selectedActivity.equals(vm.constStill)}"
                 android:onClick="@{() -> vm.onItemSelected(vm.constStill)}"
                 android:text="활동이 감지되지 않을 때" />
         </RadioGroup>

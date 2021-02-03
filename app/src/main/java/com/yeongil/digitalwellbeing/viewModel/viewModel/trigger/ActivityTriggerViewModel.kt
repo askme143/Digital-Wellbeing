@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.trigger
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yeongil.digitalwellbeing.data.trigger.ActivityTrigger
