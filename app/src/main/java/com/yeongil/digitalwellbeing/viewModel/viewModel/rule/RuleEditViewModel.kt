@@ -76,6 +76,7 @@ class RuleEditViewModel(
     }
 
     val itemAddEvent = MutableLiveData<Event<Unit>>()
+    val itemEditEvent = MutableLiveData<Event<Unit>>()
 
     val itemClickEvent = MutableLiveData<Event<String>>()
 
@@ -123,6 +124,7 @@ class RuleEditViewModel(
         }
 
         itemAddEvent.value?.getContentIfNotHandled()
+        itemEditEvent.value?.getContentIfNotHandled()
     }
 
     fun saveRule() {
@@ -137,34 +139,41 @@ class RuleEditViewModel(
     }
 
     fun addTriggerAction(triggerAction: Any) {
-        val item = when (triggerAction) {
+        val (item, isNewItem) = when (triggerAction) {
             is LocationTrigger -> {
+                val isNewItem = editingRule.value!!.locationTrigger == null
                 editingRule.value = editingRule.value!!.copy(locationTrigger = triggerAction)
-                TriggerActionItem(triggerAction)
+                Pair(TriggerActionItem(triggerAction), isNewItem)
             }
             is TimeTrigger -> {
+                val isNewItem = editingRule.value!!.timeTrigger == null
                 editingRule.value = editingRule.value!!.copy(timeTrigger = triggerAction)
-                TriggerActionItem(triggerAction)
+                Pair(TriggerActionItem(triggerAction), isNewItem)
             }
             is ActivityTrigger -> {
+                val isNewItem = editingRule.value!!.activityTrigger == null
                 editingRule.value = editingRule.value!!.copy(activityTrigger = triggerAction)
-                TriggerActionItem(triggerAction)
+                Pair(TriggerActionItem(triggerAction), isNewItem)
             }
             is AppBlockAction -> {
+                val isNewItem = editingRule.value!!.appBlockAction == null
                 editingRule.value = editingRule.value!!.copy(appBlockAction = triggerAction)
-                TriggerActionItem(triggerAction, pmRepo)
+                Pair(TriggerActionItem(triggerAction, pmRepo), isNewItem)
             }
             is NotificationAction -> {
+                val isNewItem = editingRule.value!!.notificationAction == null
                 editingRule.value = editingRule.value!!.copy(notificationAction = triggerAction)
-                TriggerActionItem(triggerAction, pmRepo)
+                Pair(TriggerActionItem(triggerAction, pmRepo), isNewItem)
             }
             is DndAction -> {
+                val isNewItem = editingRule.value!!.dndAction == null
                 editingRule.value = editingRule.value!!.copy(dndAction = triggerAction)
-                TriggerActionItem(triggerAction)
+                Pair(TriggerActionItem(triggerAction), isNewItem)
             }
             is RingerAction -> {
+                val isNewItem = editingRule.value!!.ringerAction == null
                 editingRule.value = editingRule.value!!.copy(ringerAction = triggerAction)
-                TriggerActionItem(triggerAction)
+                Pair(TriggerActionItem(triggerAction), isNewItem)
             }
             else -> return
         }
@@ -175,11 +184,11 @@ class RuleEditViewModel(
         if (index == -1) {
             triggerActionItemList.value = oldList + item
         } else {
-            triggerActionItemList.value =
-                oldList.subList(0, index) + item + oldList.subList(index + 1, oldList.size)
+            triggerActionItemList.value = oldList.toMutableList().apply { this[index] = item }
         }
 
-        itemAddEvent.value = Event(Unit)
+        if (isNewItem) itemAddEvent.value = Event(Unit)
+        else itemEditEvent.value = Event(Unit)
     }
 
     fun deleteItem() {

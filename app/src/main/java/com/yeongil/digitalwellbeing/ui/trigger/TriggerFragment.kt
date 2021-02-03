@@ -46,6 +46,11 @@ class TriggerFragment : Fragment() {
                 Toast.makeText(context, "조건이 추가되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+        ruleEditViewModel.itemEditEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                Toast.makeText(context, "조건이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
         ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 when (it) {
