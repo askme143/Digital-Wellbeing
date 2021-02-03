@@ -46,6 +46,6 @@ object TimeUtils {
         val hour = "${minutes / 60}"
         val min = "${minutes % 60}"
 
-        return if (hour == "0") "${min}분" else "${hour}시간 ${min}분"
+        return if (hour == "0") "${min}분" else if (min == "0") "${hour}시간" else "${hour}시간 ${min}분"
     }
 }

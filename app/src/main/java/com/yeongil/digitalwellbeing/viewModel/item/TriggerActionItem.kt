@@ -65,7 +65,12 @@ class TriggerActionItem(val title: String, val description: String) {
     constructor(appBlockAction: AppBlockAction, pmRepo: PackageManagerRepository) : this(
         APP_BLOCK_ACTION_TITLE,
         appBlockAction.appBlockEntryList.joinToString(", ") {
-            "${pmRepo.getLabel(it.packageName)} ${it.allowedTimeInMinutes}분 사용 시"
+            val label = pmRepo.getLabel(it.packageName)
+            val allowedTime = it.allowedTimeInMinutes.let { min ->
+                if (min == 0) "실행 시"
+                else "${TimeUtils.minutesToTimeMinute(min)} 사용 시"
+            }
+            "$label $allowedTime"
         }
     )
 
