@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Digital Wellbeing</string>
     <string name="preference_sequence_number">com.yeongil.digitalwellbeing.SEQUENCE_NUMBER</string>
+    <string name="go_back_confirm_trigger_to_main_new_rule">규칙이 저장되지 않습니다.\n메인 화면으로 이동하시겠습니까?</string>
+    <string name="go_back_confirm_trigger_to_main_old_rule">규칙이 수정되지 않습니다.\n메인 화면으로 이동하시겠습니까?</string>
 </resources>

@@ -36,6 +36,7 @@ class RuleEditViewModel(
         null
     )
     var isNewRule: Boolean = true
+    var originalRule: Rule = emptyRule
     val editingRule = MutableLiveData(emptyRule)
 
     private val triggerActionItemList = MutableLiveData<List<TriggerActionItem>>()
@@ -73,6 +74,9 @@ class RuleEditViewModel(
             )
         }
     }
+
+    val itemAddEvent = MutableLiveData<Event<Unit>>()
+
     val itemClickEvent = MutableLiveData<Event<String>>()
 
     val itemDeleteEvent = MutableLiveData<Event<Boolean>>()
@@ -86,6 +90,7 @@ class RuleEditViewModel(
 
     fun init(rule: Rule) {
         isNewRule = false
+        originalRule = rule.copy()
         editingRule.value = rule.copy()
         ruleName.value = editingRule.value?.ruleInfo?.ruleName ?: "규칙 이름"
 
@@ -94,6 +99,7 @@ class RuleEditViewModel(
 
     fun init() {
         isNewRule = true
+        originalRule = emptyRule
         editingRule.value = emptyRule.copy()
         ruleName.value = editingRule.value?.ruleInfo?.ruleName ?: "규칙 이름"
 
@@ -115,6 +121,8 @@ class RuleEditViewModel(
             rule.dndAction?.let { addTriggerAction(it) }
             rule.ringerAction?.let { addTriggerAction(it) }
         }
+
+        itemAddEvent.value?.getContentIfNotHandled()
     }
 
     fun saveRule() {
@@ -170,6 +178,8 @@ class RuleEditViewModel(
             triggerActionItemList.value =
                 oldList.subList(0, index) + item + oldList.subList(index + 1, oldList.size)
         }
+
+        itemAddEvent.value = Event(Unit)
     }
 
     fun deleteItem() {

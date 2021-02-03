@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -35,6 +36,11 @@ class ActionFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ruleEditViewModel
 
+        ruleEditViewModel.itemAddEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                Toast.makeText(context, "액션이 추가되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
         ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { title ->
                 when (title) {
