@@ -19,7 +19,7 @@ class RuleDeleteConfirmDialog : DialogFragment() {
     private val directions = RuleDeleteConfirmDialogDirections
 
     private val ruleInfoViewModel by activityViewModels<RuleInfoViewModel> {
-        RuleInfoViewModelFactory(requireContext(), requireActivity().application)
+        RuleInfoViewModelFactory(requireContext())
     }
 
     override fun onCreateView(

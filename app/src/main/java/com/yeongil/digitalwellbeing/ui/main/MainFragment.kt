@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -23,7 +24,7 @@ class MainFragment : Fragment() {
     val directions = MainFragmentDirections
 
     private val ruleInfoViewModel by activityViewModels<RuleInfoViewModel> {
-        RuleInfoViewModelFactory(requireContext(), requireActivity().application)
+        RuleInfoViewModelFactory(requireContext())
     }
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
@@ -45,6 +46,30 @@ class MainFragment : Fragment() {
             event.getContentIfNotHandled()?.let { rid ->
                 descriptionViewModel.init(rid)
                 findNavController().navigateSafe(directions.actionMainFragmentToDescriptionFragment())
+            }
+        }
+        ruleInfoViewModel.itemClickActivate.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                if (it) {
+                    Toast.makeText(context, "규칙이 활성화 됩니다. 조건을 충족하면 액션이 수행됩니다", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "규칙이 비활성화 됩니다. 조건을 충족하더라도 액션이 수행되지 않습니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+        ruleInfoViewModel.itemClickNotiOnTriggerEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                if (it) {
+                    Toast.makeText(context, "규칙의 조건이 만족되면 사용자 확인 후 액션이 실행됩니다.", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(context, "규칙의 조건이 만족되면 액션이 바로 실행됩니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         ruleInfoViewModel.itemDeleteEvent.observe(viewLifecycleOwner) { event ->

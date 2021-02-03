@@ -60,14 +60,14 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.handlingAction == vm.constCloseImmediate}"
+                android:checked="@{vm.handlingAction.equals(vm.constCloseImmediate)}"
                 android:onClick="@{() -> vm.onItemSelected(vm.constCloseImmediate)}"
                 android:text="바로 종료" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.handlingAction == vm.constAlert}"
+                android:checked="@{vm.handlingAction.equals(vm.constAlert)}"
                 android:onClick="@{() -> vm.onItemSelected(vm.constAlert)}"
                 android:text="경고 알림" />
         </RadioGroup>
