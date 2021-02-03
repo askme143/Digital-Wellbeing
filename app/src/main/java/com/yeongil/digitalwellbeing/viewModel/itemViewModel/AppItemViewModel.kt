@@ -13,7 +13,7 @@ class AppItemViewModel(
     override val id: String,
     val appItem: AppItem,
     val isAllAppClicked: MutableLiveData<Boolean>,
-    val onClickItem: (Boolean) -> Unit,
+    val onClickItem: (MutableLiveData<Boolean>) -> Unit,
 ) : RecyclerItemViewModel {
     override fun isSameItem(other: Any): Boolean {
         if (this === other) return true
@@ -33,9 +33,6 @@ class AppItemViewModel(
     }
 
     fun onClickItem() {
-        if (isAllAppClicked.value != true) {
-            appItem.checked.value = !appItem.checked.value!!
-            onClickItem(appItem.checked.value!!)
-        }
+        onClickItem(appItem.checked)
     }
 }

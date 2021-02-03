@@ -17,12 +17,12 @@ class AllAppBlockEntryItemViewModel(
         if (javaClass != other.javaClass) return false
 
         other as AllAppBlockEntryItemViewModel
-        return this.id == other.id
+        return this.description == other.description
     }
 
     override fun isSameContent(other: Any): Boolean {
         other as AllAppBlockEntryItemViewModel
-        return this.id == other.id
+        return this.description == other.description
     }
 
     override fun toRecyclerItem(): RecyclerItem {

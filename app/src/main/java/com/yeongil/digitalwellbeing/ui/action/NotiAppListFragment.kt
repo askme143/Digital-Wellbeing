@@ -54,7 +54,7 @@ class NotiAppListFragment : Fragment() {
         }
         binding.completeBtn.setOnClickListener {
             notiActionViewModel.editing = true
-            notiActionViewModel.setAppList(appListViewModel.getCheckedAppList())
+//            notiActionViewModel.setAppList(appListViewModel.getCheckedAppList())
             findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
 
@@ -63,6 +63,6 @@ class NotiAppListFragment : Fragment() {
 
     private fun initViewModel() {
         val appList = notiActionViewModel.notiAppList.value ?: listOf()
-        appListViewModel.init(appList)
+//        appListViewModel.init(appList)
     }
 }

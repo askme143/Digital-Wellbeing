@@ -47,28 +47,17 @@ class AppBlockListFragment : Fragment() {
             }
         }
 
-        initViewModel()
-
         binding.beforeBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            appBlockActionViewModel.editing = true
-            val allApp = appListViewModel.isAllAppChecked()
+            val appList = appListViewModel.getAppList()
+            if (appList == null) appBlockActionViewModel.putAllApp()
+            else appBlockActionViewModel.updateAppBlockEntryList(appList)
 
-            appBlockActionViewModel.setAppList(appListViewModel.getCheckedAppList())
             findNavController().navigateSafe(directions.actionAppBlockListFragmentToAppBlockActionFragment())
         }
 
         return binding.root
-    }
-
-    private fun initViewModel() {
-        appListViewModel.init(
-            appBlockActionViewModel
-                .getAppBlockAction()
-                .appBlockEntryList
-                .map { it.packageName }
-        )
     }
 }

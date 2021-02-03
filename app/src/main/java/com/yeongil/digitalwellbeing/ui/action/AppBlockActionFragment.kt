@@ -1,16 +1,20 @@
 package com.yeongil.digitalwellbeing.ui.action
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.addCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yeongil.digitalwellbeing.R
+import com.yeongil.digitalwellbeing.data.action.AppBlockEntry
+import com.yeongil.digitalwellbeing.databinding.DialogAllAppBlockEntryBinding
 import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockActionBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
@@ -34,6 +38,9 @@ class AppBlockActionFragment : Fragment() {
         AppBlockActionViewModelFactory(requireContext())
     }
     private val appBlockEntryViewModel by activityViewModels<AppBlockEntryViewModel>()
+    private val appListViewModel by activityViewModels<AppListViewModel> {
+        AppListViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,48 +51,64 @@ class AppBlockActionFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = appBlockActionViewModel
 
-        initViewModel()
-
         appBlockActionViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { packageName ->
-                val entry =
-                    appBlockActionViewModel.appBlockEntryList.value!!.last { it.packageName == packageName }
-                appBlockEntryViewModel.init(entry)
+            event.getContentIfNotHandled()?.let { entry ->
+                appBlockEntryViewModel.putAppBlockEntry(entry)
                 findNavController().navigateSafe(directions.actionAppBlockActionFragmentToAppBlockEntryDialog())
             }
         }
 
-        appBlockActionViewModel.allItemClickEvent.observe(viewLifecycleOwner) {event ->
+        appBlockActionViewModel.allAppItemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
+                appBlockEntryViewModel.putAllApp(it)
+                val binding = DataBindingUtil.inflate<DialogAllAppBlockEntryBinding>(
+                    LayoutInflater.from(requireContext()),
+                    R.layout.dialog_all_app_block_entry,
+                    null,
+                    false
+                )
+                binding.lifecycleOwner = viewLifecycleOwner
+                binding.vm = appBlockEntryViewModel
 
+                val dialog = BottomSheetDialog(requireContext())
+                dialog.setContentView(binding.root)
+                dialog.show()
+
+                dialog.findViewById<Button>(R.id.cancel_btn)!!
+                    .setOnClickListener {
+                        dialog.dismiss()
+                    }
+                dialog.findViewById<Button>(R.id.complete_btn)!!
+                    .setOnClickListener {
+                        val allAppHandlingAction = appBlockEntryViewModel.getAllAppHandlingAction()
+                        appBlockActionViewModel.updateAllAppHandlingAction(allAppHandlingAction)
+                        dialog.dismiss()
+                    }
             }
         }
 
         binding.addBtn.setOnClickListener {
+            val appList = appBlockActionViewModel.getAppList()
+            if (appList == null) appListViewModel.putAllApp()
+            else appListViewModel.putAppList(appList)
+
             findNavController().navigateSafe(directions.actionAppBlockActionFragmentToAppBlockListFragment())
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { onStartGoBack() }
         binding.beforeBtn.setOnClickListener { onStartGoBack() }
         binding.completeBtn.setOnClickListener {
-            appBlockActionViewModel.editing = false
-            ruleEditViewModel.addTriggerAction(appBlockActionViewModel.getAppBlockAction())
+            ruleEditViewModel.addTriggerAction(appBlockActionViewModel.getAppBlockAction()!!)
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
 
         return binding.root
     }
 
-    private fun initViewModel() {
-        if (!appBlockActionViewModel.editing) {
-            val action = ruleEditViewModel.editingRule.value?.appBlockAction
-            if (action != null) {
-                appBlockActionViewModel.init(action)
-            } else appBlockActionViewModel.init()
-        }
-    }
-
     private fun onStartGoBack() {
-        if (appBlockActionViewModel.appBlockEntryList.value?.isNotEmpty() == true) {
+        val currentAction = appBlockActionViewModel.getAppBlockAction()
+        val originalAction = appBlockActionViewModel.originalAction
+
+        if (currentAction != originalAction) {
             val bottomSheetDialog = BottomSheetDialog(requireContext())
             bottomSheetDialog.setContentView(R.layout.dialog_cancel_confirm)
             bottomSheetDialog.show()
@@ -103,9 +126,7 @@ class AppBlockActionFragment : Fragment() {
     }
 
     private fun goBack() {
-        appBlockActionViewModel.editing = false
-        val goToEditFragment = ruleEditViewModel.editingRule.value?.appBlockAction == null
-        if (goToEditFragment) {
+        if (appBlockActionViewModel.originalAction == null) {
             findNavController().navigateSafe(directions.actionAppBlockActionFragmentToActionEditFragment())
         } else {
             findNavController().navigateSafe(directions.actionGlobalActionFragment())

@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.data.action.AppBlockAction
 import com.yeongil.digitalwellbeing.data.action.AppBlockEntry
@@ -17,12 +18,14 @@ import kotlinx.coroutines.flow.combine
 class AppBlockActionViewModel(
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
-    var editing = false
-
+    /* Data */
+    var originalAction: AppBlockAction? = null
     val appBlockEntryList = MutableLiveData<List<AppBlockEntry>>()
     val allAppBlock = MutableLiveData<Boolean>(false)
     val allAppHandlingAction = MutableLiveData<Int>(CLOSE_IMMEDIATE)
 
+    /* View Related */
+    // Recycler Item List
     val allAppBlockEntryItemList = liveData<List<RecyclerItem>> {
         allAppHandlingAction.asFlow().collect {
             val description = when (it) {
@@ -34,8 +37,8 @@ class AppBlockActionViewModel(
                 listOf(
                     AllAppBlockEntryItemViewModel(
                         description = description,
-                        onClickItem = onAllItemClick,
-                        onClickDeleteItem = onAllItemDelete
+                        onClickItem = onAllAppItemClick,
+                        onClickDeleteItem = onAllAppItemDelete
                     ).toRecyclerItem()
                 )
             )
@@ -49,8 +52,8 @@ class AppBlockActionViewModel(
                         AppBlockEntryItemViewModel(
                             it.packageName,
                             it,
-                            onClickEntryItem,
-                            onClickEntryItemDelete
+                            onClickItem,
+                            onClickItemDelete
                         )
                     }
                     .map { it.toRecyclerItem() }
@@ -58,67 +61,100 @@ class AppBlockActionViewModel(
         }
     }
 
-    val isAppBlockListEmpty = liveData<Boolean> {
-        appBlockEntryList.asFlow().collect { emit(it.isEmpty()) }
+    // Action Exists; for blocking complete button
+    val actionExists = liveData<Boolean> {
+        appBlockEntryList.asFlow().combine(allAppBlock.asFlow()) { list, bool ->
+            Pair(list, bool)
+        }.collect { (list, allAppBlock) ->
+            emit(list.isNotEmpty() || allAppBlock)
+        }
     }
 
-    private val onClickEntryItemDelete: (String) -> Unit = { packageName ->
+    // item click
+    val itemClickEvent = MutableLiveData<Event<AppBlockEntry>>()
+    private val onClickItem: (String) -> Unit = { packageName ->
+        itemClickEvent.value = Event(getAppBlockEntry(packageName))
+    }
+
+    // item delete click
+    private val onClickItemDelete: (String) -> Unit = { packageName ->
         val oldEntryList = appBlockEntryList.value ?: listOf()
         val index = oldEntryList.map { it.packageName }.indexOf(packageName)
         appBlockEntryList.value = oldEntryList - oldEntryList[index]
     }
 
-    val itemClickEvent = MutableLiveData<Event<String>>()
-    private val onClickEntryItem: (String) -> Unit = { packageName ->
-        itemClickEvent.value = Event(packageName)
+    // all app item click
+    val allAppItemClickEvent = MutableLiveData<Event<Int>>()
+    private val onAllAppItemClick: () -> Unit =
+        { allAppItemClickEvent.value = Event(getAllAppHandlingAction()) }
+
+    // all app item delete
+    private val onAllAppItemDelete: () -> Unit = { allAppBlock.value = false }
+
+    ///////////////
+    /* Rule Edit */
+    ///////////////
+    fun getAppBlockAction(): AppBlockAction? {
+        val list = appBlockEntryList.value ?: listOf()
+        val allApp = allAppBlock.value ?: false
+        val handlingAction = allAppHandlingAction.value!!
+
+        return if (list.isEmpty() && !allApp) null
+        else AppBlockAction(list, allApp, handlingAction)
     }
 
-    val allItemClickEvent = MutableLiveData<Event<Unit>>()
-    private val onAllItemClick: () -> Unit = { allItemClickEvent.value = Event(Unit) }
-    private val onAllItemDelete: () -> Unit = { allAppBlock.value = false }
-
-    fun init() {
-        allAppBlock.value = false
-        allAppHandlingAction.value = CLOSE_IMMEDIATE
-        appBlockEntryList.value = listOf()
+    fun putAppBlockAction(action: AppBlockAction?) {
+        originalAction = action
+        allAppBlock.value = action?.allAppBlock ?: false
+        allAppHandlingAction.value = action?.allAppHandlingAction ?: CLOSE_IMMEDIATE
+        appBlockEntryList.value = action?.appBlockEntryList ?: listOf()
     }
 
-    fun init(appBlockAction: AppBlockAction) {
-        allAppBlock.value = appBlockAction.allAppBlock
-        allAppHandlingAction.value = appBlockAction.allAppHandlingAction
-        appBlockEntryList.value = appBlockAction.appBlockEntryList
+    //////////////
+    /* App List */
+    //////////////
+    fun getAppList(): List<String>? {
+        return if (allAppBlock.value == true) null
+        else appBlockEntryList.value?.map { it.packageName } ?: listOf()
     }
 
-    fun setAppList(packageNameList: List<String>) {
-        val oldEntryList = appBlockEntryList.value ?: listOf()
-        val subtractedEntryList = oldEntryList.filter { packageNameList.contains(it.packageName) }
-        val subtractedAppList = subtractedEntryList.map { it.packageName }
-        val additionEntryList = packageNameList
+    fun updateAppBlockEntryList(appList: List<String>) {
+        val oldList = appBlockEntryList.value ?: listOf()
+        val subtractedList = oldList.filter { appList.contains(it.packageName) }
+        val subtractedAppList = subtractedList.map { it.packageName }
+        val additionList = appList
             .filterNot { subtractedAppList.contains(it) }
             .map { AppBlockEntry(it, 0, CLOSE_IMMEDIATE) }
 
-        appBlockEntryList.value = subtractedEntryList + additionEntryList
+        appBlockEntryList.value = subtractedList + additionList
+        allAppBlock.value = false
     }
 
-    fun setAllApp() {
+    fun putAllApp() {
+        appBlockEntryList.value = listOf()
         allAppBlock.value = true
         allAppHandlingAction.value = CLOSE_IMMEDIATE
-        appBlockEntryList.value = listOf()
     }
 
-    fun addAppBlockEntry(entry: AppBlockEntry) {
-        val existingAppList = appBlockEntryList.value?.map { it.packageName } ?: listOf()
-        val index = existingAppList.indexOf(entry.packageName)
-        if (index == -1) {
-            appBlockEntryList.value = appBlockEntryList.value?.plus(entry) ?: listOf(entry)
-        } else {
-            val oldList = appBlockEntryList.value!!
-            val size = oldList.size
-            appBlockEntryList.value =
-                oldList.subList(0, index) + entry + oldList.subList(index + 1, size)
+    /////////////////////
+    /* App Block Entry */
+    /////////////////////
+    fun updateAllAppHandlingAction(handlingAction: Int) {
+        allAppHandlingAction.value = handlingAction
+    }
+
+    private fun getAllAppHandlingAction(): Int {
+        return allAppHandlingAction.value ?: CLOSE_IMMEDIATE
+    }
+
+    private fun getAppBlockEntry(packageName: String): AppBlockEntry {
+        return appBlockEntryList.value!!.last { it.packageName == packageName }
+    }
+
+    fun updateAppBlockEntryList(entry: AppBlockEntry) {
+        with(appBlockEntryList) {
+            val index = value!!.indexOfFirst { it.packageName == entry.packageName }
+            value = value!!.toMutableList().apply { this[index] = entry }
         }
     }
-
-    fun getAppBlockAction() =
-        AppBlockAction(appBlockEntryList.value!!, allAppBlock.value!!, allAppHandlingAction.value!!)
 }

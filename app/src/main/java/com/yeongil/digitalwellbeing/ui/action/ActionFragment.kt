@@ -15,6 +15,8 @@ import com.yeongil.digitalwellbeing.viewModel.item.APP_BLOCK_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.DND_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.NOTIFICATION_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.RINGER_ACTION_TITLE
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
 class ActionFragment : Fragment() {
@@ -25,6 +27,9 @@ class ActionFragment : Fragment() {
 
     private val ruleEditViewModel by activityViewModels<RuleEditViewModel> {
         RuleEditViewModelFactory(requireContext())
+    }
+    private val appBlockActionViewModel by activityViewModels<AppBlockActionViewModel> {
+        AppBlockActionViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
@@ -49,8 +54,10 @@ class ActionFragment : Fragment() {
         ruleEditViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { title ->
                 when (title) {
-                    APP_BLOCK_ACTION_TITLE ->
+                    APP_BLOCK_ACTION_TITLE -> {
+                        appBlockActionViewModel.putAppBlockAction(ruleEditViewModel.editingRule.value!!.appBlockAction)
                         findNavController().navigateSafe(directions.actionActionFragmentToAppBlockActionFragment())
+                    }
                     NOTIFICATION_ACTION_TITLE ->
                         findNavController().navigateSafe(directions.actionActionFragmentToNotificationActionFragment())
                     RINGER_ACTION_TITLE ->

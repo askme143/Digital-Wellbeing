@@ -64,7 +64,8 @@ class TriggerActionItem(val title: String, val description: String) {
 
     constructor(appBlockAction: AppBlockAction, pmRepo: PackageManagerRepository) : this(
         APP_BLOCK_ACTION_TITLE,
-        appBlockAction.appBlockEntryList.joinToString(", ") {
+        if (appBlockAction.allAppBlock) "모든 앱 실행 시"
+        else appBlockAction.appBlockEntryList.joinToString(", ") {
             val label = pmRepo.getLabel(it.packageName)
             val allowedTime = it.allowedTimeInMinutes.let { min ->
                 if (min == 0) "실행 시"

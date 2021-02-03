@@ -39,8 +39,8 @@ class AppBlockEntryDialog : BottomSheetDialogFragment() {
             findNavController().navigateSafe(directions.actionAppBlockEntryDialogToAppBlockActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            appBlockActionViewModel.editing = true
-            appBlockActionViewModel.addAppBlockEntry(appBlockEntryViewModel.getAppBlockEntry())
+            val entry = appBlockEntryViewModel.getAppBlockEntry()
+            appBlockActionViewModel.updateAppBlockEntryList(entry)
             findNavController().navigateSafe(directions.actionAppBlockEntryDialogToAppBlockActionFragment())
         }
 

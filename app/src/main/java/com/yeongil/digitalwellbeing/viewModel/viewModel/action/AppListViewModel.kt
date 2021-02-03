@@ -6,51 +6,51 @@ import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
+import kotlinx.coroutines.flow.collect
 
 class AppListViewModel(
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
-    val appRecyclerItemList = MutableLiveData<List<RecyclerItem>>()
+    // Data
+    private val appItemList = MutableLiveData<List<AppItem>>()
     val appItemAllChecked = MutableLiveData<Boolean>(false)
+
+    // View Related
+    val appRecyclerItemList = liveData {
+        appItemList.asFlow().collect { list ->
+            emit(
+                list.map {
+                    AppItemViewModel(
+                        it.packageName,
+                        it,
+                        appItemAllChecked,
+                        onClickItem
+                    ).toRecyclerItem()
+                })
+        }
+    }
+
+    val itemCount = MutableLiveData<Int>(0)
+    val onClickItem: (MutableLiveData<Boolean>) -> Unit = {
+        val newValue = !(it.value ?: false)
+        it.value = newValue
+        itemCount.value = (itemCount.value ?: 0) + (if (newValue) 1 else -1)
+    }
+
     fun onClickAll() {
         val oldCount = itemCount.value ?: 0
         if (appItemAllChecked.value == true) itemCount.value = oldCount + 1
         else itemCount.value = oldCount - 1
     }
 
-    val onClickItem: (Boolean) -> Unit = {
-        itemCount.value = itemCount.value?.plus(if (it) 1 else -1)
-    }
-    val itemCount = MutableLiveData<Int>(0)
+    ////////////////////////////////////////
+    /* View Model Communication Functions */
+    ////////////////////////////////////////
 
-    fun init() {
-        itemCount.value = 0
-
-        appItemAllChecked.value = false
-        appRecyclerItemList.value = pmRepo.getAppInfoList()
-            .filter { !pmRepo.isSystemApp(it) }
-            .map {
-                Pair(
-                    it.packageName,
-                    AppItem(it.packageName, pmRepo.getLabel(it), pmRepo.getIcon(it))
-                )
-            }
-            .sortedBy { it.second.label }
-            .map {
-                AppItemViewModel(
-                    it.first,
-                    it.second,
-                    appItemAllChecked,
-                    onClickItem
-                ).toRecyclerItem()
-            }
-    }
-
-    fun init(appList: List<String>) {
+    fun putAppList(appList: List<String>) {
         itemCount.value = appList.size
-
         appItemAllChecked.value = false
-        appRecyclerItemList.value = pmRepo.getAppInfoList()
+        appItemList.value = pmRepo.getAppInfoList()
             .filter { !pmRepo.isSystemApp(it) }
             .map {
                 AppItem(
@@ -60,32 +60,17 @@ class AppListViewModel(
                     MutableLiveData(appList.contains(it.packageName))
                 )
             }
-            .sortedBy { it.label }
-            .map {
-                AppItemViewModel(
-                    it.packageName,
-                    it,
-                    appItemAllChecked,
-                    onClickItem
-                ).toRecyclerItem()
-            }
+            .sortedBy { it.packageName }
     }
 
-    fun init(allApp: Boolean) {
-        init()
-        if (allApp) {
-            itemCount.value = 1
-            appItemAllChecked.value = true
-        }
+    fun getAppList(): List<String>? {
+        return if (appItemAllChecked.value == true) null
+        else appItemList.value!!.filter { it.checked.value == true }.map { it.packageName }
     }
 
-    fun getCheckedAppList(): List<String> {
-        return appRecyclerItemList.value!!
-            .map { it.viewModel }
-            .filterIsInstance<AppItemViewModel>()
-            .filter { it.appItem.checked.value == true }
-            .map { it.appItem.packageName }
+    fun putAllApp() {
+        itemCount.value = 1
+        appItemAllChecked.value = true
+        appItemList.value!!.forEach { it.checked.value = false }
     }
-
-    fun isAllAppChecked() = appItemAllChecked.value ?: false
 }

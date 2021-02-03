@@ -15,7 +15,7 @@
         android:padding="20dp">
 
         <TextView
-            android:id="@+id/time_title"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="제한 방법을 선택하세요."
@@ -31,16 +31,20 @@
             app:layout_constraintBottom_toTopOf="@id/btn_barrier"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time_title">
+            app:layout_constraintTop_toBottomOf="@id/title">
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="@{vm.handlingAction.equals(vm.constCloseImmediate)}"
+                android:onClick="@{() -> vm.onItemSelected(vm.constCloseImmediate)}"
                 android:text="바로 종료" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="@{vm.handlingAction.equals(vm.constAlert)}"
+                android:onClick="@{() -> vm.onItemSelected(vm.constAlert)}"
                 android:text="경고 알림" />
         </RadioGroup>
 
