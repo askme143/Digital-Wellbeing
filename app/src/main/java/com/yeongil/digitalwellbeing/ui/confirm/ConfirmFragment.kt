@@ -42,6 +42,7 @@ class ConfirmFragment : Fragment() {
                 findNavController().navigateSafe(directions.actionConfirmFragmentToConfirmDialog())
             } else {
                 descriptionViewModel.init(ruleEditViewModel.editingRule.value!!)
+                ruleEditViewModel.saveRule()
                 findNavController().navigateSafe(directions.actionConfirmFragmentToDescriptionFragment())
             }
         }
