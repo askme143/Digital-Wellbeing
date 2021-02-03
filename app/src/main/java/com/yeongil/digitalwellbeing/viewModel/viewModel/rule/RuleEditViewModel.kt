@@ -139,41 +139,62 @@ class RuleEditViewModel(
     }
 
     fun addTriggerAction(triggerAction: Any) {
-        val (item, isNewItem) = when (triggerAction) {
+        val (item, isNewItem, isEdited) = when (triggerAction) {
             is LocationTrigger -> {
-                val isNewItem = editingRule.value!!.locationTrigger == null
+                val oldTriggerAction = editingRule.value!!.locationTrigger
+                val isNewItem = oldTriggerAction == null
+                val isEdited = oldTriggerAction != triggerAction
+
                 editingRule.value = editingRule.value!!.copy(locationTrigger = triggerAction)
-                Pair(TriggerActionItem(triggerAction), isNewItem)
+                Triple(TriggerActionItem(triggerAction), isNewItem, isEdited)
             }
             is TimeTrigger -> {
-                val isNewItem = editingRule.value!!.timeTrigger == null
+                val oldTriggerAction = editingRule.value!!.timeTrigger
+                val isNewItem = oldTriggerAction == null
+                val isEdited = oldTriggerAction != triggerAction
+
                 editingRule.value = editingRule.value!!.copy(timeTrigger = triggerAction)
-                Pair(TriggerActionItem(triggerAction), isNewItem)
+                Triple(TriggerActionItem(triggerAction), isNewItem, isEdited)
             }
             is ActivityTrigger -> {
-                val isNewItem = editingRule.value!!.activityTrigger == null
+                val oldTriggerAction = editingRule.value!!.activityTrigger
+                val isNewItem = oldTriggerAction == null
+                val isEdited = oldTriggerAction != triggerAction
+
                 editingRule.value = editingRule.value!!.copy(activityTrigger = triggerAction)
-                Pair(TriggerActionItem(triggerAction), isNewItem)
+                Triple(TriggerActionItem(triggerAction), isNewItem, isEdited)
             }
             is AppBlockAction -> {
-                val isNewItem = editingRule.value!!.appBlockAction == null
+                val oldTriggerAction = editingRule.value!!.appBlockAction
+                val isNewItem = oldTriggerAction == null
+                val isEdited = oldTriggerAction != triggerAction
+
                 editingRule.value = editingRule.value!!.copy(appBlockAction = triggerAction)
-                Pair(TriggerActionItem(triggerAction, pmRepo), isNewItem)
+                Triple(TriggerActionItem(triggerAction, pmRepo), isNewItem, isEdited)
             }
             is NotificationAction -> {
-                val isNewItem = editingRule.value!!.notificationAction == null
+                val oldTriggerAction = editingRule.value!!.notificationAction
+                val isNewItem = oldTriggerAction == null
+                val isEdited = oldTriggerAction != triggerAction
+
                 editingRule.value = editingRule.value!!.copy(notificationAction = triggerAction)
-                Pair(TriggerActionItem(triggerAction, pmRepo), isNewItem)
+                Triple(TriggerActionItem(triggerAction, pmRepo), isNewItem, isEdited)
             }
             is DndAction -> {
-                val isNewItem = editingRule.value!!.dndAction == null
+                val oldTriggerAction = editingRule.value!!.dndAction
+                val isNewItem = oldTriggerAction == null
+                val isEdited = oldTriggerAction != triggerAction
+
                 editingRule.value = editingRule.value!!.copy(dndAction = triggerAction)
-                Pair(TriggerActionItem(triggerAction), isNewItem)
+                Triple(TriggerActionItem(triggerAction), isNewItem, isEdited)
             }
             is RingerAction -> {
-                val isNewItem = editingRule.value!!.ringerAction == null
+                val oldTriggerAction = editingRule.value!!.ringerAction
+                val isNewItem = oldTriggerAction == null
+                val isEdited = oldTriggerAction != triggerAction
+
                 editingRule.value = editingRule.value!!.copy(ringerAction = triggerAction)
-                Pair(TriggerActionItem(triggerAction), isNewItem)
+                Triple(TriggerActionItem(triggerAction), isNewItem, isEdited)
             }
             else -> return
         }
@@ -188,7 +209,7 @@ class RuleEditViewModel(
         }
 
         if (isNewItem) itemAddEvent.value = Event(Unit)
-        else itemEditEvent.value = Event(Unit)
+        else if (isEdited) itemEditEvent.value = Event(Unit)
     }
 
     fun deleteItem() {
