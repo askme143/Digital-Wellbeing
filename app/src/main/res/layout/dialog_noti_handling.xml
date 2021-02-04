@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationHide)}"
-                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationHide)}"
+                android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationHide)}"
                 android:text="알림 숨기기" />
 
             <RadioButton
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationVibrate)}"
-                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationVibrate)}"
+                android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationVibrate)}"
                 android:text="진동으로 받기" />
 
             <RadioButton
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationRing)}"
-                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationRing)}"
+                android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationRing)}"
                 android:text="소리로 받기" />
 
             <RadioButton
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationSilent)}"
-                android:onClick="@{() -> vm.onHandlingSelected(vm.constNotificationSilent)}"
+                android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationSilent)}"
                 android:text="무음으로 받기" />
         </RadioGroup>
 

@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel" />
@@ -39,10 +41,23 @@
             app:constraint_referenced_ids="add_app_btn, add_app_text" />
 
         <androidx.recyclerview.widget.RecyclerView
-            recycler_item_list="@{vm.notiAppItemList}"
-            android:layout_width="match_parent"
+            recycler_item_list="@{vm.notiAppRecyclerItemList}"
+            android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="@{vm.allApp ? View.GONE : View.VISIBLE}"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toTopOf="@id/keyword_top_barrier"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_barrier" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            recycler_item_list="@{vm.allAppRecyclerItemList}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{vm.allApp ? View.VISIBLE : View.GONE}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/keyword_top_barrier"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/app_barrier" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -133,7 +148,7 @@
             android:id="@+id/complete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="@{!vm.isNotiAppListEmpty}"
+            android:enabled="@{vm.actionExists}"
             android:text="완료"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />

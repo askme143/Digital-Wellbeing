@@ -77,7 +77,8 @@ class TriggerActionItem(val title: String, val description: String) {
 
     constructor(notificationAction: NotificationAction, pmRepo: PackageManagerRepository) : this(
         NOTIFICATION_ACTION_TITLE,
-        notificationAction.appList.joinToString(" / ") { pmRepo.getLabel(it) }
+        if (notificationAction.allApp) "모든 앱"
+        else notificationAction.appList.joinToString(" / ") { pmRepo.getLabel(it) }
     )
 
     @Suppress("UNUSED_PARAMETER")

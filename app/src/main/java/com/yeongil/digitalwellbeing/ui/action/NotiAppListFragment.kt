@@ -47,22 +47,16 @@ class NotiAppListFragment : Fragment() {
             }
         }
 
-        initViewModel()
-
         binding.beforeBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            notiActionViewModel.editing = true
-//            notiActionViewModel.setAppList(appListViewModel.getCheckedAppList())
+            val appList = appListViewModel.getAppList()
+            if (appList == null) notiActionViewModel.putAllApp()
+            else notiActionViewModel.updateAppList(appList)
             findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
 
         return binding.root
-    }
-
-    private fun initViewModel() {
-        val appList = notiActionViewModel.notiAppList.value ?: listOf()
-//        appListViewModel.init(appList)
     }
 }

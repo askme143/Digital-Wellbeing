@@ -47,20 +47,22 @@ class AppListViewModel(
     /* View Model Communication Functions */
     ////////////////////////////////////////
 
+    private fun loadAppList() {
+        if (appItemList.value == null)
+            appItemList.value = pmRepo.getAppInfoList()
+                .filter { !pmRepo.isSystemApp(it) }
+                .map { AppItem(it.packageName, pmRepo.getLabel(it), pmRepo.getIcon(it)) }
+                .sortedBy { it.label }
+    }
+
     fun putAppList(appList: List<String>) {
+        loadAppList()
+
         itemCount.value = appList.size
         appItemAllChecked.value = false
-        appItemList.value = pmRepo.getAppInfoList()
-            .filter { !pmRepo.isSystemApp(it) }
-            .map {
-                AppItem(
-                    it.packageName,
-                    pmRepo.getLabel(it),
-                    pmRepo.getIcon(it),
-                    MutableLiveData(appList.contains(it.packageName))
-                )
-            }
-            .sortedBy { it.packageName }
+        appItemList.value?.forEach {
+            it.checked.value = appList.contains(it.packageName)
+        }
     }
 
     fun getAppList(): List<String>? {
@@ -69,6 +71,8 @@ class AppListViewModel(
     }
 
     fun putAllApp() {
+        loadAppList()
+
         itemCount.value = 1
         appItemAllChecked.value = true
         appItemList.value!!.forEach { it.checked.value = false }

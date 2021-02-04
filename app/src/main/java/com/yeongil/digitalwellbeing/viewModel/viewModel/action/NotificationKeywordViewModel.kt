@@ -9,17 +9,17 @@ class NotificationKeywordViewModel : ViewModel() {
     var inclusion = true
     val keyword = MutableLiveData<String>()
 
-    fun init() {
+    fun putNotiKeywordItem(item: NotiKeywordItem) {
+        id = item.id
+        inclusion = item.inclusion.value!!
+        keyword.value = item.keyword
+    }
+
+    fun putNewNotiKeywordItem() {
         id = System.currentTimeMillis().toString()
         inclusion = true
         keyword.value = ""
     }
 
-    fun init(keywordItem: NotiKeywordItem) {
-        id = keywordItem.id
-        inclusion = keywordItem.inclusion.value!!
-        keyword.value = keywordItem.keyword
-    }
-
-    fun getKeywordItem() = NotiKeywordItem(id, keyword.value!!, MutableLiveData(inclusion))
+    fun getNotiKeywordItem() = NotiKeywordItem(id, keyword.value!!, MutableLiveData(inclusion))
 }

@@ -35,14 +35,11 @@ class NotiKeywordDialog : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = notiKeywordViewModel
 
-        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            notiActionViewModel.editing = true
-            notiActionViewModel.addKeywordItem(notiKeywordViewModel.getKeywordItem())
+            notiActionViewModel.putKeywordItem(notiKeywordViewModel.getNotiKeywordItem())
             findNavController().navigateSafe(directions.actionNotiKeywordDialogToNotificationActionFragment())
         }
 

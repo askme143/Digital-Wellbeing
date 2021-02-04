@@ -19,6 +19,8 @@ import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActio
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationKeywordViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiKeywordItemViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppListViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.NotificationActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
 
@@ -35,6 +37,9 @@ class NotificationActionFragment : Fragment() {
         NotificationActionViewModelFactory(requireContext())
     }
     private val notiKeywordViewModel by activityViewModels<NotificationKeywordViewModel>()
+    private val appListViewModel by activityViewModels<AppListViewModel> {
+        AppListViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,17 +58,9 @@ class NotificationActionFragment : Fragment() {
             }
         }
 
-        initViewModel()
-
         notiActionViewModel.notiKeywordItemClickEvent.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { id ->
-                val clickedItem = notiActionViewModel.notiKeywordRecyclerItemList.value!!
-                    .map { it.viewModel }
-                    .filterIsInstance<NotiKeywordItemViewModel>()
-                    .filter { it.id == id }[0]
-                    .notiKeywordItem
-
-                notiKeywordViewModel.init(clickedItem)
+            event.getContentIfNotHandled()?.let { item ->
+                notiKeywordViewModel.putNotiKeywordItem(item)
                 findNavController().navigateSafe(
                     directions.actionNotificationActionFragmentToNotiKeywordDialog()
                 )
@@ -71,10 +68,13 @@ class NotificationActionFragment : Fragment() {
         }
 
         binding.addAppBtn.setOnClickListener {
+            val appList = notiActionViewModel.getAppList()
+            if (appList == null) appListViewModel.putAllApp()
+            else appListViewModel.putAppList(appList)
             findNavController().navigateSafe(directions.actionNotificationActionFragmentToNotiAppListFragment())
         }
         binding.addKeywordBtn.setOnClickListener {
-            notiKeywordViewModel.init()
+            notiKeywordViewModel.putNewNotiKeywordItem()
             findNavController().navigateSafe(directions.actionNotificationActionFragmentToNotiKeywordDialog())
         }
         binding.handlingBtn.setOnClickListener {
@@ -83,27 +83,18 @@ class NotificationActionFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { onStartGoBack() }
         binding.beforeBtn.setOnClickListener { onStartGoBack() }
         binding.completeBtn.setOnClickListener {
-            notiActionViewModel.editing = false
-            ruleEditViewModel.addTriggerAction(notiActionViewModel.getNotificationAction())
+            ruleEditViewModel.addTriggerAction(notiActionViewModel.getNotificationAction()!!)
             findNavController().navigateSafe(directions.actionGlobalActionFragment())
         }
 
         return binding.root
     }
 
-    private fun initViewModel() {
-        if (!notiActionViewModel.editing) {
-            val action = ruleEditViewModel.editingRule.value?.notificationAction
-            if (action != null) {
-                notiActionViewModel.init(action)
-            } else notiActionViewModel.init()
-        }
-    }
-
     private fun onStartGoBack() {
-        if (notiActionViewModel.notiAppItemList.value?.isNotEmpty() == true ||
-            notiActionViewModel.notiKeywordRecyclerItemList.value?.isNotEmpty() == true
-        ) {
+        val originalAction = notiActionViewModel.originalAction
+        val currentAction = notiActionViewModel.getNotificationAction()
+
+        if (originalAction != currentAction) {
             val bottomSheetDialog = BottomSheetDialog(requireContext())
             bottomSheetDialog.setContentView(R.layout.dialog_cancel_confirm)
             bottomSheetDialog.show()
@@ -121,9 +112,7 @@ class NotificationActionFragment : Fragment() {
     }
 
     private fun goBack() {
-        notiActionViewModel.editing = false
-
-        val goToEditFragment = ruleEditViewModel.editingRule.value?.notificationAction == null
+        val goToEditFragment = notiActionViewModel.originalAction == null
         if (goToEditFragment) {
             findNavController().navigateSafe(directions.actionNotificationActionFragmentToActionEditFragment())
         } else {

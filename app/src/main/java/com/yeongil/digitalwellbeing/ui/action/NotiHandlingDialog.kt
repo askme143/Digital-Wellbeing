@@ -35,7 +35,6 @@ class NotiHandlingDialog : BottomSheetDialogFragment() {
             findNavController().navigateSafe(directions.actionNotiHandlingDialogToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
-            notiActionViewModel.editing = true
             findNavController().navigateSafe(directions.actionNotiHandlingDialogToNotificationActionFragment())
         }
 
