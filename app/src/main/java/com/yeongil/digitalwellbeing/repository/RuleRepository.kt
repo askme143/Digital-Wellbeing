@@ -3,6 +3,7 @@ package com.yeongil.digitalwellbeing.repository
 import android.util.Log
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
+import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule.RuleDao
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleDto
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
@@ -72,8 +73,16 @@ class RuleRepository(
         }
     }
 
+    fun getActiveRuleListAsFlow(): Flow<List<Rule>> {
+        return getRuleListAsFlow().map { list -> list.filter { it.ruleInfo.activated } }
+    }
+
     fun getRuleInfoListFlow(): Flow<List<RuleInfo>> {
         return ruleDao.getRuleInfoListFlow().map { it.map { ruleInfoDto -> ruleInfoDto.ruleInfo } }
+    }
+
+    fun getLocationTriggerListFlow(): Flow<List<LocationTrigger>> {
+        return ruleDao.getLocationTriggerListFlow().map { list -> list.map { it.locationTrigger } }
     }
 
     private fun ruleDtoToRule(ruleDto: RuleDto): Rule {

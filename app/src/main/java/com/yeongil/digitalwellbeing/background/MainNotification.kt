@@ -11,22 +11,20 @@ import com.yeongil.digitalwellbeing.R
 object MainNotification {
     const val CHANNEL_ID = "digital_wellbeing_service_channel"
 
-    fun createNotification(context: Context): Notification {
-        val notification =
-            NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentText("실행 중")
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setContentIntent(
-                    TaskStackBuilder.create(context).run {
-                        addNextIntentWithParentStack(
-                            Intent(context, MainActivity::class.java)
-                        )
-                        getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-                    }
-                )
-                .setOngoing(true)
-                .build()
+    fun getBuilder(context: Context): NotificationCompat.Builder {
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentText("실행 중")
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentIntent(
+                TaskStackBuilder.create(context).run {
+                    addNextIntentWithParentStack(
+                        Intent(context, MainActivity::class.java)
+                    )
+                    getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+            )
+            .setOngoing(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -43,6 +41,8 @@ object MainNotification {
             manager.createNotificationChannel(serviceChannel)
         }
 
-        return notification
+        return builder
     }
+
+    fun updateBuilder(builder: NotificationCompat.Builder, text: String) = builder.setContentText(text)
 }

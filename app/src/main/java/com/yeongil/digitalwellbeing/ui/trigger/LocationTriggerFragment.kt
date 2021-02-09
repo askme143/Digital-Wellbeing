@@ -86,7 +86,6 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun initViewModel() {
-        Log.e("hello", "hello")
         if (!locationTriggerViewModel.editing) {
             val trigger = ruleEditViewModel.editingRule.value?.locationTrigger
             if (trigger != null) {
@@ -159,14 +158,12 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16F)
 
         val tmp1 = locationTriggerViewModel.cameraMoveFast.hasBeenHandled
-        Log.e("hello", tmp1.toString())
 
         locationTriggerViewModel.cameraMoveFast.getContentIfNotHandled()
             ?.let { map.moveCamera(cameraUpdate) }
             ?: map.animateCamera(cameraUpdate)
 
         val tmp2 = locationTriggerViewModel.cameraMoveFast.hasBeenHandled
-        Log.e("hello", tmp2.toString())
     }
 
     private fun drawMarker(latLng: LatLng) {
