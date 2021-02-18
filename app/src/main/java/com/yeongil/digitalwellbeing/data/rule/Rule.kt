@@ -7,6 +7,7 @@ import com.yeongil.digitalwellbeing.data.action.RingerAction
 import com.yeongil.digitalwellbeing.data.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleDto
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,4 +21,15 @@ data class Rule(
     val notificationAction: NotificationAction? = null,
     val dndAction: DndAction? = null,
     val ringerAction: RingerAction? = null,
-)
+) {
+    constructor(ruleDto: RuleDto) : this(
+        ruleDto.ruleInfoDto.ruleInfo,
+        ruleDto.locationTriggerDto?.locationTrigger,
+        ruleDto.timeTriggerDto?.timeTrigger,
+        ruleDto.activityTriggerDto?.activityTrigger,
+        ruleDto.appBlockActionDto?.appBlockAction,
+        ruleDto.notificationActionDto?.notificationAction,
+        ruleDto.dndActionDto?.dndAction,
+        ruleDto.ringerActionDto?.ringerAction,
+    )
+}

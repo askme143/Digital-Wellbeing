@@ -33,8 +33,6 @@ class RingerDialog : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ringerActionViewModel
 
-        initViewModel()
-
         binding.cancelBtn.setOnClickListener {
             val goToEditFragment = ruleEditViewModel.editingRule.value!!.ringerAction == null
             if (goToEditFragment)
@@ -48,13 +46,5 @@ class RingerDialog : BottomSheetDialogFragment() {
         }
 
         return binding.root
-    }
-
-    private fun initViewModel() {
-        val action = ruleEditViewModel.editingRule.value?.ringerAction
-
-        if (action != null) {
-            ringerActionViewModel.init(action)
-        } else ringerActionViewModel.init()
     }
 }

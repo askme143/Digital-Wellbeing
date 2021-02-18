@@ -72,4 +72,8 @@ interface RuleDao :
     @Transaction
     @Query("SELECT * FROM rule_info")
     fun getRuleListAsFlowByRid(): Flow<List<RuleDto>>
+
+    @Transaction
+    @Query("SELECT * FROM rule_info")
+    suspend fun getRuleList(): List<RuleDto>
 }

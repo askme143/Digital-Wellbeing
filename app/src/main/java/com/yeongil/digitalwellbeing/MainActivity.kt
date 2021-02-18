@@ -1,6 +1,8 @@
 package com.yeongil.digitalwellbeing
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -25,19 +27,21 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         setContentView(R.layout.activity_main)
         job = Job()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val pm = applicationContext.getSystemService(POWER_SERVICE) as PowerManager
-            val isWhiteListing = pm.isIgnoringBatteryOptimizations(applicationContext.packageName)
-
-            if (!isWhiteListing) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                intent.data = Uri.parse("package:" + applicationContext.packageName)
-                startActivity(intent)
-            }
+        /* Request to turn off battery optimization for this app */
+        val pm = applicationContext.getSystemService(POWER_SERVICE) as PowerManager
+        val isWhiteListing = pm.isIgnoringBatteryOptimizations(applicationContext.packageName)
+        if (!isWhiteListing) {
+            val intent = Intent()
+            intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            intent.data = Uri.parse("package:" + applicationContext.packageName)
+            startActivity(intent)
         }
 
         val intent = Intent(this, MainService::class.java)
-        startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
     }
 }

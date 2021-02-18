@@ -17,6 +17,7 @@ import com.yeongil.digitalwellbeing.viewModel.item.NOTIFICATION_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModel.item.RINGER_ACTION_TITLE
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.NotificationActionViewModel
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.RingerActionViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.NotificationActionViewModelFactory
 import com.yeongil.digitalwellbeing.viewModelFactory.RuleEditViewModelFactory
@@ -36,6 +37,7 @@ class ActionFragment : Fragment() {
     private val notificationAcViewModel by activityViewModels<NotificationActionViewModel> {
         NotificationActionViewModelFactory(requireContext())
     }
+    private val ringerActionViewModel by activityViewModels<RingerActionViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,8 +69,10 @@ class ActionFragment : Fragment() {
                         notificationAcViewModel.putNotificationAction(ruleEditViewModel.editingRule.value!!.notificationAction)
                         findNavController().navigateSafe(directions.actionActionFragmentToNotificationActionFragment())
                     }
-                    RINGER_ACTION_TITLE ->
+                    RINGER_ACTION_TITLE -> {
+                        ringerActionViewModel.putRingerAction(ruleEditViewModel.editingRule.value!!.ringerAction)
                         findNavController().navigateSafe(directions.actionActionFragmentToRingerDialog())
+                    }
                 }
             }
         }

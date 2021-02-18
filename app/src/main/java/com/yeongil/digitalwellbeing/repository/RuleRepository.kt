@@ -64,12 +64,12 @@ class RuleRepository(
     }
 
     suspend fun getRuleByRid(rid: Int): Rule {
-        return ruleDtoToRule(ruleDao.getRuleByRid(rid))
+        return Rule(ruleDao.getRuleByRid(rid))
     }
 
-    fun getRuleListAsFlow(): Flow<List<Rule>> {
+    private fun getRuleListAsFlow(): Flow<List<Rule>> {
         return ruleDao.getRuleListAsFlowByRid().map { list ->
-            list.map { ruleDtoToRule(it) }
+            list.map { Rule(it) }
         }
     }
 
@@ -77,24 +77,13 @@ class RuleRepository(
         return getRuleListAsFlow().map { list -> list.filter { it.ruleInfo.activated } }
     }
 
+    suspend fun getActiveRuleList(): List<Rule> {
+        return ruleDao.getRuleList()
+            .filter { it.ruleInfoDto.ruleInfo.activated }
+            .map { Rule(it) }
+    }
+
     fun getRuleInfoListFlow(): Flow<List<RuleInfo>> {
         return ruleDao.getRuleInfoListFlow().map { it.map { ruleInfoDto -> ruleInfoDto.ruleInfo } }
-    }
-
-    fun getLocationTriggerListFlow(): Flow<List<LocationTrigger>> {
-        return ruleDao.getLocationTriggerListFlow().map { list -> list.map { it.locationTrigger } }
-    }
-
-    private fun ruleDtoToRule(ruleDto: RuleDto): Rule {
-        return Rule(
-            ruleDto.ruleInfoDto.ruleInfo,
-            ruleDto.locationTriggerDto?.locationTrigger,
-            ruleDto.timeTriggerDto?.timeTrigger,
-            ruleDto.activityTriggerDto?.activityTrigger,
-            ruleDto.appBlockActionDto?.appBlockAction,
-            ruleDto.notificationActionDto?.notificationAction,
-            ruleDto.dndActionDto?.dndAction,
-            ruleDto.ringerActionDto?.ringerAction
-        )
     }
 }

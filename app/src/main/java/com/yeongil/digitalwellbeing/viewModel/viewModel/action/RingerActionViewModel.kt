@@ -12,12 +12,8 @@ class RingerActionViewModel : ViewModel() {
 
     val selectedMode = MutableLiveData(constVibrate)
 
-    fun init() {
-        selectedMode.value = constVibrate
-    }
-
-    fun init(ringerAction: RingerAction) {
-        selectedMode.value = ringerAction.ringerMode
+    fun putRingerAction(ringerAction: RingerAction?) {
+        selectedMode.value = ringerAction?.ringerMode ?: constVibrate
     }
 
     fun onItemSelected(selected: Int) {

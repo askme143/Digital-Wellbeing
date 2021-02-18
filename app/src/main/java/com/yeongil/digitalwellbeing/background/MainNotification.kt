@@ -43,6 +43,4 @@ object MainNotification {
 
         return builder
     }
-
-    fun updateBuilder(builder: NotificationCompat.Builder, text: String) = builder.setContentText(text)
 }

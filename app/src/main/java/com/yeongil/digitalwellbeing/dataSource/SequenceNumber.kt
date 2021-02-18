@@ -3,7 +3,7 @@ package com.yeongil.digitalwellbeing.dataSource
 import android.content.Context
 import android.content.SharedPreferences
 
-class SequenceNumber(private val context: Context) {
+class SequenceNumber(context: Context) {
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(
             "com.yeongil.digitalwellbeing.SEQUENCE_NUMBER",
