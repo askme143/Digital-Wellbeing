@@ -23,7 +23,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class MainService : LifecycleService() {
-    private val sharedPref by lazy { getSharedPreferences(MAIN_SERVICE_NAME, MODE_PRIVATE) }
+    private val sharedPref by lazy { getSharedPreferences(MAIN_SERVICE_PREF_NAME, MODE_PRIVATE) }
     private val ruleRepo by lazy {
         RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleDao())
     }
@@ -328,7 +328,7 @@ class MainService : LifecycleService() {
         const val ACTIVITY_TRIGGER = "ACTIVITY_TRIGGER"
         const val LOCATION_TRIGGER = "LOCATION_TRIGGER"
 
-        const val MAIN_SERVICE_NAME = "com.yeongil.digitalwellbeing.MAIN_SERVICE"
+        const val MAIN_SERVICE_PREF_NAME = "com.yeongil.digitalwellbeing.MAIN_SERVICE"
 
         const val TIMESTAMP_TIME_TRIGGER_KEY = "TIMESTAMP_TIME_TRIGGER"
         const val TIMESTAMP_ACTIVITY_TRIGGER_KEY = "TIMESTAMP_ACTIVITY_TRIGGER"
@@ -340,8 +340,6 @@ class MainService : LifecycleService() {
 
         const val TIMESTAMP_RULE_SET_KEY = "TIMESTAMP_RULE_SET"
         const val RULE_SET_KEY = "RULE_SET"
-
-        const val CURRENT_ACTIVITIES_KEY = "CURRENT_ACTIVITY"
 
         val emptySetStr = Json.encodeToString(emptySet<Unit>())
         val ruleSetDefaultStr = Json.encodeToString(RuleSet())
