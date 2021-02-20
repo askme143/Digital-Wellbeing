@@ -1,13 +1,12 @@
 package com.yeongil.digitalwellbeing.viewModel.item
 
-import android.annotation.SuppressLint
-import com.yeongil.digitalwellbeing.data.action.AppBlockAction
-import com.yeongil.digitalwellbeing.data.action.DndAction
-import com.yeongil.digitalwellbeing.data.action.NotificationAction
-import com.yeongil.digitalwellbeing.data.action.RingerAction
-import com.yeongil.digitalwellbeing.data.trigger.ActivityTrigger
-import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
-import com.yeongil.digitalwellbeing.data.trigger.TimeTrigger
+import com.yeongil.digitalwellbeing.data.rule.action.AppBlockAction
+import com.yeongil.digitalwellbeing.data.rule.action.DndAction
+import com.yeongil.digitalwellbeing.data.rule.action.NotificationAction
+import com.yeongil.digitalwellbeing.data.rule.action.RingerAction
+import com.yeongil.digitalwellbeing.data.rule.trigger.ActivityTrigger
+import com.yeongil.digitalwellbeing.data.rule.trigger.LocationTrigger
+import com.yeongil.digitalwellbeing.data.rule.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.*
 

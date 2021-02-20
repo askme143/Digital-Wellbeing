@@ -1,7 +1,7 @@
-package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule
+package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao
 
 import androidx.room.*
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleInfoDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.RuleInfoDto
 import kotlinx.coroutines.flow.Flow
 
 @Dao

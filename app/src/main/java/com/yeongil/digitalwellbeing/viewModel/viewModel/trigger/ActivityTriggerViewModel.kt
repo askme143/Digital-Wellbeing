@@ -1,9 +1,8 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.trigger
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.data.trigger.ActivityTrigger
+import com.yeongil.digitalwellbeing.data.rule.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.utils.BICYCLE
 import com.yeongil.digitalwellbeing.utils.DRIVE
 import com.yeongil.digitalwellbeing.utils.STILL

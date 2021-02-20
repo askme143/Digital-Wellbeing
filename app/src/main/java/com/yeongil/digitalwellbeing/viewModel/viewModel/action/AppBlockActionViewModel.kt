@@ -1,9 +1,8 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.yeongil.digitalwellbeing.data.action.AppBlockAction
-import com.yeongil.digitalwellbeing.data.action.AppBlockEntry
+import com.yeongil.digitalwellbeing.data.rule.action.AppBlockAction
+import com.yeongil.digitalwellbeing.data.rule.action.AppBlockEntry
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.ALERT
 import com.yeongil.digitalwellbeing.utils.CLOSE_IMMEDIATE

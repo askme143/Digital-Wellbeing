@@ -1,4 +1,4 @@
-package com.yeongil.digitalwellbeing.data.trigger
+package com.yeongil.digitalwellbeing.data.rule.trigger
 
 import androidx.room.ColumnInfo
 import kotlinx.serialization.Serializable

@@ -1,7 +1,6 @@
 package com.yeongil.digitalwellbeing.ui.action
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yeongil.digitalwellbeing.R
-import com.yeongil.digitalwellbeing.data.action.AppBlockEntry
 import com.yeongil.digitalwellbeing.databinding.DialogAllAppBlockEntryBinding
 import com.yeongil.digitalwellbeing.databinding.FragmentAppBlockActionBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe

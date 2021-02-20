@@ -1,4 +1,4 @@
-package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule
+package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto
 
 import androidx.room.Embedded
 import androidx.room.Relation

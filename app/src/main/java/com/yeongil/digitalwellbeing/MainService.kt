@@ -340,26 +340,4 @@ class MainService : LifecycleService() {
     private fun runRules(rulesToRun: List<Rule>, runningRules: List<Rule>) {
         /* TODO: Run Rules */
     }
-
-    private fun changeRingerMode(ringerMode: Int) {
-        when (ringerMode) {
-            VIBRATE -> {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
-            }
-            RING -> {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-            }
-            SILENT -> {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
-            }
-        }
-    }
-
-    private fun changeDndMode(turnOn: Boolean) {
-        if (turnOn) {
-            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-        } else {
-            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
-        }
-    }
 }

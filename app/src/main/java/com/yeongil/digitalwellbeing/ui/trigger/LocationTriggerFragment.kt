@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.yeongil.digitalwellbeing.R
-import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
+import com.yeongil.digitalwellbeing.data.rule.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.databinding.FragmentLocationTriggerBinding
 import com.yeongil.digitalwellbeing.utils.NetworkStatus
 import com.yeongil.digitalwellbeing.utils.navigateSafe

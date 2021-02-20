@@ -1,25 +1,21 @@
 package com.yeongil.digitalwellbeing.repository
 
-import android.util.Log
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
-import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule.RuleDao
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.RuleDao
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.RuleDto
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.AppBlockActionDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.DndActionDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.NotificationActionDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.RingerActionDto
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleInfoDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.RuleInfoDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.ActivityTriggerDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.LocationTriggerDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.TimeTriggerDto
 import com.yeongil.digitalwellbeing.utils.TEMPORAL_RULE_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class RuleRepository(
     private val sequenceNumber: SequenceNumber,

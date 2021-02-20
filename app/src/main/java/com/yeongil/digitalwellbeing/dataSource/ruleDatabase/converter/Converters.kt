@@ -1,8 +1,8 @@
 package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.converter
 
 import androidx.room.TypeConverter
-import com.yeongil.digitalwellbeing.data.action.AppBlockEntry
-import com.yeongil.digitalwellbeing.data.action.KeywordEntry
+import com.yeongil.digitalwellbeing.data.rule.action.AppBlockEntry
+import com.yeongil.digitalwellbeing.data.rule.action.KeywordEntry
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

@@ -1,7 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel.item
 
 import android.graphics.drawable.Drawable
-import com.yeongil.digitalwellbeing.data.action.AppBlockEntry
+import com.yeongil.digitalwellbeing.data.rule.action.AppBlockEntry
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.ALERT
 import com.yeongil.digitalwellbeing.utils.CLOSE_IMMEDIATE

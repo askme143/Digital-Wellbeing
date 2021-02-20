@@ -2,7 +2,7 @@ package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yeongil.digitalwellbeing.data.action.RingerAction
+import com.yeongil.digitalwellbeing.data.rule.action.RingerAction
 import com.yeongil.digitalwellbeing.utils.*
 
 class RingerActionViewModel : ViewModel() {

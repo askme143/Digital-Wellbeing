@@ -3,7 +3,7 @@ package com.yeongil.digitalwellbeing.viewModel.viewModel.trigger
 import androidx.lifecycle.*
 import com.google.android.gms.maps.model.LatLng
 import com.yeongil.digitalwellbeing.data.Location
-import com.yeongil.digitalwellbeing.data.trigger.LocationTrigger
+import com.yeongil.digitalwellbeing.data.rule.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.repository.LocationRepository
 import com.yeongil.digitalwellbeing.utils.Event
 import kotlinx.coroutines.Dispatchers

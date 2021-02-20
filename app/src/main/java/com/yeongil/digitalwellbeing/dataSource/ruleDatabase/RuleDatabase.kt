@@ -3,12 +3,12 @@ package com.yeongil.digitalwellbeing.dataSource.ruleDatabase
 import android.content.Context
 import androidx.room.*
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.converter.Converters
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule.RuleDao
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.RuleDao
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.AppBlockActionDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.DndActionDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.NotificationActionDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.action.RingerActionDto
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleInfoDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.RuleInfoDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.ActivityTriggerDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.LocationTriggerDto
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.trigger.TimeTriggerDto

@@ -1,17 +1,15 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
 import androidx.lifecycle.*
-import com.yeongil.digitalwellbeing.data.action.KeywordEntry
-import com.yeongil.digitalwellbeing.data.action.NotificationAction
+import com.yeongil.digitalwellbeing.data.rule.action.KeywordEntry
+import com.yeongil.digitalwellbeing.data.rule.action.NotificationAction
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.*
-import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.NotiKeywordItem
 import com.yeongil.digitalwellbeing.viewModel.item.NotiAppItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiAllAppItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiKeywordItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiAppItemViewModel
-import kotlinx.coroutines.flow.collect
 
 class NotificationActionViewModel(
     private val pmRepo: PackageManagerRepository

@@ -1,4 +1,4 @@
-package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.rule
+package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao
 
 import androidx.room.Dao
 import androidx.room.Query
@@ -7,7 +7,7 @@ import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.action.*
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.trigger.ActivityTriggerDao
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.trigger.LocationTriggerDao
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dao.trigger.TimeTriggerDao
-import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.rule.RuleDto
+import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.dto.RuleDto
 import kotlinx.coroutines.flow.Flow
 
 @Dao
