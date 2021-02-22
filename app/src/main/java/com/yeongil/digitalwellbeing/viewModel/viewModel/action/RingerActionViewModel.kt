@@ -3,20 +3,16 @@ package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yeongil.digitalwellbeing.data.rule.action.RingerAction
-import com.yeongil.digitalwellbeing.utils.*
+import com.yeongil.digitalwellbeing.data.rule.action.RingerMode
 
 class RingerActionViewModel : ViewModel() {
-    val constVibrate = VIBRATE
-    val constRing = RING
-    val constSilent = SILENT
-
-    val selectedMode = MutableLiveData(constVibrate)
+    val selectedMode = MutableLiveData(RingerMode.VIBRATE)
 
     fun putRingerAction(ringerAction: RingerAction?) {
-        selectedMode.value = ringerAction?.ringerMode ?: constVibrate
+        selectedMode.value = ringerAction?.ringerMode ?: RingerMode.VIBRATE
     }
 
-    fun onItemSelected(selected: Int) {
+    fun onItemSelected(selected: RingerMode) {
         selectedMode.value = selected
     }
 

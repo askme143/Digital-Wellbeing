@@ -3,6 +3,7 @@ package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.converter
 import androidx.room.TypeConverter
 import com.yeongil.digitalwellbeing.data.rule.action.AppBlockEntry
 import com.yeongil.digitalwellbeing.data.rule.action.KeywordEntry
+import com.yeongil.digitalwellbeing.data.rule.action.RingerMode
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -45,6 +46,16 @@ class Converters {
 
     @TypeConverter
     fun fromStringToRepeatDay(value: String): List<Boolean> {
+        return Json.decodeFromString(value)
+    }
+
+    @TypeConverter
+    fun fromRingerModeToString(value: RingerMode): String {
+        return Json.encodeToString(value)
+    }
+
+    @TypeConverter
+    fun fromStringToRingerMode(value: String): RingerMode {
         return Json.decodeFromString(value)
     }
 }

@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             startActivity(intent)
         }
 
+        /* Start Background Service */
         val intent = Intent(this, MainService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)

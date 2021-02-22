@@ -61,7 +61,7 @@ class ActivityTriggerService : LifecycleService() {
             /* Pass results to MainService */
             val mainIntent = Intent(this@ActivityTriggerService, MainService::class.java)
             val triggeredSetStr = Json.encodeToString(triggeredSet)
-            mainIntent.putExtra(MainService.ACTIVITY_TRIGGERED_RUES_KEY, triggeredSetStr)
+            mainIntent.putExtra(MainService.ACTIVITY_TRIGGERED_RULES_KEY, triggeredSetStr)
             startService(mainIntent)
         }
 

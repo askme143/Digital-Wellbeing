@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f72800a1c5ae1ddf09fd9532968b4cb2",
+    "identityHash": "114df33350509eaa5c08859311ebf69b",
     "entities": [
       {
         "tableName": "rule_info",
@@ -266,7 +266,7 @@
       },
       {
         "tableName": "ringer_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `ringer_mode` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `ringer_mode` TEXT NOT NULL, PRIMARY KEY(`rid`))",
         "fields": [
           {
             "fieldPath": "rid",
@@ -277,7 +277,7 @@
           {
             "fieldPath": "ringerAction.ringerMode",
             "columnName": "ringer_mode",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -294,7 +294,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f72800a1c5ae1ddf09fd9532968b4cb2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '114df33350509eaa5c08859311ebf69b')"
     ]
   }
 }

@@ -5,9 +5,7 @@ import android.app.Service
 import android.content.Intent
 import android.media.AudioManager
 import android.os.IBinder
-import com.yeongil.digitalwellbeing.utils.RING
-import com.yeongil.digitalwellbeing.utils.SILENT
-import com.yeongil.digitalwellbeing.utils.VIBRATE
+import com.yeongil.digitalwellbeing.data.rule.action.RingerMode
 
 class RingerService : Service() {
     private val audioManager by lazy { getSystemService(AUDIO_SERVICE) as AudioManager }
@@ -17,7 +15,7 @@ class RingerService : Service() {
         super.onStartCommand(intent, flags, startId)
 
         if (intent == null) return START_STICKY
-        val ringerExtra = intent.getIntExtra(RINGER_EXTRA_KEY, 0)
+        val ringerExtra = intent.getSerializableExtra(RINGER_EXTRA_KEY) as RingerMode
         val dndExtra = intent.getBooleanExtra(DND_EXTRA_KEY, false)
 
         /* DND First (Ringer mode can be affected by the change of dnd mode) */
@@ -31,18 +29,17 @@ class RingerService : Service() {
         return null
     }
 
-    private fun changeRingerMode(ringerMode: Int) {
+    private fun changeRingerMode(ringerMode: RingerMode) {
         when (ringerMode) {
-            VIBRATE -> {
+            RingerMode.VIBRATE -> {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
             }
-            RING -> {
+            RingerMode.RING -> {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
             }
-            SILENT -> {
+            RingerMode.SILENT -> {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
             }
-            else -> throw Exception("Invalid ringer mode")
         }
     }
 

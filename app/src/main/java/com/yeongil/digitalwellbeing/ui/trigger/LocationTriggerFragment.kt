@@ -156,13 +156,9 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
     private fun moveCamera(latLng: LatLng) {
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16F)
 
-        val tmp1 = locationTriggerViewModel.cameraMoveFast.hasBeenHandled
-
         locationTriggerViewModel.cameraMoveFast.getContentIfNotHandled()
             ?.let { map.moveCamera(cameraUpdate) }
             ?: map.animateCamera(cameraUpdate)
-
-        val tmp2 = locationTriggerViewModel.cameraMoveFast.hasBeenHandled
     }
 
     private fun drawMarker(latLng: LatLng) {

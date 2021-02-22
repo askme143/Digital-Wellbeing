@@ -1,9 +1,6 @@
 package com.yeongil.digitalwellbeing.viewModel.item
 
-import com.yeongil.digitalwellbeing.data.rule.action.AppBlockAction
-import com.yeongil.digitalwellbeing.data.rule.action.DndAction
-import com.yeongil.digitalwellbeing.data.rule.action.NotificationAction
-import com.yeongil.digitalwellbeing.data.rule.action.RingerAction
+import com.yeongil.digitalwellbeing.data.rule.action.*
 import com.yeongil.digitalwellbeing.data.rule.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.rule.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.rule.trigger.TimeTrigger
@@ -89,10 +86,9 @@ class TriggerActionItem(val title: String, val description: String) {
     constructor(ringerAction: RingerAction) : this(
         RINGER_ACTION_TITLE,
         when (ringerAction.ringerMode) {
-            VIBRATE -> "진동 모드로 변경"
-            RING -> "소리 모드로 변경"
-            SILENT -> "무음 모드로 변경"
-            else -> "ERROR"
+            RingerMode.VIBRATE -> "진동 모드로 변경"
+            RingerMode.RING -> "소리 모드로 변경"
+            RingerMode.SILENT -> "무음 모드로 변경"
         }
     )
 }

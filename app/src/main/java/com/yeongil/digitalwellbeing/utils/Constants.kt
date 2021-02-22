@@ -14,10 +14,6 @@ const val DRIVE = "Driving"
 const val BICYCLE = "Bicycle"
 const val STILL = "Still"
 
-const val VIBRATE = 0
-const val RING = 1
-const val SILENT = 2
-
 const val CLOSE_IMMEDIATE = 0
 const val ALERT = 1
 

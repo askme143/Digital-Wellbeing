@@ -1,4 +1,4 @@
-package com.yeongil.digitalwellbeing.background
+package com.yeongil.digitalwellbeing.background.data
 
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import kotlinx.serialization.Serializable

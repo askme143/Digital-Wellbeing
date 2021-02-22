@@ -38,7 +38,6 @@
         <service
             android:name=".MainService"
             android:foregroundServiceType="location" />
-        <service android:name=".TestService" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

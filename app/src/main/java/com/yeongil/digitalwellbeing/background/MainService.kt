@@ -14,7 +14,9 @@ import androidx.lifecycle.LifecycleService
 import com.yeongil.digitalwellbeing.MainActivity
 import com.yeongil.digitalwellbeing.MainService
 import com.yeongil.digitalwellbeing.R
+import com.yeongil.digitalwellbeing.background.data.RuleSet
 import com.yeongil.digitalwellbeing.data.rule.Rule
+import com.yeongil.digitalwellbeing.data.rule.action.*
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.repository.RuleRepository
@@ -175,6 +177,28 @@ class MainService : LifecycleService() {
         }
     }
 
+    private fun getDefaultRinger(): Int {
+        return sharedPref.getInt(DEFAULT_RINGER_KEY, 0)
+    }
+
+    private fun updateDefaultRinger(ringerMode: Int) {
+        sharedPref.edit {
+            putInt(DEFAULT_RINGER_KEY, ringerMode)
+            commit()
+        }
+    }
+
+    private fun getDefaultDND(): Boolean {
+        return sharedPref.getBoolean(DEFAULT_DND_KEY, false)
+    }
+
+    private fun updateDefaultRinger(dndMode: Boolean) {
+        sharedPref.edit {
+            putBoolean(DEFAULT_DND_KEY, dndMode)
+            commit()
+        }
+    }
+
     private suspend fun checkTrigger(
         timeTriggerMap: Set<Int> = getTimeTriggeredRules(),
         activityTriggerMap: Set<Int> = getActivityTriggeredRules(),
@@ -210,8 +234,28 @@ class MainService : LifecycleService() {
     private fun run(startedRules: List<Rule>, stoppedRules: List<Rule>) {
         /* TODO: Make ActionServices */
         /* TODO: Pass Delta Results so that services can apply the changes */
+            /* TODO: Design MainService - ActionServices Protocol */
 
-        /* For Ringer/DND Mode:  */
+        var stopAppBlockAction = false
+        var stopNotificationAction = false
+        var stopRingerAction = false
+        var stopDndAction= false
+
+        var appBlockAction: AppBlockAction? = null
+        var notificationAction: NotificationAction? = null
+        var ringerAction: RingerMode? = null
+        var dndAction: Boolean? = null
+
+        startedRules.forEach {
+            if (it.appBlockAction != null) {
+            }
+            if (it.notificationAction != null) {
+            }
+            if (it.dndAction != null) {
+            }
+            if (it.ringerAction != null) {
+            }
+        }
 
         stoppedRules.forEach {
             if (it.appBlockAction != null) {
@@ -340,6 +384,9 @@ class MainService : LifecycleService() {
 
         const val TIMESTAMP_RULE_SET_KEY = "TIMESTAMP_RULE_SET"
         const val RULE_SET_KEY = "RULE_SET"
+
+        const val DEFAULT_RINGER_KEY = "DEFAULT_RINGER"
+        const val DEFAULT_DND_KEY = "DEFAULT_DND"
 
         val emptySetStr = Json.encodeToString(emptySet<Unit>())
         val ruleSetDefaultStr = Json.encodeToString(RuleSet())

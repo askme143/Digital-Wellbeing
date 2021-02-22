@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.LocationServices
 import com.yeongil.digitalwellbeing.MainActivity
 import com.yeongil.digitalwellbeing.MainService
-import com.yeongil.digitalwellbeing.background.MainService.Companion.LOCATION_TRIGGERED_RUES_KEY
+import com.yeongil.digitalwellbeing.background.MainService.Companion.LOCATION_TRIGGERED_RULES_KEY
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
@@ -66,7 +66,7 @@ class LocationTriggerService : LifecycleService() {
             /* Pass results to MainService */
             val mainIntent = Intent(this@LocationTriggerService, MainService::class.java)
             val triggeredSetStr = Json.encodeToString(triggeredSet)
-            mainIntent.putExtra(LOCATION_TRIGGERED_RUES_KEY, triggeredSetStr)
+            mainIntent.putExtra(LOCATION_TRIGGERED_RULES_KEY, triggeredSetStr)
             startService(mainIntent)
         }
 
