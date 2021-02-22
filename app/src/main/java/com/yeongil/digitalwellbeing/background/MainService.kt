@@ -52,21 +52,21 @@ class MainService : LifecycleService() {
 
         when (intent?.action) {
             TIME_TRIGGER -> {
-                val intentStr = intent.getStringExtra(TIME_TRIGGERED_RUES_KEY) ?: emptySetStr
+                val intentStr = intent.getStringExtra(TIME_TRIGGERED_RULES_KEY) ?: emptySetStr
                 val intentMap =
                     Json.decodeFromString<Set<Int>>(intentStr)
 
                 updateTimeTriggeredRules(intentStr)
             }
             ACTIVITY_TRIGGER -> {
-                val intentStr = intent.getStringExtra(ACTIVITY_TRIGGERED_RUES_KEY) ?: emptySetStr
+                val intentStr = intent.getStringExtra(ACTIVITY_TRIGGERED_RULES_KEY) ?: emptySetStr
                 val intentMap =
                     Json.decodeFromString<Set<Int>>(intentStr)
 
                 updateActivityTriggeredRules(intentStr)
             }
             LOCATION_TRIGGER -> {
-                val intentStr = intent.getStringExtra(LOCATION_TRIGGERED_RUES_KEY) ?: emptySetStr
+                val intentStr = intent.getStringExtra(LOCATION_TRIGGERED_RULES_KEY) ?: emptySetStr
                 val rule =
                     Json.decodeFromString<Set<Int>>(intentStr)
 
@@ -109,7 +109,7 @@ class MainService : LifecycleService() {
 
     private fun getTimeTriggeredRules(): Set<Int> {
         val set = Json.decodeFromString<Set<Int>>(
-            sharedPref.getString(TIME_TRIGGERED_RUES_KEY, emptySetStr) ?: emptySetStr
+            sharedPref.getString(TIME_TRIGGERED_RULES_KEY, emptySetStr) ?: emptySetStr
         )
         val timestamp = sharedPref.getLong(TIMESTAMP_TIME_TRIGGER_KEY, 0)
 
@@ -119,7 +119,7 @@ class MainService : LifecycleService() {
 
     private fun getActivityTriggeredRules(): Set<Int> {
         val set = Json.decodeFromString<Set<Int>>(
-            sharedPref.getString(ACTIVITY_TRIGGERED_RUES_KEY, emptySetStr) ?: emptySetStr
+            sharedPref.getString(ACTIVITY_TRIGGERED_RULES_KEY, emptySetStr) ?: emptySetStr
         )
         val timestamp = sharedPref.getLong(TIMESTAMP_ACTIVITY_TRIGGER_KEY, 0)
 
@@ -129,7 +129,7 @@ class MainService : LifecycleService() {
 
     private fun getLocationTriggeredRules(): Set<Int> {
         val set = Json.decodeFromString<Set<Int>>(
-            sharedPref.getString(LOCATION_TRIGGERED_RUES_KEY, emptySetStr) ?: emptySetStr
+            sharedPref.getString(LOCATION_TRIGGERED_RULES_KEY, emptySetStr) ?: emptySetStr
         )
         val timestamp = sharedPref.getLong(TIMESTAMP_LOCATION_TRIGGER_KEY, 0)
 
@@ -139,7 +139,7 @@ class MainService : LifecycleService() {
 
     private fun updateTimeTriggeredRules(str: String) {
         sharedPref.edit {
-            putString(TIME_TRIGGERED_RUES_KEY, str)
+            putString(TIME_TRIGGERED_RULES_KEY, str)
             putLong(TIMESTAMP_TIME_TRIGGER_KEY, System.currentTimeMillis())
             commit()
         }
@@ -147,7 +147,7 @@ class MainService : LifecycleService() {
 
     private fun updateActivityTriggeredRules(str: String) {
         sharedPref.edit {
-            putString(ACTIVITY_TRIGGERED_RUES_KEY, str)
+            putString(ACTIVITY_TRIGGERED_RULES_KEY, str)
             putLong(TIMESTAMP_ACTIVITY_TRIGGER_KEY, System.currentTimeMillis())
             commit()
         }
@@ -155,7 +155,7 @@ class MainService : LifecycleService() {
 
     private fun updateLocationTriggeredRules(str: String) {
         sharedPref.edit {
-            putString(LOCATION_TRIGGERED_RUES_KEY, str)
+            putString(LOCATION_TRIGGERED_RULES_KEY, str)
             putLong(TIMESTAMP_LOCATION_TRIGGER_KEY, System.currentTimeMillis())
             commit()
         }
@@ -169,7 +169,7 @@ class MainService : LifecycleService() {
 
     private fun updateRuleSet(ruleSet: RuleSet) {
         sharedPref.edit {
-            putString(LOCATION_TRIGGERED_RUES_KEY, Json.encodeToString(ruleSet))
+            putString(LOCATION_TRIGGERED_RULES_KEY, Json.encodeToString(ruleSet))
             putLong(TIMESTAMP_RULE_SET_KEY, System.currentTimeMillis())
             commit()
         }
@@ -334,9 +334,9 @@ class MainService : LifecycleService() {
         const val TIMESTAMP_ACTIVITY_TRIGGER_KEY = "TIMESTAMP_ACTIVITY_TRIGGER"
         const val TIMESTAMP_LOCATION_TRIGGER_KEY = "TIMESTAMP_LOCATION_TRIGGER"
 
-        const val TIME_TRIGGERED_RUES_KEY = "TIME_TRIGGERED_RUES"
-        const val ACTIVITY_TRIGGERED_RUES_KEY = "ACTIVITY_TRIGGERED_RUES"
-        const val LOCATION_TRIGGERED_RUES_KEY = "LOCATION_TRIGGERED_RUES"
+        const val TIME_TRIGGERED_RULES_KEY = "TIME_TRIGGERED_RULES"
+        const val ACTIVITY_TRIGGERED_RULES_KEY = "ACTIVITY_TRIGGERED_RULES"
+        const val LOCATION_TRIGGERED_RULES_KEY = "LOCATION_TRIGGERED_L"
 
         const val TIMESTAMP_RULE_SET_KEY = "TIMESTAMP_RULE_SET"
         const val RULE_SET_KEY = "RULE_SET"
