@@ -22,6 +22,8 @@ class RingerService : Service() {
         changeDndMode(dndExtra)
         changeRingerMode(ringerExtra)
 
+        stopSelf(startId)
+
         return START_STICKY
     }
 

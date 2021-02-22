@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.yeongil.digitalwellbeing.background.MainService
 import com.yeongil.digitalwellbeing.databinding.FragmentMainBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel
@@ -49,8 +51,8 @@ class MainFragment : Fragment() {
             }
         }
         ruleInfoViewModel.itemClickActivate.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                if (it) {
+            event.getContentIfNotHandled()?.let { (ruleId, activated) ->
+                if (activated) {
                     Toast.makeText(context, "규칙이 활성화 됩니다. 조건을 충족하면 액션이 수행됩니다", Toast.LENGTH_SHORT)
                         .show()
                 } else {
@@ -60,16 +62,26 @@ class MainFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
+                val intent = Intent(requireContext(), MainService::class.java)
+                intent.action = MainService.RULE_CHANGE
+                intent.putExtra(MainService.CHANGED_RULE_ID_KEY, ruleId)
+                requireActivity().startService(intent)
             }
         }
         ruleInfoViewModel.itemClickNotiOnTriggerEvent.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
-                if (it) {
+            event.getContentIfNotHandled()?.let { (ruleId, notiOnTrigger) ->
+                if (notiOnTrigger) {
                     Toast.makeText(context, "규칙의 조건이 만족되면 사용자 확인 후 액션이 실행됩니다.", Toast.LENGTH_SHORT)
                         .show()
                 } else {
                     Toast.makeText(context, "규칙의 조건이 만족되면 액션이 바로 실행됩니다.", Toast.LENGTH_SHORT).show()
                 }
+
+                val intent = Intent(requireContext(), MainService::class.java)
+                intent.action = MainService.RULE_CHANGE
+                intent.putExtra(MainService.CHANGED_RULE_ID_KEY, ruleId)
+                requireActivity().startService(intent)
             }
         }
         ruleInfoViewModel.itemDeleteEvent.observe(viewLifecycleOwner) { event ->

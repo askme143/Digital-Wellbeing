@@ -1,8 +1,6 @@
 package com.yeongil.digitalwellbeing
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -10,11 +8,11 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
+import com.yeongil.digitalwellbeing.background.MainService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
-
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var job: Job
@@ -39,6 +37,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         /* Start Background Service */
         val intent = Intent(this, MainService::class.java)
+            .apply { action = MainService.START_BACKGROUND }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)
         } else {

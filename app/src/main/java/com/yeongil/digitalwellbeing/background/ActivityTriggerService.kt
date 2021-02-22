@@ -62,7 +62,10 @@ class ActivityTriggerService : LifecycleService() {
             val mainIntent = Intent(this@ActivityTriggerService, MainService::class.java)
             val triggeredSetStr = Json.encodeToString(triggeredSet)
             mainIntent.putExtra(MainService.ACTIVITY_TRIGGERED_RULES_KEY, triggeredSetStr)
+            mainIntent.action = MainService.ACTIVITY_TRIGGER
             startService(mainIntent)
+
+            stopSelf(startId)
         }
 
         return START_STICKY

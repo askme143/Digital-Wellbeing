@@ -1,5 +1,6 @@
 package com.yeongil.digitalwellbeing.ui.confirm
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.yeongil.digitalwellbeing.background.MainService
 import com.yeongil.digitalwellbeing.databinding.FragmentConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel
@@ -41,8 +43,15 @@ class ConfirmFragment : Fragment() {
             if (ruleEditViewModel.isNewRule) {
                 findNavController().navigateSafe(directions.actionConfirmFragmentToConfirmDialog())
             } else {
-                descriptionViewModel.init(ruleEditViewModel.editingRule.value!!)
+                val rule = ruleEditViewModel.editingRule.value!!
+                descriptionViewModel.init(rule)
                 ruleEditViewModel.saveRule()
+
+                val intent = Intent(requireContext(), MainService::class.java)
+                intent.action = MainService.RULE_CHANGE
+                intent.putExtra(MainService.CHANGED_RULE_ID_KEY, rule.ruleInfo.ruleId)
+                requireActivity().startService(intent)
+
                 findNavController().navigateSafe(directions.actionConfirmFragmentToDescriptionFragment())
             }
         }

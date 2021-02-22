@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing.ui.confirm
 
 import android.app.Service
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -12,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.yeongil.digitalwellbeing.background.MainService
 import com.yeongil.digitalwellbeing.databinding.DialogConfirmBinding
 import com.yeongil.digitalwellbeing.utils.navigateSafe
 import com.yeongil.digitalwellbeing.viewModel.viewModel.rule.DescriptionViewModel
@@ -70,6 +72,13 @@ class ConfirmDialog : BottomSheetDialogFragment() {
 
     private fun onComplete() {
         ruleEditViewModel.saveRule()
+
+        val rule = ruleEditViewModel.editingRule.value!!
+        val intent = Intent(requireContext(), MainService::class.java)
+        intent.action = MainService.RULE_CHANGE
+        intent.putExtra(MainService.CHANGED_RULE_ID_KEY, rule.ruleInfo.ruleId)
+        requireActivity().startService(intent)
+
         findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
     }
 }

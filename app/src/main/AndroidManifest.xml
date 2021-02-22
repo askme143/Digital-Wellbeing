@@ -36,8 +36,12 @@
         </activity>
 
         <service
-            android:name=".MainService"
+            android:name=".background.MainService"
             android:foregroundServiceType="location" />
+        <service android:name=".background.TimeTriggerService" />
+        <service android:name=".background.LocationTriggerService" />
+        <service android:name=".background.ActivityTriggerService" />
+        <service android:name=".background.RingerService" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

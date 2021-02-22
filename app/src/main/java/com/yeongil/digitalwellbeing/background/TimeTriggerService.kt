@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.yeongil.digitalwellbeing.data.rule.Rule
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.*
 
 class TimeTriggerService : LifecycleService() {
     private val ruleRepo by lazy {
@@ -31,6 +33,8 @@ class TimeTriggerService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+
+        Log.e("hello", "TIME_TRIGGER_SERVICE_STARTED")
 
         lifecycleScope.launch(Dispatchers.Default) {
             val rules = ruleRepo.getActiveRuleList()
@@ -52,7 +56,10 @@ class TimeTriggerService : LifecycleService() {
             val mainIntent = Intent(this@TimeTriggerService, MainService::class.java)
             val triggeredSetStr = Json.encodeToString(triggeredSet)
             mainIntent.putExtra(MainService.TIME_TRIGGERED_RULES_KEY, triggeredSetStr)
+            mainIntent.action = MainService.TIME_TRIGGER
             startService(mainIntent)
+
+            stopSelf(startId)
         }
 
         return START_REDELIVER_INTENT
@@ -62,21 +69,24 @@ class TimeTriggerService : LifecycleService() {
         val timeRules = rules.filter { it.timeTrigger != null }
         if (timeRules.isEmpty()) return Pair(emptySet(), null)
 
-        val curr = System.currentTimeMillis() / 1000 / 60
+        val calendar = Calendar.getInstance()
+        val curr = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
 
         val checkResults = timeRules.map {
             with(it.timeTrigger!!) {
                 val triggered = curr in startTimeInMinutes until endTimeInMinutes
                 val timeRemaining = when {
-                    curr < startTimeInMinutes -> (startTimeInMinutes - curr) / 1000
-                    curr < endTimeInMinutes -> (endTimeInMinutes - curr) / 1000
-                    else -> startTimeInMinutes + 24 * 60 - curr
+                    curr < startTimeInMinutes -> (startTimeInMinutes - curr) * 60
+                    curr < endTimeInMinutes -> (endTimeInMinutes - curr) * 60
+                    else -> (startTimeInMinutes + 24 * 60 - curr) * 60
                 }
                 Triple(triggered, it.ruleInfo.ruleId, timeRemaining)
             }
         }
         val triggeredSet = checkResults.filter { it.first }.map { it.second }.toSet()
-        val minInterval = checkResults.minOf { it.third.toInt() }
+        val minInterval = checkResults.minOf { it.third }
+
+        Log.e("hello", "$minInterval")
 
         return Pair(triggeredSet, minInterval)
     }

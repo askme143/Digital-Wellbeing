@@ -31,20 +31,20 @@ class RuleInfoViewModel(
         }
     }
     val itemClickEvent = MutableLiveData<Event<Int>>()
-    val itemClickActivate = MutableLiveData<Event<Boolean>>()
-    val itemClickNotiOnTriggerEvent = MutableLiveData<Event<Boolean>>()
+    val itemClickActivate = MutableLiveData<Event<Pair<Int, Boolean>>>()
+    val itemClickNotiOnTriggerEvent = MutableLiveData<Event<Pair<Int, Boolean>>>()
     val itemDeleteEvent = MutableLiveData<Event<Unit>>()
     private val _deletingRule = MutableLiveData<Pair<Int, String>>()
     val deletingRuleName: LiveData<String> get() = _deletingRule.map { it.second }
 
     private val onClickActivate: (RuleInfo) -> Unit = {
         val newRuleInfo = it.copy(activated = !it.activated)
-        itemClickActivate.value = Event(newRuleInfo.activated)
+        itemClickActivate.value = Event(Pair(it.ruleId, newRuleInfo.activated))
         viewModelScope.launch { ruleRepo.updateRuleInfo(newRuleInfo) }
     }
     private val onClickNotiOnTrigger: (RuleInfo) -> Unit = {
         val newRuleInfo = it.copy(notiOnTrigger = !it.notiOnTrigger)
-        itemClickNotiOnTriggerEvent.value = Event(newRuleInfo.notiOnTrigger)
+        itemClickNotiOnTriggerEvent.value = Event(Pair(it.ruleId, newRuleInfo.notiOnTrigger))
         viewModelScope.launch { ruleRepo.updateRuleInfo(newRuleInfo) }
     }
     private val onClickDelete: (ruleId: Int, ruleName: String) -> Unit = { ruleId, ruleName ->

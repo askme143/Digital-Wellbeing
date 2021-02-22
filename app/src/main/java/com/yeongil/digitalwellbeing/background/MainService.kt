@@ -7,12 +7,13 @@ import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.yeongil.digitalwellbeing.MainActivity
-import com.yeongil.digitalwellbeing.MainService
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.background.data.RuleSet
 import com.yeongil.digitalwellbeing.data.rule.Rule
@@ -20,6 +21,8 @@ import com.yeongil.digitalwellbeing.data.rule.action.*
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.repository.RuleRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -30,7 +33,7 @@ class MainService : LifecycleService() {
         RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleDao())
     }
     private val builder by lazy {
-        NotificationCompat.Builder(this, MainNotification.CHANNEL_ID)
+        NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentText("실행 중")
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -44,35 +47,50 @@ class MainService : LifecycleService() {
             )
             .setOngoing(true)
     }
-
-    /* System Services */
-    private val notificationManager =
-        this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
         when (intent?.action) {
             TIME_TRIGGER -> {
+                Log.e("hello", "TIME_TRIGGER")
                 val intentStr = intent.getStringExtra(TIME_TRIGGERED_RULES_KEY) ?: emptySetStr
-                val intentMap =
-                    Json.decodeFromString<Set<Int>>(intentStr)
+                Log.e("hello", intentStr)
+                val ruleIdSet = Json.decodeFromString<Set<Int>>(intentStr)
 
                 updateTimeTriggeredRules(intentStr)
+                lifecycleScope.launch(Dispatchers.Default) {
+                    checkTrigger(timeTriggerSet = ruleIdSet)
+                }
             }
             ACTIVITY_TRIGGER -> {
+                Log.e("hello", "ACTIVITY_TRIGGER")
                 val intentStr = intent.getStringExtra(ACTIVITY_TRIGGERED_RULES_KEY) ?: emptySetStr
-                val intentMap =
-                    Json.decodeFromString<Set<Int>>(intentStr)
+                val ruleIdSet = Json.decodeFromString<Set<Int>>(intentStr)
 
                 updateActivityTriggeredRules(intentStr)
+                lifecycleScope.launch(Dispatchers.Default) {
+                    checkTrigger(activityTriggerSet = ruleIdSet)
+                }
             }
             LOCATION_TRIGGER -> {
+                Log.e("hello", "LOCATION_TRIGGER")
                 val intentStr = intent.getStringExtra(LOCATION_TRIGGERED_RULES_KEY) ?: emptySetStr
-                val rule =
-                    Json.decodeFromString<Set<Int>>(intentStr)
+                val ruleIdSet = Json.decodeFromString<Set<Int>>(intentStr)
 
                 updateLocationTriggeredRules(intentStr)
+                lifecycleScope.launch(Dispatchers.Default) {
+                    checkTrigger(locationTriggerSet = ruleIdSet)
+                }
+            }
+            START_BACKGROUND -> {
+                Log.e("hello", "START_BACKGROUND")
+                startTriggerObserving()
+            }
+            RULE_CHANGE -> {
+                Log.e("hello", "RULE_CHANGE")
+                startTriggerObserving()
             }
         }
 
@@ -85,7 +103,7 @@ class MainService : LifecycleService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             /* Create Notification Channel for ForegroundService */
             val serviceChannel = NotificationChannel(
-                MainNotification.CHANNEL_ID,
+                CHANNEL_ID,
                 "Digitall Wellbeing Channel",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
@@ -96,7 +114,7 @@ class MainService : LifecycleService() {
 
             /* Create Notification Channel for Notified Rules */
             val notifyChannel = NotificationChannel(
-                MainService.RULE_NOTIFICATION_CHANNEL_ID,
+                RULE_NOTIFICATION_CHANNEL_ID,
                 "Digitall Wellbeing Rule Confirm Channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
@@ -130,6 +148,7 @@ class MainService : LifecycleService() {
     }
 
     private fun getLocationTriggeredRules(): Set<Int> {
+        val str = sharedPref.getString(LOCATION_TRIGGERED_RULES_KEY, emptySetStr) ?: emptySetStr
         val set = Json.decodeFromString<Set<Int>>(
             sharedPref.getString(LOCATION_TRIGGERED_RULES_KEY, emptySetStr) ?: emptySetStr
         )
@@ -171,19 +190,21 @@ class MainService : LifecycleService() {
 
     private fun updateRuleSet(ruleSet: RuleSet) {
         sharedPref.edit {
-            putString(LOCATION_TRIGGERED_RULES_KEY, Json.encodeToString(ruleSet))
+            putString(RULE_SET_KEY, Json.encodeToString(ruleSet))
             putLong(TIMESTAMP_RULE_SET_KEY, System.currentTimeMillis())
             commit()
         }
     }
 
-    private fun getDefaultRinger(): Int {
-        return sharedPref.getInt(DEFAULT_RINGER_KEY, 0)
+    private fun getDefaultRingerMode(): RingerMode {
+        return sharedPref.getString(DEFAULT_RINGER_KEY, Json.encodeToString(RingerMode.VIBRATE))
+            ?.let { Json.decodeFromString<RingerMode>(it) }
+            ?: RingerMode.VIBRATE
     }
 
-    private fun updateDefaultRinger(ringerMode: Int) {
+    private fun updateDefaultRinger(ringerMode: RingerMode) {
         sharedPref.edit {
-            putInt(DEFAULT_RINGER_KEY, ringerMode)
+            putString(DEFAULT_RINGER_KEY, Json.encodeToString(ringerMode))
             commit()
         }
     }
@@ -200,17 +221,17 @@ class MainService : LifecycleService() {
     }
 
     private suspend fun checkTrigger(
-        timeTriggerMap: Set<Int> = getTimeTriggeredRules(),
-        activityTriggerMap: Set<Int> = getActivityTriggeredRules(),
-        locationTriggerMap: Set<Int> = getLocationTriggeredRules(),
+        timeTriggerSet: Set<Int> = getTimeTriggeredRules(),
+        activityTriggerSet: Set<Int> = getActivityTriggeredRules(),
+        locationTriggerSet: Set<Int> = getLocationTriggeredRules(),
     ) {
         val rules = ruleRepo.getActiveRuleList()
         val ruleSet = getRuleSet()
 
         val triggeredRules = rules
-            .filter { it.timeTrigger == null || it.ruleInfo.ruleId in timeTriggerMap }
-            .filter { it.activityTrigger == null || it.ruleInfo.ruleId in activityTriggerMap }
-            .filter { it.locationTrigger == null || it.ruleInfo.ruleId in locationTriggerMap }
+            .filter { it.timeTrigger == null || it.ruleInfo.ruleId in timeTriggerSet }
+            .filter { it.activityTrigger == null || it.ruleInfo.ruleId in activityTriggerSet }
+            .filter { it.locationTrigger == null || it.ruleInfo.ruleId in locationTriggerSet }
 
         val rulesToNotify = triggeredRules
             .filter { it.ruleInfo.notiOnTrigger }
@@ -226,51 +247,79 @@ class MainService : LifecycleService() {
 
         val newRuleSet = RuleSet(rulesToNotify, rulesToBeConflicted, rulesToRun)
         updateRuleSet(newRuleSet)
+
+        /* make notification */
+        notifyRules(rulesToNotify, ruleSet.notified)
+
+        /* apply changes to action services */
+        val startedRules = rulesToRun - ruleSet.running
+        val stoppedRules = ruleSet.running - rulesToRun
+        applyRuleChange(startedRules, stoppedRules)
     }
 
-    private fun applyRuleChange(rule: Rule) {
-    }
-
-    private fun run(startedRules: List<Rule>, stoppedRules: List<Rule>) {
+    private fun applyRuleChange(startedRules: List<Rule>, stoppedRules: List<Rule>) {
         /* TODO: Make ActionServices */
         /* TODO: Pass Delta Results so that services can apply the changes */
-            /* TODO: Design MainService - ActionServices Protocol */
+        /* TODO: Design MainService - ActionServices Protocol */
 
         var stopAppBlockAction = false
         var stopNotificationAction = false
         var stopRingerAction = false
-        var stopDndAction= false
+        var stopDndAction = false
 
         var appBlockAction: AppBlockAction? = null
         var notificationAction: NotificationAction? = null
-        var ringerAction: RingerMode? = null
+        var ringerMode: RingerMode? = null
         var dndAction: Boolean? = null
 
         startedRules.forEach {
             if (it.appBlockAction != null) {
+                appBlockAction = it.appBlockAction
             }
             if (it.notificationAction != null) {
+                notificationAction = it.notificationAction
             }
             if (it.dndAction != null) {
+                dndAction = true
             }
             if (it.ringerAction != null) {
+                ringerMode = it.ringerAction.ringerMode
             }
         }
 
         stoppedRules.forEach {
             if (it.appBlockAction != null) {
+                stopAppBlockAction = true
             }
             if (it.notificationAction != null) {
+                stopNotificationAction = true
             }
             if (it.dndAction != null) {
+                stopDndAction = true
             }
             if (it.ringerAction != null) {
+                stopRingerAction = true
             }
+        }
+
+        if (ringerMode != null || dndAction != null || stopRingerAction || stopDndAction) {
+            val ringerIntent = Intent(this, RingerService::class.java)
+
+            if (ringerMode != null)
+                ringerIntent.putExtra(RingerService.RINGER_EXTRA_KEY, ringerMode)
+            else if (stopRingerAction)
+                ringerIntent.putExtra(RingerService.RINGER_EXTRA_KEY, getDefaultRingerMode())
+
+            if (dndAction != null)
+                ringerIntent.putExtra(RingerService.DND_EXTRA_KEY, true)
+            else if (stopDndAction)
+                ringerIntent.putExtra(RingerService.DND_EXTRA_KEY, getDefaultDND())
+
+            startService(ringerIntent)
         }
     }
 
     private fun notifyRules(rulesToNotify: List<Rule>, notifiedRules: List<Rule>) {
-        /* TODO: Refactor this function */
         val removedRules = notifiedRules - rulesToNotify
         val newRules = rulesToNotify - notifiedRules
 
@@ -367,10 +416,25 @@ class MainService : LifecycleService() {
         return newRulesToRun + oldRulesToRun
     }
 
+    private fun startTriggerObserving() {
+        val timeIntent = Intent(this, TimeTriggerService::class.java)
+        val activityIntent = Intent(this, ActivityTriggerService::class.java)
+        val locationIntent = Intent(this, LocationTriggerService::class.java)
+
+        startService(timeIntent)
+        startService(activityIntent)
+        startService(locationIntent)
+    }
+
     companion object {
+        const val CHANNEL_ID = "digital_wellbeing_service_channel"
+        const val RULE_NOTIFICATION_CHANNEL_ID = "digital_wellbeing_rule_notification_channel"
+
         const val TIME_TRIGGER = "TIME_TRIGGER"
         const val ACTIVITY_TRIGGER = "ACTIVITY_TRIGGER"
         const val LOCATION_TRIGGER = "LOCATION_TRIGGER"
+        const val START_BACKGROUND = "START_BACKGROUND"
+        const val RULE_CHANGE = "RULE_CHANGE"
 
         const val MAIN_SERVICE_PREF_NAME = "com.yeongil.digitalwellbeing.MAIN_SERVICE"
 
@@ -380,15 +444,17 @@ class MainService : LifecycleService() {
 
         const val TIME_TRIGGERED_RULES_KEY = "TIME_TRIGGERED_RULES"
         const val ACTIVITY_TRIGGERED_RULES_KEY = "ACTIVITY_TRIGGERED_RULES"
-        const val LOCATION_TRIGGERED_RULES_KEY = "LOCATION_TRIGGERED_L"
+        const val LOCATION_TRIGGERED_RULES_KEY = "LOCATION_TRIGGERED_RULES"
 
         const val TIMESTAMP_RULE_SET_KEY = "TIMESTAMP_RULE_SET"
         const val RULE_SET_KEY = "RULE_SET"
 
+        const val CHANGED_RULE_ID_KEY = "CHANGED_RULE_ID"
         const val DEFAULT_RINGER_KEY = "DEFAULT_RINGER"
         const val DEFAULT_DND_KEY = "DEFAULT_DND"
 
-        val emptySetStr = Json.encodeToString(emptySet<Unit>())
+
+        val emptySetStr = Json.encodeToString(emptySet<Int>())
         val ruleSetDefaultStr = Json.encodeToString(RuleSet())
     }
 }
