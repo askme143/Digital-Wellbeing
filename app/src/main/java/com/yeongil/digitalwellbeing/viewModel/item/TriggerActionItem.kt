@@ -74,7 +74,15 @@ class TriggerActionItem(val title: String, val description: String) {
     constructor(notificationAction: NotificationAction, pmRepo: PackageManagerRepository) : this(
         NOTIFICATION_ACTION_TITLE,
         if (notificationAction.allApp) "모든 앱"
-        else notificationAction.appList.joinToString(" / ") { pmRepo.getLabel(it) }
+        else notificationAction.appList.joinToString(", ") { pmRepo.getLabel(it) } +
+                " / " +
+                when (notificationAction.handlingAction) {
+                    0 -> "숨기기"
+                    1 -> "진동"
+                    2 -> "소리"
+                    3 -> "무음"
+                    else -> ""
+                }
     )
 
     @Suppress("UNUSED_PARAMETER")

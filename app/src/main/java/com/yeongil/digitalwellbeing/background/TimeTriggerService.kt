@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.yeongil.digitalwellbeing.data.rule.Rule
@@ -33,8 +32,6 @@ class TimeTriggerService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-
-        Log.e("hello", "TIME_TRIGGER_SERVICE_STARTED")
 
         lifecycleScope.launch(Dispatchers.Default) {
             val rules = ruleRepo.getActiveRuleList()
@@ -85,8 +82,6 @@ class TimeTriggerService : LifecycleService() {
         }
         val triggeredSet = checkResults.filter { it.first }.map { it.second }.toSet()
         val minInterval = checkResults.minOf { it.third }
-
-        Log.e("hello", "$minInterval")
 
         return Pair(triggeredSet, minInterval)
     }

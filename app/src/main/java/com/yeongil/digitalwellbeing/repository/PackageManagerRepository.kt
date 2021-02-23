@@ -21,4 +21,5 @@ class PackageManagerRepository(
     fun isSystemApp(info: ApplicationInfo): Boolean =
         (info.flags and ApplicationInfo.FLAG_SYSTEM) != 0
                 && info.packageName != "com.google.android.youtube"
+                && info.packageName != "com.google.android.gm"
 }

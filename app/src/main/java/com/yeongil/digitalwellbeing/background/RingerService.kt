@@ -15,12 +15,12 @@ class RingerService : Service() {
         super.onStartCommand(intent, flags, startId)
 
         if (intent == null) return START_STICKY
-        val ringerExtra = intent.getSerializableExtra(RINGER_EXTRA_KEY) as RingerMode
+        val ringerMode = intent.getParcelableExtra(RINGER_EXTRA_KEY) ?: RingerMode.VIBRATE
         val dndExtra = intent.getBooleanExtra(DND_EXTRA_KEY, false)
 
         /* DND First (Ringer mode can be affected by the change of dnd mode) */
         changeDndMode(dndExtra)
-        changeRingerMode(ringerExtra)
+        changeRingerMode(ringerMode)
 
         stopSelf(startId)
 

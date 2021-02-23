@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.LocationServices
@@ -90,14 +89,11 @@ class LocationTriggerService : LifecycleService() {
         currLocation.latitude = location.latitude
         currLocation.longitude = location.longitude
 
-        Log.e("hello", "Current Location: ${currLocation.latitude} ${currLocation.longitude}")
-
         val distances = locationRules.map {
             with(it.locationTrigger!!) {
                 val dest = Location("dest location").also { dest ->
                     dest.latitude = latitude
                     dest.longitude = longitude
-                    Log.e("hello", "Destination Location: ${dest.latitude} ${dest.longitude}")
                 }
                 Pair(it.ruleInfo.ruleId, range - currLocation.distanceTo(dest))
             }

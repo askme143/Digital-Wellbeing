@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import com.yeongil.digitalwellbeing.background.MainService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,13 +37,24 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             startActivity(intent)
         }
 
-        /* Start Background Service */
-        val intent = Intent(this, MainService::class.java)
-            .apply { action = MainService.START_BACKGROUND }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
+        /* Notification Listener Permission */
+        val sets = NotificationManagerCompat.getEnabledListenerPackages(this)
+        if (!sets.contains(applicationContext.packageName)) {
+            val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+            startActivity(intent)
+        }
+
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val runningServices = activityManager.getRunningServices(Int.MAX_VALUE)
+        if (MainService::class.java.name !in runningServices.map { it.service.className }) {
+            /* Start Background Service */
+            val intent = Intent(this, MainService::class.java)
+                .apply { action = MainService.START_BACKGROUND }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
         }
     }
 }
