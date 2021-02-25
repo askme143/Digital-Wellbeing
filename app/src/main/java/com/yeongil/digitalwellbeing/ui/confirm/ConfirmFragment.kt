@@ -35,6 +35,8 @@ class ConfirmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentConfirmBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = ruleEditViewModel
 
         binding.beforeBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionConfirmFragmentToActionFragment())

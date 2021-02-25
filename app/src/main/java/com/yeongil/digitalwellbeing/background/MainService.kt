@@ -19,6 +19,7 @@ import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.background.data.RuleSet
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.data.rule.action.*
+import com.yeongil.digitalwellbeing.data.rule.action.RingerAction.RingerMode
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
 import com.yeongil.digitalwellbeing.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.digitalwellbeing.repository.RuleRepository
@@ -43,15 +44,22 @@ class MainService : LifecycleService() {
                     addNextIntentWithParentStack(
                         Intent(this@MainService, MainActivity::class.java)
                     )
-                    getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                    getPendingIntent(0, 0)
                 }
             )
             .setOngoing(true)
     }
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
+    private fun test() {
+        val intent = Intent(this, AppBlockService::class.java)
+        startService(intent)
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+
+        test()
 
         when (intent?.action) {
             TIME_TRIGGER -> {
@@ -250,6 +258,16 @@ class MainService : LifecycleService() {
         val newRuleSet = RuleSet(rulesToNotify, rulesToBeConflicted, rulesToRun)
         updateRuleSet(newRuleSet)
 
+        /* update main notification */
+        builder.setContentText(
+            when (rulesToRun.size) {
+                0 -> "수행 중인 규칙이 없습니다."
+                1 -> "현재 [${rulesToRun[0].ruleInfo.ruleName}] 규칙이 수행 중입니다."
+                else -> "현재 [${rulesToRun[0].ruleInfo.ruleName}]외 ${rulesToRun.size - 1}개 규칙이 수행 중입니다."
+            }
+        )
+        startForeground(1, builder.build())
+
         /* make notification */
         notifyRules(rulesToNotify, ruleSet.notified)
 
@@ -260,16 +278,13 @@ class MainService : LifecycleService() {
     }
 
     private fun applyRuleSetChange(startedRules: List<Rule>, stoppedRules: List<Rule>) {
-        /* TODO: Make ActionServices */
-        /* TODO: Pass Delta Results so that services can apply the changes */
-        /* TODO: Design MainService - ActionServices Protocol */
-
         var stopAppBlockAction = false
         var stopNotificationAction = false
         var stopRingerAction = false
         var stopDndAction = false
 
         var appBlockAction: AppBlockAction? = null
+        var appBlockRid: Int? = null
         var notificationAction: NotificationAction? = null
         var ringerMode: RingerMode? = null
         var dndAction: Boolean? = null
@@ -277,39 +292,26 @@ class MainService : LifecycleService() {
         startedRules.forEach {
             if (it.appBlockAction != null) {
                 appBlockAction = it.appBlockAction
+                appBlockRid = it.ruleInfo.ruleId
             }
-            if (it.notificationAction != null) {
-                notificationAction = it.notificationAction
-            }
-            if (it.dndAction != null) {
-                dndAction = true
-            }
-            if (it.ringerAction != null) {
-                ringerMode = it.ringerAction.ringerMode
-            }
+            if (it.notificationAction != null) notificationAction = it.notificationAction
+            if (it.dndAction != null) dndAction = true
+            if (it.ringerAction != null) ringerMode = it.ringerAction.ringerMode
         }
 
         stoppedRules.forEach {
-            if (it.appBlockAction != null) {
-                stopAppBlockAction = true
-            }
-            if (it.notificationAction != null) {
-                stopNotificationAction = true
-            }
-            if (it.dndAction != null) {
-                stopDndAction = true
-            }
-            if (it.ringerAction != null) {
-                stopRingerAction = true
-            }
+            if (it.appBlockAction != null) stopAppBlockAction = true
+            if (it.notificationAction != null) stopNotificationAction = true
+            if (it.dndAction != null) stopDndAction = true
+            if (it.ringerAction != null) stopRingerAction = true
         }
 
         val ringerIntent by lazy { Intent(this, RingerService::class.java) }
         val notificationIntent by lazy { Intent(this, NotificationBlockService::class.java) }
+        val appBlockIntent by lazy { Intent(this, AppBlockService::class.java) }
 
         /* RingerAction / DNDAction */
         if (ringerMode != null || dndAction != null || stopRingerAction || stopDndAction) {
-
             if (ringerMode != null)
                 ringerIntent.putExtra(RingerService.RINGER_EXTRA_KEY, ringerMode as Parcelable)
             else if (stopRingerAction)
@@ -338,6 +340,22 @@ class MainService : LifecycleService() {
                 null as NotificationAction?
             )
             startService(notificationIntent)
+        }
+        /* App Block Action */
+        if (appBlockAction != null) {
+            appBlockIntent.apply {
+                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
+                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, appBlockAction)
+                putExtra(AppBlockService.RID_EXTRA_KEY, appBlockRid)
+            }
+            startService(appBlockIntent)
+        } else if (stopAppBlockAction) {
+            appBlockIntent.apply {
+                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
+                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, null as AppBlockAction?)
+                putExtra(AppBlockService.RID_EXTRA_KEY, 0)
+            }
+            startService(appBlockIntent)
         }
     }
 
@@ -400,6 +418,18 @@ class MainService : LifecycleService() {
             updateRuleSet(
                 RuleSet(ruleSet.notified - rule, ruleSet.conflicting, ruleSet.running + rule)
             )
+
+            /* Notification Update */
+            builder.setContentText(
+                when (rulesToRun.size) {
+                    0 -> "수행 중인 규칙이 없습니다."
+                    1 -> "현재 [${rulesToRun[0].ruleInfo.ruleName}] 규칙이 수행 중입니다."
+                    else -> "현재 [${rulesToRun[0].ruleInfo.ruleName}]외 ${rulesToRun.size - 1}개 규칙이 수행 중입니다."
+                }
+            )
+            startForeground(1, builder.build())
+
+            /* Apply Action */
             applyRuleSetChange(listOf(rule), emptyList())
         } else {
             updateRuleSet(

@@ -1,5 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.rule
 
+import android.text.Html
+import android.text.Spanned
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.R
 import com.yeongil.digitalwellbeing.data.rule.action.AppBlockAction
@@ -14,6 +16,8 @@ import com.yeongil.digitalwellbeing.data.rule.trigger.TimeTrigger
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.*
+import com.yeongil.digitalwellbeing.utils.TimeUtils.repeatDayToString
+import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.*
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemViewModel
@@ -88,6 +92,87 @@ class RuleEditViewModel(
     }
 
     val ruleName = MutableLiveData<String>()
+
+    /* For Confirm Fragment */
+    val locationHTMLText = editingRule.map {
+        val fontTagStart = "<font color=\"#A52A2A\">"
+        val fontTagEnd = "</font>"
+        val breakTag = "<br />"
+
+        val location = it.locationTrigger?.locationName ?: ""
+        val range = it.locationTrigger?.range?.toString()?.let { str -> "${str}m 이내" } ?: ""
+        val conjunction = "(그리고)"
+        val html =
+            "$fontTagStart$location${fontTagEnd}을(를)$breakTag 중심으로 ${fontTagStart}${range}${fontTagEnd} $conjunction"
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+        else Html.fromHtml(html)
+    }
+    val timeHTMLText = editingRule.map { rule ->
+        val fontTagStart = "<font color=\"#A52A2A\">"
+        val fontTagEnd = "</font>"
+
+        val repeatDay = rule.timeTrigger?.repeatDay?.let { repeatDayToString(it) }
+        val time = rule.timeTrigger?.let {
+            startEndMinutesToString(it.startTimeInMinutes, it.endTimeInMinutes)
+        }
+        val conjunction = "(그리고)"
+        val html = "${fontTagStart}매주 $repeatDay $time${fontTagEnd} $conjunction"
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+        else Html.fromHtml(html)
+    }
+    val activityHTMLText = editingRule.map { rule ->
+        val fontTagStart = "<font color=\"#A52A2A\">"
+        val fontTagEnd = "</font>"
+
+        val activity = when (rule.activityTrigger?.activity) {
+            DRIVE -> "자동차 운전"
+            BICYCLE -> "자전거 운행"
+            STILL -> "아무것도 하지 않을 때"
+            else -> ""
+        }
+
+        val html = "$fontTagStart$activity$fontTagEnd 감지"
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+        else Html.fromHtml(html)
+    }
+    val manualTriggerHTMLText: Spanned =
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+            Html.fromHtml(
+                "  <font color=\"#A52A2A\">사용자가 규칙을 활성화 시</font>",
+                Html.FROM_HTML_MODE_LEGACY
+            )
+        else Html.fromHtml("  <font color=\"#A52A2A\">사용자가 규칙을 활성화 시</font>")
+    val isManualTrigger = editingRule.map {
+        it.locationTrigger == null && it.activityTrigger == null && it.timeTrigger == null
+    }
+
+    val actionHTMLText = editingRule.map { rule ->
+        val breakTag = "<br />"
+        rule.appBlockAction?.let { action ->
+            if (action.allAppBlock) {
+                val actionType = if (action.allAppHandlingAction == CLOSE_IMMEDIATE) "종료" else "경고"
+
+                "모든 앱 실행 시 $actionType$breakTag"
+            } else {
+                action.appBlockEntryList.map {
+                    val actionType = if (it.handlingAction == CLOSE_IMMEDIATE) "종료" else "경고"
+                    val appName = pmRepo.getLabel(it.packageName)
+                    val allowedTime =
+                        if (it.allowedTimeInMinutes == 0) "실행 시"
+                        else "${TimeUtils.minutesToTimeMinute(it.allowedTimeInMinutes)} 이상 사용 시"
+
+                    "$appName $allowedTime $actionType$breakTag"
+                }.joinToString("")
+            }
+        } ?: "" + breakTag +
+        rule.notificationAction?.let { }
+    }
 
     fun init(rule: Rule) {
         isNewRule = false

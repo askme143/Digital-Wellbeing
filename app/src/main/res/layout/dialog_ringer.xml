@@ -3,7 +3,7 @@
 
     <data>
 
-        <import type="com.yeongil.digitalwellbeing.data.rule.action.RingerMode" />
+        <import type="com.yeongil.digitalwellbeing.data.rule.action.RingerAction.RingerMode" />
 
         <variable
             name="vm"

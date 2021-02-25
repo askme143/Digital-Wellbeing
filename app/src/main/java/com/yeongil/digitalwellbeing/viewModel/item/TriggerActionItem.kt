@@ -1,6 +1,7 @@
 package com.yeongil.digitalwellbeing.viewModel.item
 
 import com.yeongil.digitalwellbeing.data.rule.action.*
+import com.yeongil.digitalwellbeing.data.rule.action.RingerAction.RingerMode
 import com.yeongil.digitalwellbeing.data.rule.trigger.ActivityTrigger
 import com.yeongil.digitalwellbeing.data.rule.trigger.LocationTrigger
 import com.yeongil.digitalwellbeing.data.rule.trigger.TimeTrigger
@@ -50,7 +51,7 @@ class TriggerActionItem(val title: String, val description: String) {
                 timeTrigger.startTimeInMinutes,
                 timeTrigger.endTimeInMinutes
             )
-        }\n${TimeUtils.repeatDayToString(timeTrigger.repeatDay)}"
+        }\n매주 반복: ${TimeUtils.repeatDayToString(timeTrigger.repeatDay)}"
     )
 
     constructor(activityTrigger: ActivityTrigger) : this(

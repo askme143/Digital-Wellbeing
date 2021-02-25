@@ -26,7 +26,7 @@ object TimeUtils {
     }
 
     fun repeatDayToString(repeatDay: List<Boolean>): String {
-        return "매주 반복: " + repeatDay.mapIndexed { index, bool ->
+        return repeatDay.mapIndexed { index, bool ->
             if (bool) {
                 when (index) {
                     SUN -> "일"

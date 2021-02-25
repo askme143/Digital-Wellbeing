@@ -5,7 +5,7 @@ import android.app.Service
 import android.content.Intent
 import android.media.AudioManager
 import android.os.IBinder
-import com.yeongil.digitalwellbeing.data.rule.action.RingerMode
+import com.yeongil.digitalwellbeing.data.rule.action.RingerAction.RingerMode
 
 class RingerService : Service() {
     private val audioManager by lazy { getSystemService(AUDIO_SERVICE) as AudioManager }

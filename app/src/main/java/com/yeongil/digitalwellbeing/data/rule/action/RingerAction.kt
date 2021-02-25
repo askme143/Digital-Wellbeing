@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Parcelize
-enum class RingerMode : Parcelable { VIBRATE, RING, SILENT }
-
-@Serializable
-@Parcelize
 data class RingerAction(
     @ColumnInfo(name = "ringer_mode") val ringerMode: RingerMode,
-) : Parcelable
+) : Parcelable {
+    enum class RingerMode { VIBRATE, RING, SILENT }
+}

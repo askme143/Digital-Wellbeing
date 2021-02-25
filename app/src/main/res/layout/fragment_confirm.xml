@@ -1,41 +1,341 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="액션 동작/해제 조건 확인"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="30sp"
-        />
+    <data>
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/footer_barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="before_btn, next_btn" />
+        <import type="android.view.View" />
 
-    <Button
-        android:id="@+id/before_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="취소 (이전)"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        <variable
+            name="vm"
+            type="com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleEditViewModel" />
+    </data>
 
-    <Button
-        android:id="@+id/next_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="설정 완료"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="규칙 동작 확인"
+            android:textSize="30sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/footer_barrier"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_border"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/trigger_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:text="아래의 조건을 모두 충족하면 액션이 실행됩니다."
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/location_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="장소: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="@{vm.editingRule.locationTrigger == null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/trigger_title" />
+
+                    <TextView
+                        android:id="@+id/location_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.locationHTMLText}"
+                        android:textSize="16sp"
+                        android:visibility="@{vm.editingRule.locationTrigger == null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintLeft_toRightOf="@id/location_title"
+                        app:layout_constraintTop_toBottomOf="@id/trigger_title" />
+
+                    <TextView
+                        android:id="@+id/time_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="시간: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="@{vm.editingRule.timeTrigger == null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/location_text" />
+
+                    <TextView
+                        android:id="@+id/time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.timeHTMLText}"
+                        android:textSize="16sp"
+                        android:visibility="@{vm.editingRule.timeTrigger == null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintLeft_toRightOf="@id/time_title"
+                        app:layout_constraintTop_toBottomOf="@id/location_text" />
+
+                    <TextView
+                        android:id="@+id/activity_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="활동: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="@{vm.editingRule.activityTrigger == null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/time_text" />
+
+                    <TextView
+                        android:id="@+id/activity_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.activityHTMLText}"
+                        android:textSize="16sp"
+                        android:visibility="@{vm.editingRule.activityTrigger == null ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintLeft_toRightOf="@id/activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/time_text" />
+
+                    <TextView
+                        android:id="@+id/manual_trigger_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.manualTriggerHTMLText}"
+                        android:textSize="16sp"
+                        android:visibility="@{vm.isManualTrigger ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintLeft_toRightOf="@id/activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/time_text" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_border"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/action_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:text="실행 액션"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/app_block_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="앱 제한: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/action_title" />
+
+                    <TextView
+                        android:id="@+id/app_block_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="앱 제한"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@id/app_block_title"
+                        app:layout_constraintTop_toBottomOf="@id/action_title" />
+
+                    <TextView
+                        android:id="@+id/notification_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="알림 숨기기: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/app_block_title" />
+
+                    <TextView
+                        android:id="@+id/notification_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="알림 숨기기"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@id/notification_title"
+                        app:layout_constraintTop_toBottomOf="@id/app_block_title" />
+
+                    <TextView
+                        android:id="@+id/dnd_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="방해 금지 모드: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/notification_title" />
+
+                    <TextView
+                        android:id="@+id/dnd_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="방해 금지 모드 실행"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@id/dnd_title"
+                        app:layout_constraintTop_toBottomOf="@id/notification_title" />
+
+                    <TextView
+                        android:id="@+id/ringer_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="소리 모드: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/dnd_title" />
+
+                    <TextView
+                        android:id="@+id/ringer_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="진동"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@id/ringer_title"
+                        app:layout_constraintTop_toBottomOf="@id/dnd_title" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_border"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/release_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:text="실행된 액션은 아래 상황에서 해제됩니다."
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/release_location_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="장소: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/release_title" />
+
+                    <TextView
+                        android:id="@+id/release_location_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="장소"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@id/release_location_title"
+                        app:layout_constraintTop_toBottomOf="@id/release_title" />
+
+                    <TextView
+                        android:id="@+id/release_time_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="시간: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/release_location_title" />
+
+                    <TextView
+                        android:id="@+id/release_time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="시간"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@id/release_time_title"
+                        app:layout_constraintTop_toBottomOf="@id/release_location_title" />
+
+                    <TextView
+                        android:id="@+id/release_activity_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="활동: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/release_time_title" />
+
+                    <TextView
+                        android:id="@+id/release_activity_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="장소:"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintLeft_toRightOf="@id/release_activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/release_time_title" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/footer_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="before_btn, next_btn" />
+
+        <Button
+            android:id="@+id/before_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소 (이전)"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <Button
+            android:id="@+id/next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정 완료"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

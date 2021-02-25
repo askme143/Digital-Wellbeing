@@ -3,7 +3,8 @@ package com.yeongil.digitalwellbeing.dataSource.ruleDatabase.converter
 import androidx.room.TypeConverter
 import com.yeongil.digitalwellbeing.data.rule.action.AppBlockEntry
 import com.yeongil.digitalwellbeing.data.rule.action.KeywordEntry
-import com.yeongil.digitalwellbeing.data.rule.action.RingerMode
+import com.yeongil.digitalwellbeing.data.rule.action.RingerAction
+import com.yeongil.digitalwellbeing.data.rule.action.RingerAction.RingerMode
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -50,12 +51,12 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromRingerModeToString(value: RingerMode): String {
-        return Json.encodeToString(value)
+    fun fromRingerModeToInt(value: RingerMode): Int {
+        return value.ordinal
     }
 
     @TypeConverter
-    fun fromStringToRingerMode(value: String): RingerMode {
-        return Json.decodeFromString(value)
+    fun fromIntToRingerMode(value: Int): RingerMode {
+        return enumValues<RingerMode>()[value]
     }
 }

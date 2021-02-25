@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationManagerCompat
 import com.yeongil.digitalwellbeing.background.MainService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,26 +27,20 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         job = Job()
 
         /* Request to turn off battery optimization for this app */
-        val pm = applicationContext.getSystemService(POWER_SERVICE) as PowerManager
-        val isWhiteListing = pm.isIgnoringBatteryOptimizations(applicationContext.packageName)
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        val isWhiteListing =
+            powerManager.isIgnoringBatteryOptimizations(packageName)
         if (!isWhiteListing) {
             val intent = Intent()
             intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            intent.data = Uri.parse("package:" + applicationContext.packageName)
+            intent.data = Uri.parse("package:$packageName")
             startActivity(intent)
         }
 
-        /* Notification Listener Permission */
-        val sets = NotificationManagerCompat.getEnabledListenerPackages(this)
-        if (!sets.contains(applicationContext.packageName)) {
-            val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-            startActivity(intent)
-        }
-
+        /* Start Background Service */
         val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val runningServices = activityManager.getRunningServices(Int.MAX_VALUE)
         if (MainService::class.java.name !in runningServices.map { it.service.className }) {
-            /* Start Background Service */
             val intent = Intent(this, MainService::class.java)
                 .apply { action = MainService.START_BACKGROUND }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
