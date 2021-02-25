@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.lang.Exception
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -99,8 +100,8 @@ class LocationTriggerService : LifecycleService() {
             }
         }
 
-        val triggeredSet = distances.map { it.first }.filter { it > 0 }.toSet()
-        val minDist = distances.map { it.second }.minOrNull() ?: 0f
+        val triggeredSet = distances.filter { it.second > 0 }.map { it.first }.toSet()
+        val minDist = distances.map { abs(it.second) }.minOrNull() ?: 0f
 
         return Pair(triggeredSet, minDist)
     }
