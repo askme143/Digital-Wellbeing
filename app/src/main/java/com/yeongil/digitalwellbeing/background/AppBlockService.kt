@@ -161,7 +161,14 @@ class AppBlockService : AccessibilityService() {
                     action = CHECK_PACKAGE
                     putExtra(PACKAGE_NAME_EXTRA_KEY, packageName)
                 }
-                .let { PendingIntent.getService(this, 0, it, 0) }
+                .let {
+                    PendingIntent.getService(
+                        this,
+                        (System.currentTimeMillis() % (48 * 60 * 60 * 1000)).toInt(),   // Unique Number
+                        it,
+                        0
+                    )
+                }
 
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
