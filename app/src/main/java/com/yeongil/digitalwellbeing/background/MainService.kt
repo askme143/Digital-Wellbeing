@@ -4,15 +4,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.media.AudioManager
 import android.os.Build
 import android.os.Parcelable
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
@@ -399,13 +395,6 @@ class MainService : LifecycleService() {
                                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
                             )
                         }
-//                    TaskStackBuilder.create(this).run {
-//                        addNextIntentWithParentStack(
-//                            /* TODO: Show Rule Start Confirm Dialog */
-//                            Intent(this@MainService, MainActivity::class.java)
-//                        )
-//                        getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-//                    }
                 )
                 .setAutoCancel(true)
 
@@ -459,69 +448,93 @@ class MainService : LifecycleService() {
         conflictingRules: List<Rule>,
         runningRules: List<Rule>
     ): List<Rule> {
+        /* Return true if the rule is a manual trigger rule */
+        fun isManualTrigger(rule: Rule) = rule.locationTrigger == null
+                && rule.timeTrigger == null
+                && rule.activityTrigger == null
+
         /* Return a conflict-free rule list */
         tailrec fun removeConflictInNewRules(rules: List<Rule>): List<Rule> {
             return when {
                 rules.count { it.appBlockAction != null } > 2 -> {
                     val appBlockRules = rules.filter { it.appBlockAction != null }
-                    removeConflictInNewRules(rules - appBlockRules + appBlockRules.random())
+                    val selectedRule =
+                        appBlockRules.firstOrNull { isManualTrigger(it) } ?: appBlockRules.random()
+                    removeConflictInNewRules(rules - appBlockRules + selectedRule)
                 }
                 rules.count { it.notificationAction != null } > 2 -> {
                     val notificationRules = rules.filter { it.notificationAction != null }
-                    removeConflictInNewRules(rules - notificationRules + notificationRules.random())
+                    val selectedRule =
+                        notificationRules.firstOrNull { isManualTrigger(it) }
+                            ?: notificationRules.random()
+                    removeConflictInNewRules(rules - notificationRules + selectedRule)
                 }
                 rules.count { it.dndAction != null } > 2 -> {
                     val dndRules = rules.filter { it.dndAction != null }
-                    removeConflictInNewRules(rules - dndRules + dndRules.random())
+                    val selectedRule =
+                        dndRules.firstOrNull { isManualTrigger(it) } ?: dndRules.random()
+                    removeConflictInNewRules(rules - dndRules + selectedRule)
                 }
                 rules.count { it.ringerAction != null } > 2 -> {
                     val ringerRules = rules.filter { it.ringerAction != null }
-                    removeConflictInNewRules(rules - ringerRules + ringerRules.random())
+                    val selectedRule =
+                        ringerRules.firstOrNull { isManualTrigger(it) } ?: ringerRules.random()
+                    removeConflictInNewRules(rules - ringerRules + selectedRule)
                 }
                 else -> rules
             }
         }
 
         /* Remove conflicting rules from OldRules and return it */
-        tailrec fun removeConflictInOldRules(
+        tailrec fun removeConflict(
             newRules: List<Rule>,
             oldRules: List<Rule>
         ): List<Rule> {
+            val newAppBlockRule by lazy { newRules.firstOrNull { it.appBlockAction != null } }
+            val oldAppBlockRule by lazy { oldRules.firstOrNull { it.appBlockAction != null } }
+            val newNotificationRule by lazy { newRules.firstOrNull { it.notificationAction != null } }
+            val oldNotificationRule by lazy { oldRules.firstOrNull { it.notificationAction != null } }
+            val newDndRule by lazy { newRules.firstOrNull { it.dndAction != null } }
+            val oldDndRule by lazy { oldRules.firstOrNull { it.dndAction != null } }
+            val newRingerRule by lazy { newRules.firstOrNull { it.ringerAction != null } }
+            val oldRingerRule by lazy { oldRules.firstOrNull { it.ringerAction != null } }
+
             return when {
-                newRules.any { it.appBlockAction != null }
-                        && oldRules.any { it.appBlockAction != null } -> {
-                    removeConflictInOldRules(
-                        newRules,
-                        oldRules.filter { it.appBlockAction == null })
+                newAppBlockRule != null -> {
+                    if (!isManualTrigger(newAppBlockRule!!) && isManualTrigger(oldAppBlockRule!!))
+                        removeConflict(newRules - newAppBlockRule!!, oldRules)
+                    else
+                        removeConflict(newRules, oldRules - oldAppBlockRule!!)
                 }
-                newRules.any { it.notificationAction != null }
-                        && oldRules.any { it.notificationAction != null } -> {
-                    removeConflictInOldRules(
-                        newRules,
-                        oldRules.filter { it.notificationAction == null })
+                newNotificationRule != null && oldNotificationRule != null -> {
+                    if (!isManualTrigger(newNotificationRule!!)
+                        && isManualTrigger(oldNotificationRule!!)
+                    )
+                        removeConflict(newRules - newNotificationRule!!, oldRules)
+                    else
+                        removeConflict(newRules, oldRules - oldNotificationRule!!)
                 }
-                newRules.any { it.dndAction != null }
-                        && oldRules.any { it.dndAction != null } -> {
-                    removeConflictInOldRules(newRules, oldRules.filter { it.dndAction == null })
+                newDndRule != null && oldDndRule != null -> {
+                    if (!isManualTrigger(newDndRule!!) && isManualTrigger(oldDndRule!!))
+                        removeConflict(newRules - newDndRule!!, oldRules)
+                    else
+                        removeConflict(newRules, oldRules - oldDndRule!!)
                 }
-                newRules.any { it.ringerAction != null }
-                        && oldRules.any { it.ringerAction != null } -> {
-                    removeConflictInOldRules(newRules, oldRules.filter { it.ringerAction == null })
+                newRingerRule != null && oldRingerRule != null -> {
+                    if (!isManualTrigger(newRingerRule!!) && isManualTrigger(oldRingerRule!!))
+                        removeConflict(newRules - newRingerRule!!, oldRules)
+                    else
+                        removeConflict(newRules, oldRules - oldRingerRule!!)
                 }
-                else ->
-                    oldRules
+                else -> newRules + oldRules
             }
         }
 
         val newRules = rules - conflictingRules - runningRules
         val oldRules = (rules - newRules).filter { it in runningRules }
 
-        val newRulesToRun = removeConflictInNewRules(newRules)
-        val oldRulesToRun = runningRules
-            .filter { it in oldRules }
-            .let { removeConflictInOldRules(newRulesToRun, it) }
-
-        return newRulesToRun + oldRulesToRun
+        val filteredNewRules = removeConflictInNewRules(newRules)
+        return removeConflict(filteredNewRules, oldRules)
     }
 
     private fun startTriggerObserving() {

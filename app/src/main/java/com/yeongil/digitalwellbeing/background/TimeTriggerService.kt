@@ -63,7 +63,7 @@ class TimeTriggerService : LifecycleService() {
     }
 
     private fun checkTimeRules(rules: List<Rule>): Pair<Set<Int>, Int?> {
-        /* TODO: Next Day case (startTime >= endTime) */
+        /* TODO: Consider for the case if the start time is bigger than or equals to the end time. */
         val timeRules = rules.filter { it.timeTrigger != null }
         if (timeRules.isEmpty()) return Pair(emptySet(), null)
 
