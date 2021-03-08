@@ -36,6 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AppBlockActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
 
         <service
             android:name=".background.MainService"

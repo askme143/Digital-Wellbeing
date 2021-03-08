@@ -500,7 +500,7 @@ class MainService : LifecycleService() {
             val oldRingerRule by lazy { oldRules.firstOrNull { it.ringerAction != null } }
 
             return when {
-                newAppBlockRule != null -> {
+                newAppBlockRule != null && oldAppBlockRule != null -> {
                     if (!isManualTrigger(newAppBlockRule!!) && isManualTrigger(oldAppBlockRule!!))
                         removeConflict(newRules - newAppBlockRule!!, oldRules)
                     else

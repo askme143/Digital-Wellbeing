@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 
 class PackageManagerRepository(
-    private val pm: PackageManager
+    private val pm: PackageManager,
 ) {
     @SuppressLint("QueryPermissionsNeeded")
     fun getAppInfoList(): MutableList<ApplicationInfo> {
@@ -22,4 +22,9 @@ class PackageManagerRepository(
         (info.flags and ApplicationInfo.FLAG_SYSTEM) != 0
                 && info.packageName != "com.google.android.youtube"
                 && info.packageName != "com.google.android.gm"
+                && info.packageName != "com.samsung.android.spay"
+                || info.packageName == "com.yeongil.digitalwellbeing"
+
+    fun isSystemApp(packageName: String): Boolean =
+        isSystemApp(pm.getApplicationInfo(packageName, 0))
 }
