@@ -237,8 +237,7 @@ class AppBlockService : AccessibilityService() {
 
             addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK
-                        or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
             )
         }
 

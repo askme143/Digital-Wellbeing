@@ -6,7 +6,10 @@ import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AppListViewModel(
     private val pmRepo: PackageManagerRepository
@@ -16,17 +19,14 @@ class AppListViewModel(
     val appItemAllChecked = MutableLiveData<Boolean>(false)
 
     // View Related
-    val appRecyclerItemList = liveData {
-        appItemList.asFlow().collect { list ->
-            emit(
-                list.map {
-                    AppItemViewModel(
-                        it.packageName,
-                        it,
-                        appItemAllChecked,
-                        onClickItem
-                    ).toRecyclerItem()
-                })
+    val appRecyclerItemList = appItemList.map { list ->
+        list.map {
+            AppItemViewModel(
+                it.packageName,
+                it,
+                appItemAllChecked,
+                onClickItem
+            ).toRecyclerItem()
         }
     }
 
@@ -47,12 +47,16 @@ class AppListViewModel(
     /* View Model Communication Functions */
     ////////////////////////////////////////
 
-    private fun loadAppList() {
-        if (appItemList.value == null)
-            appItemList.value = pmRepo.getAppInfoList()
+    /* TODO: Change to use cache in repository pattern */
+    fun loadAppList() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val freshList = pmRepo.getAppInfoList()
                 .filter { !pmRepo.isSystemApp(it) }
                 .map { AppItem(it.packageName, pmRepo.getLabel(it), pmRepo.getIcon(it)) }
                 .sortedBy { it.label }
+
+            withContext(Dispatchers.Main) { appItemList.value = freshList }
+        }
     }
 
     fun putAppList(appList: List<String>) {

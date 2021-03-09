@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -79,6 +80,8 @@ class ConfirmDialog : BottomSheetDialogFragment() {
         intent.putExtra(MainService.CHANGED_RULE_ID_KEY, rule.ruleInfo.ruleId)
         requireActivity().startService(intent)
 
+        Toast.makeText(requireContext().applicationContext, "규칙이 생성되었습니다.", Toast.LENGTH_SHORT)
+            .show()
         findNavController().navigateSafe(directions.actionConfirmDialogToMainFragment())
     }
 }

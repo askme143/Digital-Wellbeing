@@ -577,7 +577,7 @@ class MainService : LifecycleService() {
         const val DEFAULT_DND_KEY = "DEFAULT_DND"
 
 
-        val emptySetStr = Json.encodeToString(emptySet<Int>())
+        val emptySetStr = Json.encodeToString(emptySet<Unit>())
         val ruleSetDefaultStr = Json.encodeToString(RuleSet())
     }
 }

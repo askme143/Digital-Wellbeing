@@ -8,11 +8,16 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.yeongil.digitalwellbeing.background.MainService
+import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppListViewModel
+import com.yeongil.digitalwellbeing.viewModelFactory.AppListViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
@@ -20,11 +25,20 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
 
+    private val appListViewModel by viewModels<AppListViewModel> {
+        AppListViewModelFactory(applicationContext)
+    }
+
     @SuppressLint("BatteryLife")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         job = Job()
+
+        /* Do some heavy tasks */
+        lifecycleScope.launch(Dispatchers.Default) {
+            load()
+        }
 
         /* Request to turn off battery optimization for this app */
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager
@@ -49,5 +63,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 startService(intent)
             }
         }
+    }
+
+    private suspend fun load() {
+        appListViewModel.loadAppList()  // load app lists with sorting
     }
 }
