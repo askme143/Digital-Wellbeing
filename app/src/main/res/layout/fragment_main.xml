@@ -68,8 +68,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rule_recycler_view"
             recycler_item_list="@{vm.recyclerItemList}"
+            recycler_item_space="@{true}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -79,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_marginTop="10dp"
             android:text="생성된 방해 관리\n규칙이 없습니다.\n\n규칙 추가 버튼을 터치하여\n규칙을 추가해 주세요"
             android:textAlignment="center"
             android:textSize="16sp"
@@ -97,8 +100,7 @@
             android:textStyle="italic"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rule_recycler_view"
-            />
+            app:layout_constraintTop_toBottomOf="@id/rule_recycler_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

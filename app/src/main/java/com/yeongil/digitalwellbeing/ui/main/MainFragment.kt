@@ -46,22 +46,6 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = ruleInfoViewModel
 
-        binding.ruleRecyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
-            ) {
-                super.getItemOffsets(outRect, view, parent, state)
-                val adapter = parent.adapter ?: return
-                outRect.top = 10
-                if (parent.getChildAdapterPosition(view) != adapter.itemCount - 1) {
-                    outRect.bottom = 10
-                }
-            }
-        })
-
         ruleInfoViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { rid ->
                 descriptionViewModel.init(rid)

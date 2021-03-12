@@ -9,7 +9,7 @@ import com.yeongil.digitalwellbeing.viewModel.item.TriggerActionItem
 // ID is Title of TriggerActionItem
 class TriggerActionItemViewModel(
     override val id: String,
-    val layoutId: Int,
+    private val layoutId: Int,
     val triggerActionItem: TriggerActionItem,
     val onClickItem: (String) -> Unit,
     val onClickItemDelete: (String) -> Unit

@@ -1,14 +1,11 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.rule
 
-import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.*
-import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.data.rule.RuleInfo
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.Event
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
-import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleCountItemViewModel
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.HelpPhraseItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleInfoItemViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -32,7 +29,8 @@ class RuleInfoViewModel(
     }
     val recyclerItemList = ruleInfoItemList.map {
         if (it.isNotEmpty()) {
-            it + RuleCountItemViewModel(it.size).toRecyclerItem()
+            val text = "현재 ${it.size}개의 방해 관리\n규칙이 있습니다."
+            it + HelpPhraseItemViewModel(text).toRecyclerItem()
         } else it
     }
 

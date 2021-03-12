@@ -20,6 +20,7 @@ import com.yeongil.digitalwellbeing.utils.TimeUtils.repeatDayToString
 import com.yeongil.digitalwellbeing.utils.TimeUtils.startEndMinutesToString
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.*
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.HelpPhraseItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.TriggerActionItemViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -43,40 +44,51 @@ class RuleEditViewModel(
     var originalRule: Rule = emptyRule
     val editingRule = MutableLiveData(emptyRule)
 
-    private val triggerActionItemList = MutableLiveData<List<TriggerActionItem>>()
-    val triggerRecyclerItemList = liveData<List<RecyclerItem>> {
-        triggerActionItemList.asFlow().collect { list ->
-            emit(
-                list.filter { it.isTrigger }
-                    .map {
-                        TriggerActionItemViewModel(
-                            it.title,
-                            R.layout.item_trigger_action,
-                            it,
-                            onClickItem,
-                            onClickItemDelete
-                        )
-                    }
-                    .map { it.toRecyclerItem() }
-            )
-        }
+    private val triggerActionItemList = MutableLiveData<List<TriggerActionItem>>(listOf())
+    val triggerRecyclerItemList = triggerActionItemList.map { list ->
+        list.filter { it.isTrigger }
+            .map {
+                TriggerActionItemViewModel(
+                    it.title,
+                    R.layout.item_trigger_action,
+                    it,
+                    onClickItem,
+                    onClickItemDelete
+                )
+            }
+            .map { it.toRecyclerItem() }
     }
-    val actionRecyclerItemList = liveData<List<RecyclerItem>> {
-        triggerActionItemList.asFlow().collect { list ->
-            emit(
-                list.filter { it.isAction }
-                    .map {
-                        TriggerActionItemViewModel(
-                            it.title,
-                            R.layout.item_trigger_action,
-                            it,
-                            onClickItem,
-                            onClickItemDelete
-                        )
-                    }
-                    .map { it.toRecyclerItem() }
-            )
-        }
+    val triggerRecyclerItemListWithHelpPhrase = triggerRecyclerItemList.map {
+        val text =
+            if (it.isNotEmpty())
+                "설정한 조건을 모두 충족하면\n액션을 실행합니다."
+            else
+                "설정한 조건을 모두 충족하면\n액션을 실행합니다.\n\n조건 추가 버튼을 터치하여\n조건을 추가해 주세요."
+
+        it + HelpPhraseItemViewModel(text).toRecyclerItem()
+    }
+    val actionRecyclerItemList = triggerActionItemList.map { list ->
+        list.filter { it.isAction }
+            .map {
+                TriggerActionItemViewModel(
+                    it.title,
+                    R.layout.item_trigger_action,
+                    it,
+                    onClickItem,
+                    onClickItemDelete
+                )
+            }
+            .map { it.toRecyclerItem() }
+    }
+    val actionRecyclerItemListWithHelpPhrase = triggerRecyclerItemList.map {
+        val text =
+            if (it.isNotEmpty())
+                "이전 페이지에서 설정한 조건이\n모두 충족되면 액션이 실행됩니다.\n"
+            else
+                "이전 페이지에서 설정한 조건이\n모두 충족되면 액션이 실행됩니다.\n" +
+                        "\n액션 추가 버튼을 터치하여\n액션을 추가해 주세요."
+
+        it + HelpPhraseItemViewModel(text).toRecyclerItem()
     }
 
     val itemAddEvent = MutableLiveData<Event<Unit>>()
