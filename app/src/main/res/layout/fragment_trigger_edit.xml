@@ -175,38 +175,17 @@
                 app:layout_constraintTop_toBottomOf="@id/activity_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--    <Button-->
-        <!--        android:id="@+id/location_btn"-->
-        <!--        android:layout_width="0dp"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:text="장소"-->
-        <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--        app:layout_constraintRight_toRightOf="parent"-->
-        <!--        app:layout_constraintTop_toBottomOf="@id/header_barrier"-->
-        <!--        app:layout_constraintWidth_default="percent"-->
-        <!--        app:layout_constraintWidth_percent="0.9" />-->
-
-        <!--        <Button-->
-        <!--            android:id="@+id/time_btn"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="시간"-->
-        <!--            app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--            app:layout_constraintRight_toRightOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/location_btn"-->
-        <!--            app:layout_constraintWidth_default="percent"-->
-        <!--            app:layout_constraintWidth_percent="0.9" />-->
-
-        <!--        <Button-->
-        <!--            android:id="@+id/activity_btn"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="활동"-->
-        <!--            app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--            app:layout_constraintRight_toRightOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/time_btn"-->
-        <!--            app:layout_constraintWidth_default="percent"-->
-        <!--            app:layout_constraintWidth_percent="0.9" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="설정할 조건의 타입을 선택하세요."
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_btn" />
 
         <Button
             android:id="@+id/cancel_btn"
