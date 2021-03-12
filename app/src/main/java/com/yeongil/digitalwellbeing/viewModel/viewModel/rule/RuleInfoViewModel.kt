@@ -8,6 +8,7 @@ import com.yeongil.digitalwellbeing.data.rule.RuleInfo
 import com.yeongil.digitalwellbeing.repository.RuleRepository
 import com.yeongil.digitalwellbeing.utils.Event
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleCountItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleInfoItemViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -15,7 +16,6 @@ import kotlinx.coroutines.launch
 class RuleInfoViewModel(
     private val ruleRepo: RuleRepository
 ) : ViewModel() {
-
     val ruleInfoItemList: LiveData<List<RecyclerItem>> = liveData {
         ruleRepo.getRuleInfoListFlow().collect {
             it.map { ruleInfo ->
@@ -30,6 +30,12 @@ class RuleInfoViewModel(
             }.also { recyclerItems -> emit(recyclerItems) }
         }
     }
+    val recyclerItemList = ruleInfoItemList.map {
+        if (it.isNotEmpty()) {
+            it + RuleCountItemViewModel(it.size).toRecyclerItem()
+        } else it
+    }
+
     val itemClickEvent = MutableLiveData<Event<Int>>()
     val itemClickActivate = MutableLiveData<Event<Pair<Int, Boolean>>>()
     val itemClickNotiOnTriggerEvent = MutableLiveData<Event<Pair<Int, Boolean>>>()

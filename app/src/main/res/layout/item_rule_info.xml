@@ -41,25 +41,49 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="title, delete_btn" />
 
-        <CheckedTextView
+        <TextView
+            android:id="@+id/activation_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-            android:checked="@{itemVM.ruleInfo.activated}"
             android:onClick="@{() -> itemVM.onClickActivate()}"
             android:text="규칙 활성화"
+            android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/activation_checkbox"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/activation_checkbox" />
+
+        <CheckBox
+            android:id="@+id/activation_checkbox"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="40dp"
+            android:background="@android:color/transparent"
+            android:checked="@{itemVM.ruleInfo.activated}"
+            android:onClick="@{() -> itemVM.onClickActivate()}"
+            app:layout_constraintLeft_toRightOf="@id/activation_text"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 
-        <CheckedTextView
+        <TextView
+            android:id="@+id/noti_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:onClick="@{() -> itemVM.onClickNotiOnTrigger()}"
+            android:text="사용자 확인 후 규칙 실행"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/noti_checkbox"
+            app:layout_constraintRight_toLeftOf="@id/noti_checkbox"
+            app:layout_constraintTop_toTopOf="@id/noti_checkbox" />
+
+        <CheckBox
+            android:id="@+id/noti_checkbox"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="40dp"
+            android:background="@android:color/transparent"
             android:checked="@{itemVM.ruleInfo.notiOnTrigger}"
             android:onClick="@{() -> itemVM.onClickNotiOnTrigger()}"
-            android:text="사용자 확인 후 액션 수행"
-            android:textSize="16sp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 

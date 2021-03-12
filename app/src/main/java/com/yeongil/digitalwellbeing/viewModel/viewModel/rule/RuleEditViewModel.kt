@@ -258,7 +258,7 @@ class RuleEditViewModel(
         else Html.fromHtml(html)
     }
     val manualReleasingHtml: Spanned = run {
-        val html = "${redFontTagStart}사용자가 규칙을 활성화 시${redFontTagEnd}"
+        val html = "${redFontTagStart}사용자가 규칙을 해제 시${redFontTagEnd}"
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
             Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
