@@ -1,13 +1,10 @@
 package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
-import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -50,12 +47,23 @@ class AppListViewModel(
     /* TODO: Change to use cache in repository pattern */
     fun loadAppList() {
         viewModelScope.launch(Dispatchers.Default) {
+            val oldCheckedList = appItemList.value?.filter { it.checked.value == true } ?: listOf()
             val freshList = pmRepo.getAppInfoList()
                 .filter { !pmRepo.isSystemApp(it) }
                 .map { AppItem(it.packageName, pmRepo.getLabel(it), pmRepo.getIcon(it)) }
                 .sortedBy { it.label }
+                .toMutableList()
 
-            withContext(Dispatchers.Main) { appItemList.value = freshList }
+            withContext(Dispatchers.Main) {
+                oldCheckedList.forEach { oldItem ->
+                    val idx = freshList.indexOfFirst { it.packageName == oldItem.packageName }
+                    if (idx != -1) {
+                        freshList[idx].checked.value = oldItem.checked.value
+                    }
+                }
+
+                appItemList.value = freshList
+            }
         }
     }
 
