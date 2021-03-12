@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.yeongil.digitalwellbeing.viewModel.viewModel.rule.RuleInfoViewModel" />
@@ -13,35 +15,75 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:id="@+id/header_bg"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:background="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:text="나의 규칙들"
+            android:textColor="@color/white"
             android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@id/header_bg"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/header_bg" />
+
 
         <ImageView
             android:id="@+id/add_btn"
-            android:layout_width="40sp"
+            android:layout_width="wrap_content"
             android:layout_height="40sp"
+            android:adjustViewBounds="true"
             android:src="@drawable/ic_add_btn"
+            app:layout_constraintBottom_toBottomOf="@id/header_bg"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/header_bg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="규칙 추가"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/add_btn"
+            app:layout_constraintLeft_toLeftOf="@id/add_btn"
+            app:layout_constraintTop_toTopOf="@id/add_btn" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/header_barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="add_btn, title" />
+            app:constraint_referenced_ids="header_bg" />
 
         <androidx.recyclerview.widget.RecyclerView
             recycler_item_list="@{vm.ruleInfoItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header_barrier" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="생성된 방해 관리\n규칙이 없습니다.\n\n규칙 추가 버튼을 터치하여\n규칙을 추가해 주세요"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="italic"
+
+            android:visibility="@{vm.ruleInfoItemList.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />

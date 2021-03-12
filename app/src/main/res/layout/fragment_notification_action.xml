@@ -28,7 +28,7 @@
             android:id="@+id/add_app_btn"
             android:layout_width="40sp"
             android:layout_height="40sp"
-            android:src="@drawable/ic_add_btn"
+            android:src="@drawable/ic_add_btn_deprecated"
             app:layout_constraintBottom_toBottomOf="@id/add_app_text"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/add_app_text" />
@@ -81,7 +81,7 @@
             android:id="@+id/add_keyword_btn"
             android:layout_width="40sp"
             android:layout_height="40sp"
-            android:src="@drawable/ic_add_btn"
+            android:src="@drawable/ic_add_btn_deprecated"
             app:layout_constraintBottom_toBottomOf="@id/add_keyword_text"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/add_keyword_text" />

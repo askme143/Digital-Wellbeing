@@ -35,7 +35,7 @@
             android:id="@+id/add_btn"
             android:layout_width="40sp"
             android:layout_height="40sp"
-            android:src="@drawable/ic_add_btn"
+            android:src="@drawable/ic_add_btn_deprecated"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
