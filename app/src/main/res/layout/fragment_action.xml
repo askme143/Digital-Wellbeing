@@ -13,43 +13,61 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:id="@+id/header_bg"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:background="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:text="액션 설정하기"
+            android:textColor="@color/white"
             android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@id/header_bg"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이전 페이지에서 설정한 조건이 모두 만족하면\n아래의 액션이 자동으로 실행됩니다."
-            android:textSize="16sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+            app:layout_constraintTop_toTopOf="@id/header_bg" />
 
         <ImageView
             android:id="@+id/add_btn"
-            android:layout_width="40sp"
+            android:layout_width="wrap_content"
             android:layout_height="40sp"
-            android:src="@drawable/ic_add_btn_deprecated"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_add_btn"
+            app:layout_constraintBottom_toBottomOf="@id/header_bg"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/header_bg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="액션 추가"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/add_btn"
+            app:layout_constraintLeft_toLeftOf="@id/add_btn"
+            app:layout_constraintTop_toTopOf="@id/add_btn" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/header_barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="add_btn, description, title" />
+            app:constraint_referenced_ids="add_btn, header_bg, title" />
 
         <androidx.recyclerview.widget.RecyclerView
-            recycler_item_list="@{vm.actionRecyclerItemList}"
+            recycler_item_list="@{vm.actionRecyclerItemListWithHelpPhrase}"
+            recycler_item_space="@{true}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -66,6 +84,7 @@
             android:id="@+id/before_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="이전"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
@@ -74,6 +93,7 @@
             android:id="@+id/next_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:enabled="@{!vm.isActionItemEmpty()}"
             android:text="다음"
             app:layout_constraintBottom_toBottomOf="parent"

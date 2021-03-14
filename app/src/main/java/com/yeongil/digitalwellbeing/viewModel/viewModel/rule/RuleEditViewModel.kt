@@ -80,7 +80,7 @@ class RuleEditViewModel(
             }
             .map { it.toRecyclerItem() }
     }
-    val actionRecyclerItemListWithHelpPhrase = triggerRecyclerItemList.map {
+    val actionRecyclerItemListWithHelpPhrase = actionRecyclerItemList.map {
         val text =
             if (it.isNotEmpty())
                 "이전 페이지에서 설정한 조건이\n모두 충족되면 액션이 실행됩니다.\n"

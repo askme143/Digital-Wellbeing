@@ -67,7 +67,7 @@ class ActionEditFragment : Fragment() {
 
         binding.cancelBtn.setOnClickListener { findNavController().navigateSafe(directions.actionGlobalActionFragment()) }
 
-        binding.appTimeBtn.setOnClickListener {
+        binding.appBlockBtn.setOnClickListener {
             val accessibilityPermission = accessibilityManager
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.DEFAULT)
                 .any {

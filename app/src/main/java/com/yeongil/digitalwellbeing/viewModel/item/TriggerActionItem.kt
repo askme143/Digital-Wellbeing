@@ -19,6 +19,7 @@ const val NOTIFICATION_ACTION_TITLE = "알림 처리"
 const val DND_ACTION_TITLE = "방해 금지 모드"
 const val RINGER_ACTION_TITLE = "소리 모드 변경"
 
+@Suppress("DEPRECATION")
 class TriggerActionItem(val title: String, val description: Spanned) {
     val isTrigger = when (title) {
         LOCATION_TRIGGER_TITLE -> true
@@ -46,98 +47,102 @@ class TriggerActionItem(val title: String, val description: Spanned) {
         LOCATION_TRIGGER_TITLE -> R.drawable.ic_location
         TIME_TRIGGER_TITLE -> R.drawable.ic_time
         ACTIVITY_TRIGGER_TITLE -> R.drawable.ic_activity
-        APP_BLOCK_ACTION_TITLE -> R.drawable.ic_location
-        NOTIFICATION_ACTION_TITLE -> R.drawable.ic_location
-        DND_ACTION_TITLE -> R.drawable.ic_location
-        RINGER_ACTION_TITLE -> R.drawable.ic_location
+        APP_BLOCK_ACTION_TITLE -> R.drawable.ic_phone_block
+        NOTIFICATION_ACTION_TITLE -> R.drawable.ic_notification
+        DND_ACTION_TITLE -> R.drawable.ic_dnd
+        RINGER_ACTION_TITLE -> R.drawable.ic_ringer_mode
         else -> R.drawable.ic_location
     }
 
     constructor(locationTrigger: LocationTrigger) : this(
         LOCATION_TRIGGER_TITLE,
-        ("$boldStart${locationTrigger.locationName}${boldEnd}을(를)${breakTag}" +
-                "중심으로 $boldStart${locationTrigger.range}m$boldEnd 내에 있을 때")
-            .let {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                    Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
-                else Html.fromHtml(it)
-            }
+        locationTrigger.let { triger ->
+            val location = triger.locationName
+            val range = triger.range
+            val html = "$boldStart$location${boldEnd}을(를)$breakTag" +
+                    "중심으로 $boldStart${range}m$boldEnd 내에 있을 때"
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+            else Html.fromHtml(html)
+        }
     )
 
     constructor(timeTrigger: TimeTrigger) : this(
         TIME_TRIGGER_TITLE,
-        ("${boldStart}매주 ${TimeUtils.repeatDayToString(timeTrigger.repeatDay)}요일$breakTag" +
-                "${
-                    TimeUtils.startEndMinutesToString(
-                        timeTrigger.startTimeInMinutes,
-                        timeTrigger.endTimeInMinutes
-                    )
-                }${boldEnd}")
-            .let {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                    Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
-                else Html.fromHtml(it)
-            }
+        timeTrigger.let { trigger ->
+            val repeatDays = TimeUtils.repeatDayToString(trigger.repeatDay)
+            val time = TimeUtils.startEndMinutesToString(
+                timeTrigger.startTimeInMinutes,
+                timeTrigger.endTimeInMinutes
+            )
+            val html = "${boldStart}매주 ${repeatDays}요일$breakTag" +
+                    "$time$boldEnd"
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+            else Html.fromHtml(html)
+        }
     )
 
     constructor(activityTrigger: ActivityTrigger) : this(
         ACTIVITY_TRIGGER_TITLE,
-        "$boldStart${
-            when (activityTrigger.activity) {
+        activityTrigger.let { trigger ->
+            val activity = when (trigger.activity) {
                 DRIVE -> "자동차 운전"
                 BICYCLE -> "자전거 운행"
                 STILL -> "아무것도 하지 않을 때"
                 else -> ""
             }
-        }$boldEnd 감지"
-            .let {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                    Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
-                else Html.fromHtml(it)
-            }
+            val html = "$boldStart$activity$boldEnd 감지"
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+            else Html.fromHtml(html)
+        }
     )
 
     constructor(appBlockAction: AppBlockAction, pmRepo: PackageManagerRepository) : this(
         APP_BLOCK_ACTION_TITLE,
-        (if (appBlockAction.allAppBlock) "모든 앱 실행 시"
-        else appBlockAction.appBlockEntryList.joinToString(", ") {
-            val label = pmRepo.getLabel(it.packageName)
-            val allowedTime = it.allowedTimeInMinutes.let { min ->
-                if (min == 0) "실행 시"
-                else "${TimeUtils.minutesToTimeMinute(min)} 사용 시"
-            }
-            "$label $allowedTime"
-        })
-            .let {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                    Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
-                else Html.fromHtml(it)
-            }
+        appBlockAction.let { action ->
+            val apps =
+                if (action.allAppBlock)
+                    "모든 앱"
+                else action.appBlockEntryList
+                    .joinToString(", ") { pmRepo.getLabel(it.packageName) }
+            val html = "${boldStart}제한한 앱$boldEnd$breakTag" + apps
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+            else Html.fromHtml(html)
+        }
     )
 
     constructor(notificationAction: NotificationAction, pmRepo: PackageManagerRepository) : this(
         NOTIFICATION_ACTION_TITLE,
-        (if (notificationAction.allApp) "모든 앱"
-        else notificationAction.appList.joinToString(", ") { pmRepo.getLabel(it) } +
-                " / " +
-                when (notificationAction.handlingAction) {
-                    0 -> "숨기기"
-                    1 -> "진동"
-                    2 -> "소리"
-                    3 -> "무음"
-                    else -> ""
-                })
-            .let {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                    Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
-                else Html.fromHtml(it)
-            }
+        notificationAction.let { action ->
+            val apps =
+                if (action.allApp) "모든 앱"
+                else action.appList.joinToString(", ") { pmRepo.getLabel(it) }
+            val keywords = action.keywordList
+                .joinToString(", ") {
+                    val keyword = it.keyword
+                    val inclusion = if (it.inclusion) "포함" else "미포함"
+                    "$keyword (${inclusion})"
+                }
+            val html = "${boldStart}지정한 앱:$boldEnd $apps$breakTag" +
+                    "${boldStart}지정한 키워드:$boldEnd $keywords"
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+            else Html.fromHtml(html)
+        }
     )
 
     @Suppress("UNUSED_PARAMETER")
     constructor(dndAction: DndAction) : this(
         DND_ACTION_TITLE,
-        "방해 금지 모드 실행"
+        "${boldStart}방해 금지 모드${boldEnd}를 실행합니다."
             .let {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
                     Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
@@ -147,16 +152,18 @@ class TriggerActionItem(val title: String, val description: Spanned) {
 
     constructor(ringerAction: RingerAction) : this(
         RINGER_ACTION_TITLE,
-        when (ringerAction.ringerMode) {
-            RingerMode.VIBRATE -> "진동 모드로 변경"
-            RingerMode.RING -> "소리 모드로 변경"
-            RingerMode.SILENT -> "무음 모드로 변경"
-        }
-            .let {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                    Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
-                else Html.fromHtml(it)
+        ringerAction.let { action ->
+            val ringerMode = when (action.ringerMode) {
+                RingerMode.VIBRATE -> "진동 모드"
+                RingerMode.RING -> "소리 모드"
+                RingerMode.SILENT -> "무음 모드"
             }
+            val html = "$boldStart$ringerMode${boldEnd}로 변경"
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+            else Html.fromHtml(html)
+        }
     )
 
     companion object {
