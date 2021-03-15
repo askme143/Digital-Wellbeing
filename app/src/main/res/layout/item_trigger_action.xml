@@ -42,7 +42,7 @@
             android:id="@+id/delete_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:onClick="@{() -> itemVM.onClickDelete()}"
+            android:onClick="@{() -> itemVM.onDelete()}"
             android:src="@drawable/ic_garbage"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -11,9 +11,12 @@ object RecyclerViewBindingAdapters {
     @JvmStatic
     fun recyclerItemBind(recyclerView: RecyclerView, data: List<RecyclerItem>?) {
         if (recyclerView.adapter == null) {
-            recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
-            recyclerView.adapter = RecyclerViewAdapter()
-            recyclerView.itemAnimator = null
+            recyclerView.apply {
+                if (layoutManager == null)
+                    layoutManager = LinearLayoutManager(recyclerView.context)
+                recyclerView.adapter = RecyclerViewAdapter()
+                recyclerView.itemAnimator = null
+            }
         }
         (recyclerView.adapter as RecyclerViewAdapter).submitList(data)
     }
@@ -46,5 +49,17 @@ object RecyclerViewBindingAdapters {
                     outRect.bottom = 10
             }
         })
+    }
+
+    @BindingAdapter("recycler_disable_scroll")
+    @JvmStatic
+    fun recyclerDisableScroll(recyclerView: RecyclerView, bool: Boolean) {
+        if (!bool) return
+
+        recyclerView.layoutManager = object : LinearLayoutManager(recyclerView.context) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+        }
     }
 }

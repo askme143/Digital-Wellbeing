@@ -46,7 +46,7 @@ class ConfirmFragment : Fragment() {
                 findNavController().navigateSafe(directions.actionConfirmFragmentToConfirmDialog())
             } else {
                 val rule = ruleEditViewModel.editingRule.value!!
-                descriptionViewModel.init(rule)
+                descriptionViewModel.putRule(rule)
                 ruleEditViewModel.saveRule()
 
                 val intent = Intent(requireContext(), MainService::class.java)

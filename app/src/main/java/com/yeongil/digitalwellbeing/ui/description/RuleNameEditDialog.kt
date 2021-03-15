@@ -3,7 +3,6 @@ package com.yeongil.digitalwellbeing.ui.description
 import android.app.Service
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +36,7 @@ class RuleNameEditDialog : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = descriptionViewModel
 
-        initViewModel()
+        descriptionViewModel.refreshEditingRuleName()
 
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionRuleNameEditDialogToDescriptionFragment())
@@ -66,7 +65,7 @@ class RuleNameEditDialog : BottomSheetDialogFragment() {
 
     private fun editRuleName() {
         /* Submit new rule name */
-        descriptionViewModel.ruleNameSubmit()
+        descriptionViewModel.updateRuleName()
         /* Notify rule change */
         val intent = Intent(requireContext(), MainService::class.java)
         intent.action = MainService.RULE_CHANGE
@@ -75,5 +74,7 @@ class RuleNameEditDialog : BottomSheetDialogFragment() {
         findNavController().navigateSafe(directions.actionRuleNameEditDialogToDescriptionFragment())
     }
 
-    private fun initViewModel() = run { descriptionViewModel.initEditingRuleName() }
+    private fun initViewModel() {
+        descriptionViewModel.refreshEditingRuleName()
+    }
 }

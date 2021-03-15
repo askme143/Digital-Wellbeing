@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/edit_name"
+        android:title="@string/edit_rule_name" />
+    <item
+        android:id="@+id/edit_trigger_action"
+        android:title="@string/edit_trigger_action" />
+</menu>
