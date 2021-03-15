@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="android.text.Html" />
+
         <variable
             name="itemVM"
             type="com.yeongil.digitalwellbeing.viewModel.itemViewModel.NotiKeywordItemViewModel" />
@@ -14,16 +16,15 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> itemVM.onClick()}"
         android:padding="10dp"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="4dp">
+        android:paddingStart="20dp">
 
         <TextView
             android:id="@+id/keyword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{itemVM.notiKeywordItem.keyword}"
+            android:textColor="@color/black"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,11 +32,10 @@
             android:id="@+id/handling_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{itemVM.notiKeywordItem.inclusion ? "을(를) 메시지에 포함한 알림" : "을(를) 메시지에 포함하지 않은 알림"}'
+            android:text='@{itemVM.notiKeywordItem.inclusion ? Html.fromHtml(@string/include) : Html.fromHtml(@string/exclude)}'
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/keyword"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintLeft_toLeftOf="@id/keyword"
+            app:layout_constraintTop_toBottomOf="@id/keyword" />
 
         <CheckBox
             android:id="@+id/handling_checkbox"

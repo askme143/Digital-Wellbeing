@@ -34,6 +34,7 @@ class NotificationActionViewModel(
 
     fun onSelectHandlingAction(action: Int) = run { handlingAction.value = action }
 
+    /* App */
     /* App List */
     val appList = MutableLiveData<List<String>>()
     val notiAppRecyclerItemList = appList.map { list ->
@@ -53,6 +54,11 @@ class NotificationActionViewModel(
             NotiAllAppItemViewModel("ALL_APP", onClickAllAppItemDelete).toRecyclerItem()
         )
     )
+
+    /* No App */
+    val noApp = appList
+        .combineWith(allApp) { first, second -> Pair(first, second) }
+        .map { (appList, allApp) -> allApp?.not() ?: true && appList?.isEmpty() ?: true }
 
     /* Noti Keyword */
     val notiKeywordItemList = MutableLiveData<List<NotiKeywordItem>>()
@@ -74,6 +80,9 @@ class NotificationActionViewModel(
             ).toRecyclerItem()
         }
     }
+
+    /* No Keyword */
+    val noKeyword = notiKeywordItemList.map { it.isEmpty() }
 
     /* Action Exists: if not, block the complete button*/
     val actionExists =

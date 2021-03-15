@@ -77,9 +77,6 @@ class NotificationActionFragment : Fragment() {
             notiKeywordViewModel.putNewNotiKeywordItem()
             findNavController().navigateSafe(directions.actionNotificationActionFragmentToNotiKeywordDialog())
         }
-        binding.handlingBtn.setOnClickListener {
-            findNavController().navigateSafe(directions.actionNotificationActionFragmentToNotiHandlingDialog())
-        }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { onStartGoBack() }
         binding.beforeBtn.setOnClickListener { onStartGoBack() }
         binding.completeBtn.setOnClickListener {

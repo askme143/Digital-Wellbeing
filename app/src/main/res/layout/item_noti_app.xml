@@ -29,9 +29,10 @@
             android:id="@+id/app_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
             android:text="@{itemVM.notiAppItem.label}"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/app_icon"
             app:layout_constraintLeft_toRightOf="@id/app_icon"
             app:layout_constraintTop_toTopOf="@id/app_icon"
@@ -39,10 +40,10 @@
 
         <ImageView
             android:id="@+id/delete_btn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:onClick="@{() -> itemVM.onClickDelete()}"
-            android:src="@drawable/ic_garbage_deprecated"
+            android:src="@drawable/ic_garbage"
             app:layout_constraintBottom_toBottomOf="@id/app_icon"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/app_icon" />
