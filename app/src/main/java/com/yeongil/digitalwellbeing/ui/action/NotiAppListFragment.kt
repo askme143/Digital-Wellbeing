@@ -1,9 +1,11 @@
 package com.yeongil.digitalwellbeing.ui.action
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -48,9 +50,13 @@ class NotiAppListFragment : Fragment() {
         }
 
         binding.beforeBtn.setOnClickListener {
+            hideKeyboard()
+
             findNavController().navigateSafe(directions.actionNotiAppListFragmentToNotificationActionFragment())
         }
         binding.completeBtn.setOnClickListener {
+            hideKeyboard()
+
             val appList = appListViewModel.getAppList()
             if (appList == null) notiActionViewModel.putAllApp()
             else notiActionViewModel.updateAppList(appList)
@@ -59,4 +65,13 @@ class NotiAppListFragment : Fragment() {
 
         return binding.root
     }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        requireActivity().currentFocus?.clearFocus()
+        inputMethodManager.hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
+    }
+
 }

@@ -2,6 +2,7 @@ package com.yeongil.digitalwellbeing.viewModel.viewModel.action
 
 import androidx.lifecycle.*
 import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
+import com.yeongil.digitalwellbeing.utils.combineWith
 import com.yeongil.digitalwellbeing.viewModel.item.AppItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppItemViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ class AppListViewModel(
 ) : ViewModel() {
     // Data
     private val appItemList = MutableLiveData<List<AppItem>>()
+    val searchText = MutableLiveData<String>()
     val appItemAllChecked = MutableLiveData<Boolean>(false)
 
     // View Related
@@ -26,6 +28,18 @@ class AppListViewModel(
             ).toRecyclerItem()
         }
     }
+    val appRecyclerItemListSearched =
+        searchText
+            .combineWith(appRecyclerItemList) { text, list -> Pair(text, list) }
+            .map { (searchText, recyclerItemList) ->
+                val text = searchText ?: ""
+                val list = recyclerItemList ?: listOf()
+
+                list.map { it.viewModel }
+                    .filterIsInstance<AppItemViewModel>()
+                    .filter { it.appItem.label.contains(text, true) }
+                    .map { it.toRecyclerItem() }
+            }
 
     val itemCount = MutableLiveData<Int>(0)
     val onClickItem: (MutableLiveData<Boolean>) -> Unit = {
