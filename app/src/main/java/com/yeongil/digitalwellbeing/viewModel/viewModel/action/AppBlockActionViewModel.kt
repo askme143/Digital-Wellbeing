@@ -7,10 +7,12 @@ import com.yeongil.digitalwellbeing.repository.PackageManagerRepository
 import com.yeongil.digitalwellbeing.utils.ALERT
 import com.yeongil.digitalwellbeing.utils.CLOSE_IMMEDIATE
 import com.yeongil.digitalwellbeing.utils.Event
+import com.yeongil.digitalwellbeing.utils.combineWith
 import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.digitalwellbeing.viewModel.item.AppBlockEntryItem
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AllAppBlockEntryItemViewModel
 import com.yeongil.digitalwellbeing.viewModel.itemViewModel.AppBlockEntryItemViewModel
+import com.yeongil.digitalwellbeing.viewModel.itemViewModel.HelpPhraseItemViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 
@@ -23,55 +25,81 @@ class AppBlockActionViewModel(
     val allAppBlock = MutableLiveData<Boolean>(false)
     val allAppHandlingAction = MutableLiveData<Int>(CLOSE_IMMEDIATE)
 
+    // Indicate whether the user have clicked any item. It's for showing help
+    val isFirstItemClick = MutableLiveData<Boolean>(true)
+
     /* View Related */
     // Recycler Item List
-    val allAppBlockEntryItemList = liveData<List<RecyclerItem>> {
-        allAppHandlingAction.asFlow().collect {
-            val description = when (it) {
+    val allAppBlockEntryItemList = allAppHandlingAction
+        .combineWith(isFirstItemClick) { a, b -> Pair(a, b) }
+        .map { (handlingAction, isFirst) ->
+            val description = when (handlingAction) {
                 CLOSE_IMMEDIATE -> "바로 종료"
                 ALERT -> "경고 알림"
                 else -> ""
             }
-            emit(
+
+            listOf(
+                AllAppBlockEntryItemViewModel(
+                    description = description,
+                    isFirstClick = isFirst ?: true,
+                    onClickItem = onAllAppItemClick,
+                    onClickDeleteItem = onAllAppItemDelete
+                ).toRecyclerItem(),
+                HelpPhraseItemViewModel(
+                    "카드 버튼을 터치하면 모든 앱 \n" +
+                            "사용을 제한하거나 앱 사용시 \n" +
+                            "경고가 표시되도록 설정할 수 \n" +
+                            "있습니다 (전화 및 시스템 앱은 \n" +
+                            "제외) "
+                ).toRecyclerItem()
+            )
+        }
+    val appBlockEntryItemList = appBlockEntryList
+        .combineWith(isFirstItemClick) { a, b -> Pair(a, b) }
+        .map { (entryList, isFirst) ->
+            val list = entryList ?: listOf()
+
+            if (list.isEmpty()) {
                 listOf(
-                    AllAppBlockEntryItemViewModel(
-                        description = description,
-                        onClickItem = onAllAppItemClick,
-                        onClickDeleteItem = onAllAppItemDelete
+                    HelpPhraseItemViewModel(
+                        "제한 앱 추가 버튼을 터치하여 \n" +
+                                "제한할 앱을 추가해 주세요 \n" +
+                                "(동시에 여러 앱 선택 가능) "
                     ).toRecyclerItem()
                 )
-            )
+            } else {
+                list.map {
+                    val item = AppBlockEntryItem(it, pmRepo)
+                    val itemViewModel = AppBlockEntryItemViewModel(
+                        item.packageName,
+                        item,
+                        isFirst ?: true,
+                        onClickItem,
+                        onClickItemDelete
+                    )
+
+                    itemViewModel.toRecyclerItem()
+                } + HelpPhraseItemViewModel(
+                    "카드 버튼을 터치하여 앱 사용 허용 \n" +
+                            "시간을 추가로 설정할 수 있습니다 \n" +
+                            "\n" +
+                            "허용 시간 초과시 앱 사용을 \n" +
+                            "제한하거나 앱 사용시 경고가 \n" +
+                            "표시되도록 설정할 수 있습니다 "
+                ).toRecyclerItem()
+            }
         }
-    }
-    val appBlockEntryItemList = liveData<List<RecyclerItem>> {
-        appBlockEntryList.asFlow().collect { list ->
-            emit(
-                list.map { AppBlockEntryItem(it, pmRepo) }
-                    .map {
-                        AppBlockEntryItemViewModel(
-                            it.packageName,
-                            it,
-                            onClickItem,
-                            onClickItemDelete
-                        )
-                    }
-                    .map { it.toRecyclerItem() }
-            )
-        }
-    }
 
     // Action Exists; for blocking complete button
-    val actionExists = liveData<Boolean> {
-        appBlockEntryList.asFlow().combine(allAppBlock.asFlow()) { list, bool ->
-            Pair(list, bool)
-        }.collect { (list, allAppBlock) ->
-            emit(list.isNotEmpty() || allAppBlock)
-        }
-    }
+    val actionExists = appBlockEntryList
+        .combineWith(allAppBlock) { list, bool -> Pair(list, bool) }
+        .map { (list, allAppBlock) -> list?.isNotEmpty() ?: false || allAppBlock ?: false }
 
     // item click
     val itemClickEvent = MutableLiveData<Event<AppBlockEntry>>()
     private val onClickItem: (String) -> Unit = { packageName ->
+        isFirstItemClick.value = false
         itemClickEvent.value = Event(getAppBlockEntry(packageName))
     }
 
@@ -84,8 +112,10 @@ class AppBlockActionViewModel(
 
     // all app item click
     val allAppItemClickEvent = MutableLiveData<Event<Int>>()
-    private val onAllAppItemClick: () -> Unit =
-        { allAppItemClickEvent.value = Event(getAllAppHandlingAction()) }
+    private val onAllAppItemClick: () -> Unit = {
+        isFirstItemClick.value = false
+        allAppItemClickEvent.value = Event(getAllAppHandlingAction())
+    }
 
     // all app item delete
     private val onAllAppItemDelete: () -> Unit = { allAppBlock.value = false }
@@ -107,6 +137,8 @@ class AppBlockActionViewModel(
         allAppBlock.value = action?.allAppBlock ?: false
         allAppHandlingAction.value = action?.allAppHandlingAction ?: CLOSE_IMMEDIATE
         appBlockEntryList.value = action?.appBlockEntryList ?: listOf()
+
+        isFirstItemClick.value = action == null
     }
 
     //////////////

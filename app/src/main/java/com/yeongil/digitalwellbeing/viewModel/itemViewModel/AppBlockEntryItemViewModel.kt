@@ -10,6 +10,7 @@ import com.yeongil.digitalwellbeing.viewModel.item.AppBlockEntryItem
 class AppBlockEntryItemViewModel(
     override val id: String,
     val appBlockEntryItem: AppBlockEntryItem,
+    val isFirstClick: Boolean,
     val onClickItem: (String) -> Unit,
     val onClickItemDelete: (String) -> Unit,
 ) : RecyclerItemViewModel {
@@ -18,12 +19,12 @@ class AppBlockEntryItemViewModel(
         if (javaClass != other.javaClass) return false
 
         other as AppBlockEntryItemViewModel
-        return appBlockEntryItem == other.appBlockEntryItem
+        return appBlockEntryItem == other.appBlockEntryItem && isFirstClick == other.isFirstClick
     }
 
     override fun isSameContent(other: Any): Boolean {
         other as AppBlockEntryItemViewModel
-        return appBlockEntryItem == other.appBlockEntryItem
+        return appBlockEntryItem == other.appBlockEntryItem && isFirstClick == other.isFirstClick
     }
 
     override fun toRecyclerItem(): RecyclerItem {

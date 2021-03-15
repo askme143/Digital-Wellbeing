@@ -13,6 +13,7 @@ import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionVie
 import com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockEntryViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockActionViewModelFactory
 
+
 class AppBlockEntryDialog : BottomSheetDialogFragment() {
     private var _binding: DialogAppBlockEntryBinding? = null
     private val binding get() = _binding!!
@@ -35,6 +36,8 @@ class AppBlockEntryDialog : BottomSheetDialogFragment() {
 
         binding.timePicker.setIs24HourView(true)
 
+        disableTimePicker()
+
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionAppBlockEntryDialogToAppBlockActionFragment())
         }
@@ -45,5 +48,18 @@ class AppBlockEntryDialog : BottomSheetDialogFragment() {
         }
 
         return binding.root
+    }
+
+    private fun disableTimePicker() {
+        fun disable(viewGroup: ViewGroup) {
+            for (i in 0 until viewGroup.childCount) {
+                val view = viewGroup.getChildAt(i)
+
+                if (view is ViewGroup) disable(view)
+                else view.isEnabled = false
+            }
+        }
+
+        disable(binding.timePicker)
     }
 }

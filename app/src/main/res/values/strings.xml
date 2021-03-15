@@ -4,6 +4,8 @@
     <string name="go_back_confirm_trigger_to_main_new_rule">규칙이 생성되지 않습니다.\n메인 화면으로 이동하시겠습니까?</string>
     <string name="go_back_confirm_trigger_to_main_old_rule">규칙이 수정되지 않습니다.\n메인 화면으로 이동하시겠습니까?</string>
     <string name="app_block_service_description">For Digital Wellbeing App Block Action</string>
+
+    <!--  explanation strings in trigger/action edit fragment  -->
     <string name="location_trigger_explanation"><![CDATA[<i><b>지정한 장소</b>에서 <br>액션을 실행합니다 </i>]]></string>
     <string name="time_trigger_explanation"><![CDATA[<i><b>지정한 시간</b>에 <br>액션을 실행합니다 </i>]]></string>
     <string name="activity_trigger_explanation"><![CDATA[<i><b>선택한 활동을 감지</b>하면 <br>액션을 실행합니다 </i>]]></string>
@@ -11,4 +13,7 @@
     <string name="notification_action_explanation"><![CDATA[<i>특정 앱의 알림이나 특정 키워드와 <br> 관련된 알림을 별도로 처리합니다 </i>]]></string>
     <string name="dnd_action_explanation"><![CDATA[<i>방해 금지 모드를 실행합니다 </i>]]></string>
     <string name="ringer_action_explanation"><![CDATA[<i>원하는 소리 모드로 변경합니다 </i>]]></string>
+
+    <!--  helper string in app block action fragment  -->
+    <string name="app_block_entry_item_first_click"><![CDATA[<i>터치하여 추가 설정 </i>]]></string>
 </resources>

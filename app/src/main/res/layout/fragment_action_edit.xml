@@ -27,7 +27,7 @@
             android:layout_marginStart="20dp"
             android:text="추가할 액션 타입 선택하기"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/header_bg"
             app:layout_constraintLeft_toLeftOf="parent"

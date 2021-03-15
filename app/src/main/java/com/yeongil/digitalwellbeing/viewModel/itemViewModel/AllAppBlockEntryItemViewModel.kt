@@ -9,6 +9,7 @@ import com.yeongil.digitalwellbeing.utils.recyclerViewUtils.RecyclerItemViewMode
 class AllAppBlockEntryItemViewModel(
     override val id: String = "ALL_APP",
     val description: String,
+    val isFirstClick: Boolean,
     val onClickItem: () -> Unit,
     val onClickDeleteItem: () -> Unit
 ) : RecyclerItemViewModel {
@@ -17,12 +18,12 @@ class AllAppBlockEntryItemViewModel(
         if (javaClass != other.javaClass) return false
 
         other as AllAppBlockEntryItemViewModel
-        return this.description == other.description
+        return this.description == other.description && this.isFirstClick == other.isFirstClick
     }
 
     override fun isSameContent(other: Any): Boolean {
         other as AllAppBlockEntryItemViewModel
-        return this.description == other.description
+        return this.description == other.description && this.isFirstClick == other.isFirstClick
     }
 
     override fun toRecyclerItem(): RecyclerItem {
