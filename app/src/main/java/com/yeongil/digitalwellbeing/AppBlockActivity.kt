@@ -14,7 +14,6 @@ import com.yeongil.digitalwellbeing.databinding.DialogAppBlockCloseBinding
 import com.yeongil.digitalwellbeing.viewModel.viewModel.AppBlockViewModel
 import com.yeongil.digitalwellbeing.viewModelFactory.AppBlockViewModelFactory
 
-
 class AppBlockActivity : AppCompatActivity() {
     private val appBlockViewModel: AppBlockViewModel by viewModels {
         AppBlockViewModelFactory(this)
