@@ -59,11 +59,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="이번 사용만 경고 알림을 출력하지 않습니다."
+            android:enabled="@{vm.tempUseEnabled}"
+            android:text='@{vm.tempUseBtnText}'
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/complete_btn"
             app:layout_constraintWidth_default="percent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
