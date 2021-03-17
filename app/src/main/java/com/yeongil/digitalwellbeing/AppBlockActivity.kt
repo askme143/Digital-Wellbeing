@@ -2,12 +2,15 @@ package com.yeongil.digitalwellbeing
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.WindowManager.LayoutParams
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.whenResumed
+import androidx.lifecycle.withResumed
 import com.yeongil.digitalwellbeing.background.AppBlockService
 import com.yeongil.digitalwellbeing.databinding.DialogAppBlockAlertBinding
 import com.yeongil.digitalwellbeing.databinding.DialogAppBlockCloseBinding
@@ -21,6 +24,14 @@ class AppBlockActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /* If current activity is recreated with history, forward to main activity. */
+        if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) {
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            })
+            finishAffinity()
+        }
 
         /* Initialize window settings */
         window.setFlags(LayoutParams.FLAG_NOT_TOUCH_MODAL, LayoutParams.FLAG_NOT_TOUCH_MODAL)
@@ -46,6 +57,14 @@ class AppBlockActivity : AppCompatActivity() {
                 showAlertDialog()
             }
         }
+    }
+
+    override fun onRestart() {
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        })
+        finishAffinity()
+        super.onRestart()
     }
 
     private fun showCloseDialog() {
@@ -80,12 +99,13 @@ class AppBlockActivity : AppCompatActivity() {
             addFlags(
                 Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
                         or Intent.FLAG_ACTIVITY_FORWARD_RESULT
-                        or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP
-                        or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                        or Intent.FLAG_ACTIVITY_NEW_TASK
+                        or Intent.FLAG_ACTIVITY_CLEAR_TASK
             )
         }
 
-        finish()
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
         startActivity(intent)
     }
 

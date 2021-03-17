@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -63,6 +64,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 startService(intent)
             }
         }
+    }
+
+    override fun onResume() {
+        Log.e("hello", "main resume")
+        super.onResume()
     }
 
     private suspend fun load() {
