@@ -9,7 +9,6 @@ import android.os.SystemClock
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.LocationServices
-import com.yeongil.digitalwellbeing.MainActivity
 import com.yeongil.digitalwellbeing.background.MainService.Companion.LOCATION_TRIGGERED_RULES_KEY
 import com.yeongil.digitalwellbeing.data.rule.Rule
 import com.yeongil.digitalwellbeing.dataSource.SequenceNumber
@@ -20,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -34,7 +32,7 @@ class LocationTriggerService : LifecycleService() {
     }
     private val alarmManager by lazy { getSystemService(Context.ALARM_SERVICE) as AlarmManager }
     private val pendingIntent by lazy {
-        Intent(this, MainActivity::class.java).let { intent ->
+        Intent(this, LocationTriggerService::class.java).let { intent ->
             PendingIntent.getService(this, 0, intent, 0)
         }
     }
