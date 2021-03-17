@@ -4,8 +4,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.media.AudioManager
 import android.os.Build
 import android.os.Parcelable
 import android.util.Log
@@ -51,15 +54,8 @@ class MainService : LifecycleService() {
     }
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
-    private fun test() {
-        val intent = Intent(this, AppBlockService::class.java)
-        startService(intent)
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-
-        test()
 
         when (intent?.action) {
             TIME_TRIGGER -> {
@@ -140,17 +136,19 @@ class MainService : LifecycleService() {
             notificationManager.createNotificationChannel(notifyChannel)
         }
 
-//        val ringerChangeReceiver = object : BroadcastReceiver() {
-//            override fun onReceive(context: Context?, intent: Intent?) {
-//                if (intent?.action == AudioManager.RINGER_MODE_CHANGED_ACTION) {
-//                    Toast.makeText(context, "ringer changed", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//        val intentFilter = IntentFilter().apply {
-//            addAction(AudioManager.RINGER_MODE_CHANGED_ACTION)
-//        }
-//        registerReceiver(ringerChangeReceiver, intentFilter)
+        /* Listen for the ringer mode change */
+        val ringerChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == AudioManager.RINGER_MODE_CHANGED_ACTION) {
+                    val ringerIntent = Intent(context, RingerService::class.java).apply {
+                        action = RingerService.RINGER_MODE_CHANGE_DETECTED
+                    }
+                    startService(ringerIntent)
+                }
+            }
+        }
+        val filter = IntentFilter().apply { addAction(AudioManager.RINGER_MODE_CHANGED_ACTION) }
+        registerReceiver(ringerChangeReceiver, filter)
 
         startForeground(1, builder.build())
     }
@@ -207,30 +205,6 @@ class MainService : LifecycleService() {
         sharedPref.edit {
             putString(RULE_SET_KEY, Json.encodeToString(ruleSet))
             putLong(TIMESTAMP_RULE_SET_KEY, System.currentTimeMillis())
-            commit()
-        }
-    }
-
-    private fun getDefaultRingerMode(): RingerMode {
-        return sharedPref.getString(DEFAULT_RINGER_KEY, Json.encodeToString(RingerMode.VIBRATE))
-            ?.let { Json.decodeFromString<RingerMode>(it) }
-            ?: RingerMode.VIBRATE
-    }
-
-    private fun updateDefaultRinger(ringerMode: RingerMode) {
-        sharedPref.edit {
-            putString(DEFAULT_RINGER_KEY, Json.encodeToString(ringerMode))
-            commit()
-        }
-    }
-
-    private fun getDefaultDND(): Boolean {
-        return sharedPref.getBoolean(DEFAULT_DND_KEY, false)
-    }
-
-    private fun updateDefaultDnd(dndMode: Boolean) {
-        sharedPref.edit {
-            putBoolean(DEFAULT_DND_KEY, dndMode)
             commit()
         }
     }
@@ -326,17 +300,10 @@ class MainService : LifecycleService() {
         if (ringerMode != null || dndAction != null || stopRingerAction || stopDndAction) {
             if (ringerMode != null)
                 ringerIntent.putExtra(RingerService.RINGER_EXTRA_KEY, ringerMode as Parcelable)
-            else if (stopRingerAction)
-                ringerIntent.putExtra(
-                    RingerService.RINGER_EXTRA_KEY,
-                    getDefaultRingerMode() as Parcelable
-                )
-
             if (dndAction != null)
                 ringerIntent.putExtra(RingerService.DND_EXTRA_KEY, true)
-            else if (stopDndAction)
-                ringerIntent.putExtra(RingerService.DND_EXTRA_KEY, getDefaultDND())
 
+            ringerIntent.action = RingerService.RUN_ACTION
             startService(ringerIntent)
         }
         /* Notification Action */
