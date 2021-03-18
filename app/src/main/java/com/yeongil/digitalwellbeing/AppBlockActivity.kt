@@ -34,11 +34,7 @@ class AppBlockActivity : AppCompatActivity() {
         }
 
         /* Initialize window settings */
-        window.setFlags(LayoutParams.FLAG_NOT_TOUCH_MODAL, LayoutParams.FLAG_NOT_TOUCH_MODAL)
-        window.setFlags(
-            LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-            LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-        )
+        setFinishOnTouchOutside(false)
 
         /* Initialize */
         val packageName = intent.getStringExtra(PACKAGE_NAME_KEY) ?: return
@@ -129,19 +125,6 @@ class AppBlockActivity : AppCompatActivity() {
 
         finish()
         startService(intent)
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        /* If we've received a touch notification that the user has touched
-         * outside the app, finish the activity. */
-        if (MotionEvent.ACTION_OUTSIDE == event.action) {
-            val isClose = appBlockViewModel.isClose.value ?: false
-            if (isClose) goHome() else extendAllowedTime()
-            return true
-        }
-
-        /* Delegate everything else to Activity */
-        return super.onTouchEvent(event)
     }
 
     companion object {
