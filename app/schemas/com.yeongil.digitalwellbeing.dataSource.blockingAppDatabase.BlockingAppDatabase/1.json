@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4136089933d372b195ae64540ddd4f3c",
+    "identityHash": "e1ee4767b0c9769de3669837f918056c",
     "entities": [
       {
         "tableName": "blocking_apps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `package_name` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `allowed_time_in_minutes` INTEGER NOT NULL, `action` INTEGER NOT NULL, PRIMARY KEY(`package_name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `package_name` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `allowed_time_in_seconds` INTEGER NOT NULL, `action` INTEGER NOT NULL, PRIMARY KEY(`package_name`))",
         "fields": [
           {
             "fieldPath": "rid",
@@ -27,8 +27,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "allowedTimeInMinutes",
-            "columnName": "allowed_time_in_minutes",
+            "fieldPath": "allowedTimeInSeconds",
+            "columnName": "allowed_time_in_seconds",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -52,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4136089933d372b195ae64540ddd4f3c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e1ee4767b0c9769de3669837f918056c')"
     ]
   }
 }

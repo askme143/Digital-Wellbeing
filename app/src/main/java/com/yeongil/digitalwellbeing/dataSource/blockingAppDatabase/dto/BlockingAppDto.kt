@@ -10,14 +10,14 @@ data class BlockingAppDto(
     val rid: Int,
     @PrimaryKey @ColumnInfo(name = "package_name") val packageName: String,
     val timestamp: Long,
-    @ColumnInfo(name = "allowed_time_in_minutes") val allowedTimeInMinutes: Int,
+    @ColumnInfo(name = "allowed_time_in_seconds") val allowedTimeInSeconds: Int,
     val action: BlockingAppActionType,
 ) {
     constructor(blockingApp: BlockingApp) : this(
         blockingApp.rid,
         blockingApp.packageName,
         blockingApp.timestamp,
-        blockingApp.allowedTimeInMinutes,
+        blockingApp.allowedTimeInSeconds,
         when (blockingApp.action) {
             BlockingApp.BlockingAppActionType.CLOSE -> BlockingAppActionType.CLOSE
             BlockingApp.BlockingAppActionType.ALERT -> BlockingAppActionType.ALERT
@@ -31,7 +31,7 @@ data class BlockingAppDto(
             rid,
             packageName,
             timestamp,
-            allowedTimeInMinutes,
+            allowedTimeInSeconds,
             when (action) {
                 BlockingAppActionType.CLOSE -> BlockingApp.BlockingAppActionType.CLOSE
                 BlockingAppActionType.ALERT -> BlockingApp.BlockingAppActionType.ALERT

@@ -56,6 +56,8 @@ class AppBlockService : AccessibilityService() {
             EXTEND_ALLOWED_TIME -> {
                 val packageName = intent.getStringExtra(PACKAGE_NAME_EXTRA_KEY)
                     ?: return START_STICKY
+                val extraSeconds = intent.getIntExtra(EXTRA_SECONDS_EXTRA_KEY, 60)
+
                 serviceScope.launch {
                     val blockingApp = blockingAppRepo.getBlockingAppByPackageName(packageName)
                         ?: return@launch
@@ -63,9 +65,11 @@ class AppBlockService : AccessibilityService() {
                     blockingAppRepo.updateBlockingApp(
                         blockingApp.copy(
                             timestamp = System.currentTimeMillis(),
-                            allowedTimeInMinutes = 1
+                            allowedTimeInSeconds = extraSeconds
                         )
                     )
+
+                    setAlarm(packageName, extraSeconds.toLong() * 1000)
                 }
             }
             /* Remove the package from blocking apps */
@@ -122,7 +126,7 @@ class AppBlockService : AccessibilityService() {
                 action.appBlockEntryList.map {
                     BlockingApp(
                         rid,
-                        it.packageName, System.currentTimeMillis(), it.allowedTimeInMinutes,
+                        it.packageName, System.currentTimeMillis(), it.allowedTimeInMinutes * 60,
                         when (it.handlingAction) {
                             CLOSE_IMMEDIATE -> BlockingAppActionType.CLOSE
                             ALERT -> BlockingAppActionType.ALERT
@@ -144,11 +148,11 @@ class AppBlockService : AccessibilityService() {
 
         /* Check usage time */
         val from = blockingApp.timestamp
-        val allowedTime = blockingApp.allowedTimeInMinutes
+        val allowedTime = blockingApp.allowedTimeInSeconds
         val (usageTime, lastEventType, lastPackageName) =
             getUsageStatus(blockingApp.packageName, from, allowedTime)
 
-        if (usageTime / 1000 / 60 >= blockingApp.allowedTimeInMinutes) {
+        if (usageTime / 1000 >= blockingApp.allowedTimeInSeconds) {
             /* Block Application if the usage time exceeds allowed time */
             if (isAllApp && lastPackageName != null) {
                 blockApp(blockingApp, lastPackageName)
@@ -158,20 +162,9 @@ class AppBlockService : AccessibilityService() {
         } else if (lastEventType == UsageEvents.Event.ACTIVITY_RESUMED) {
             /* If the user is currently using this application,
              * check again after the allowed time has elapsed */
-            val pendingIntent = Intent(this, AppBlockService::class.java)
-                .apply {
-                    action = CHECK_APP_USAGE
-                    putExtra(
-                        PACKAGE_NAME_EXTRA_KEY,
-                        if (isAllApp) BlockingApp.ALL_APP else packageName
-                    )
-                }
-                .let { PendingIntent.getService(this, 0, it, 0) }
-
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + blockingApp.allowedTimeInMinutes * 60 * 1000 - usageTime,
-                pendingIntent
+            setAlarm(
+                if (isAllApp) BlockingApp.ALL_APP else packageName,
+                blockingApp.allowedTimeInSeconds * 1000 - usageTime
             )
         }
     }
@@ -203,7 +196,7 @@ class AppBlockService : AccessibilityService() {
                         usageTime += (appEvent.timeStamp - offset)
                         offset = 0
 
-                        if (usageTime / 1000 / 60 >= limit) break
+                        if (usageTime / 1000 >= limit) break
                     }
                     lastEventType = UsageEvents.Event.ACTIVITY_PAUSED
                     lastPackageName = null
@@ -245,10 +238,27 @@ class AppBlockService : AccessibilityService() {
         startActivity(intent)
     }
 
+    /* Wake up this service after TIME_IN_MILLIS ms and check usage time of PACKAGE_NAME app */
+    private fun setAlarm(packageName: String, timeInMillis: Long) {
+        val pendingIntent = Intent(this, AppBlockService::class.java)
+            .apply {
+                action = CHECK_APP_USAGE
+                putExtra(PACKAGE_NAME_EXTRA_KEY, packageName)
+            }
+            .let { PendingIntent.getService(this, 0, it, 0) }
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + timeInMillis,
+            pendingIntent
+        )
+    }
+
     companion object {
         const val APP_BLOCK_EXTRA_KEY = "APP_BLOCK_EXTRA"
         const val RID_EXTRA_KEY = "RID"
         const val PACKAGE_NAME_EXTRA_KEY = "PACKAGE_NAME"
+        const val EXTRA_SECONDS_EXTRA_KEY = "EXTRA_TIME"
 
         const val CHECK_APP_USAGE = "CHECK_APP_USAGE"
         const val SUBMIT_APP_BLOCK_ACTION = "SUBMIT_APP_BLOCK_ACTION"

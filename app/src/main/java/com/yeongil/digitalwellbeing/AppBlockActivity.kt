@@ -2,15 +2,10 @@ package com.yeongil.digitalwellbeing
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.WindowManager.LayoutParams
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.whenResumed
-import androidx.lifecycle.withResumed
 import com.yeongil.digitalwellbeing.background.AppBlockService
 import com.yeongil.digitalwellbeing.databinding.DialogAppBlockAlertBinding
 import com.yeongil.digitalwellbeing.databinding.DialogAppBlockCloseBinding
@@ -70,7 +65,7 @@ class AppBlockActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.notifyChange()
 
-        binding.tempUseBtn.setOnClickListener { extendAllowedTime() }
+        binding.tempUseBtn.setOnClickListener { extendAllowedTime(60) }
         binding.completeBtn.setOnClickListener { goHome() }
         onBackPressedDispatcher.addCallback { goHome() }
     }
@@ -84,8 +79,8 @@ class AppBlockActivity : AppCompatActivity() {
 
         binding.closeBtn.setOnClickListener { goHome() }
         binding.tempUseBtn.setOnClickListener { allowForThisTime() }
-        binding.completeBtn.setOnClickListener { extendAllowedTime() }
-        onBackPressedDispatcher.addCallback { extendAllowedTime() }
+        binding.completeBtn.setOnClickListener { extendAllowedTime(10) }
+        onBackPressedDispatcher.addCallback { extendAllowedTime(10) }
     }
 
     private fun goHome() {
@@ -105,11 +100,12 @@ class AppBlockActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun extendAllowedTime() {
+    private fun extendAllowedTime(extraSeconds: Int) {
         val packageName = appBlockViewModel.blockingAppKey
         val intent = Intent(this, AppBlockService::class.java).apply {
             action = AppBlockService.EXTEND_ALLOWED_TIME
             putExtra(AppBlockService.PACKAGE_NAME_EXTRA_KEY, packageName)
+            putExtra(AppBlockService.EXTRA_SECONDS_EXTRA_KEY, extraSeconds)
         }
 
         finish()

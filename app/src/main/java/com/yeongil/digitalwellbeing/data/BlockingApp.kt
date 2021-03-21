@@ -4,7 +4,7 @@ data class BlockingApp(
     val rid: Int,
     val packageName: String,
     val timestamp: Long,
-    val allowedTimeInMinutes: Int,
+    val allowedTimeInSeconds: Int,
     val action: BlockingAppActionType,
 ) {
     enum class BlockingAppActionType { CLOSE, ALERT }
