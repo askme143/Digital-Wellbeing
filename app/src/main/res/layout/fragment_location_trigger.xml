@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.LocationTriggerViewModel" />
+            type="com.yeongil.focusaid.viewModel.viewModel.trigger.LocationTriggerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

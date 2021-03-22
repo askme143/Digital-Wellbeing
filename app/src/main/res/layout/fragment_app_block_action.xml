@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockActionViewModel" />
+            type="com.yeongil.focusaid.viewModel.viewModel.action.AppBlockActionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

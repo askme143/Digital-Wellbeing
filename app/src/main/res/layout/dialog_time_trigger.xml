@@ -6,11 +6,11 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="com.yeongil.digitalwellbeing.R" />
+        <import type="com.yeongil.focusaid.R" />
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.viewModel.trigger.TimeTriggerViewModel" />
+            type="com.yeongil.focusaid.viewModel.viewModel.trigger.TimeTriggerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
