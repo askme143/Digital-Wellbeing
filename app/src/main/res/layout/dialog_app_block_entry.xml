@@ -3,11 +3,11 @@
 
     <data>
 
-        <import type="com.yeongil.digitalwellbeing.utils.ConstantsKt" />
+        <import type="com.yeongil.focusaid.utils.ConstantsKt" />
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.AppBlockEntryViewModel" />
+            type="com.yeongil.focusaid.viewModel.viewModel.action.AppBlockEntryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -3,11 +3,11 @@
 
     <data>
 
-        <import type="com.yeongil.digitalwellbeing.data.rule.action.RingerAction.RingerMode" />
+        <import type="com.yeongil.focusaid.data.rule.action.RingerAction.RingerMode" />
 
         <variable
             name="vm"
-            type="com.yeongil.digitalwellbeing.viewModel.viewModel.action.RingerActionViewModel" />
+            type="com.yeongil.focusaid.viewModel.viewModel.action.RingerActionViewModel" />
 
     </data>
 

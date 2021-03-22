@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.yeongil.digitalwellbeing">
+    package="com.yeongil.focusaid">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -29,7 +29,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DigitalWellbeing">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.yeongil.focusaid.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,18 +37,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AppBlockActivity"
+            android:name="com.yeongil.focusaid.AppBlockActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
 
         <service
-            android:name=".background.MainService"
+            android:name="com.yeongil.focusaid.background.MainService"
             android:foregroundServiceType="location" />
-        <service android:name=".background.TimeTriggerService" />
-        <service android:name=".background.LocationTriggerService" />
-        <service android:name=".background.ActivityTriggerService" />
-        <service android:name=".background.RingerService" />
+        <service android:name="com.yeongil.focusaid.background.TimeTriggerService" />
+        <service android:name="com.yeongil.focusaid.background.LocationTriggerService" />
+        <service android:name="com.yeongil.focusaid.background.ActivityTriggerService" />
+        <service android:name="com.yeongil.focusaid.background.RingerService" />
         <service
-            android:name=".background.NotificationBlockService"
+            android:name="com.yeongil.focusaid.background.NotificationBlockService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -57,7 +57,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".background.AppBlockService"
+            android:name="com.yeongil.focusaid.background.AppBlockService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

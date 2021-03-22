@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.main.MainFragment"
+        android:name="com.yeongil.focusaid.ui.main.MainFragment"
         android:label="MainFragment">
         <action
             android:id="@+id/action_mainFragment_to_triggerFragment"
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/triggerFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.TriggerFragment"
+        android:name="com.yeongil.focusaid.ui.trigger.TriggerFragment"
         android:label="TriggerFragment">
         <action
             android:id="@+id/action_triggerFragment_to_mainFragment"
@@ -61,7 +61,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/actionFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.ActionFragment"
+        android:name="com.yeongil.focusaid.ui.action.ActionFragment"
         android:label="ActionFragment">
         <action
             android:id="@+id/action_actionFragment_to_triggerFragment"
@@ -94,7 +94,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/confirmFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.confirm.ConfirmFragment"
+        android:name="com.yeongil.focusaid.ui.confirm.ConfirmFragment"
         android:label="ConfirmFragment">
         <action
             android:id="@+id/action_confirmFragment_to_actionFragment"
@@ -112,7 +112,7 @@
     </fragment>
     <fragment
         android:id="@+id/descriptionFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.description.DescriptionFragment"
+        android:name="com.yeongil.focusaid.ui.description.DescriptionFragment"
         android:label="DescriptionFragment">
         <action
             android:id="@+id/action_descriptionFragment_to_mainFragment"
@@ -128,7 +128,7 @@
     </fragment>
     <dialog
         android:id="@+id/confirmDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.confirm.ConfirmDialog"
+        android:name="com.yeongil.focusaid.ui.confirm.ConfirmDialog"
         android:label="ConfirmDialog">
         <action
             android:id="@+id/action_confirmDialog_to_confirmFragment"
@@ -143,7 +143,7 @@
     </dialog>
     <fragment
         android:id="@+id/triggerEditFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.TriggerEditFragment"
+        android:name="com.yeongil.focusaid.ui.trigger.TriggerEditFragment"
         android:label="TriggerEditFragment">
         <action
             android:id="@+id/action_triggerEditFragment_to_locationTriggerFragment"
@@ -162,7 +162,7 @@
     </fragment>
     <fragment
         android:id="@+id/locationTriggerFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.LocationTriggerFragment"
+        android:name="com.yeongil.focusaid.ui.trigger.LocationTriggerFragment"
         android:label="LocationTriggerFragment">
         <action
             android:id="@+id/action_locationTriggerFragment_to_triggerEditFragment"
@@ -180,7 +180,7 @@
     </fragment>
     <dialog
         android:id="@+id/timeTriggerDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.TimeTriggerDialog"
+        android:name="com.yeongil.focusaid.ui.trigger.TimeTriggerDialog"
         android:label="TimeTriggerDialog">
         <action
             android:id="@+id/action_timeTriggerDialog_to_triggerEditFragment"
@@ -195,7 +195,7 @@
     </dialog>
     <dialog
         android:id="@+id/activityTriggerDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.ActivityTriggerDialog"
+        android:name="com.yeongil.focusaid.ui.trigger.ActivityTriggerDialog"
         android:label="ActivityTriggerDialog">
         <action
             android:id="@+id/action_activityTriggerDialog_to_triggerEditFragment"
@@ -211,7 +211,7 @@
 
     <fragment
         android:id="@+id/actionEditFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.ActionEditFragment"
+        android:name="com.yeongil.focusaid.ui.action.ActionEditFragment"
         android:label="ActionEditFragment">
         <action
             android:id="@+id/action_actionEditFragment_to_appBlockActionFragment"
@@ -228,7 +228,7 @@
     </fragment>
     <fragment
         android:id="@+id/appBlockListFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.AppBlockListFragment"
+        android:name="com.yeongil.focusaid.ui.action.AppBlockListFragment"
         android:label="AppBlockListFragment">
         <action
             android:id="@+id/action_appBlockListFragment_to_appBlockActionFragment"
@@ -238,7 +238,7 @@
     </fragment>
     <fragment
         android:id="@+id/appBlockActionFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.AppBlockActionFragment"
+        android:name="com.yeongil.focusaid.ui.action.AppBlockActionFragment"
         android:label="AppBlockActionFragment">
         <action
             android:id="@+id/action_appBlockActionFragment_to_appBlockListFragment"
@@ -254,7 +254,7 @@
     </fragment>
     <fragment
         android:id="@+id/notiAppListFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.NotiAppListFragment"
+        android:name="com.yeongil.focusaid.ui.action.NotiAppListFragment"
         android:label="NotiAppListFragment">
         <action
             android:id="@+id/action_notiAppListFragment_to_notificationActionFragment"
@@ -264,7 +264,7 @@
     </fragment>
     <dialog
         android:id="@+id/notiKeywordDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.action.NotiKeywordDialog"
+        android:name="com.yeongil.focusaid.ui.action.NotiKeywordDialog"
         android:label="NotiKeywordDialog">
         <action
             android:id="@+id/action_notiKeywordDialog_to_notificationActionFragment"
@@ -274,7 +274,7 @@
     </dialog>
     <fragment
         android:id="@+id/notificationActionFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.action.NotificationActionFragment"
+        android:name="com.yeongil.focusaid.ui.action.NotificationActionFragment"
         android:label="NotificationActionFragment">
         <action
             android:id="@+id/action_notificationActionFragment_to_notiAppListFragment"
@@ -293,7 +293,7 @@
     </fragment>
     <dialog
         android:id="@+id/dndDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.action.DndDialog"
+        android:name="com.yeongil.focusaid.ui.action.DndDialog"
         android:label="DndDialog">
         <action
             android:id="@+id/action_dndDialog_to_actionEditFragment"
@@ -303,7 +303,7 @@
     </dialog>
     <dialog
         android:id="@+id/ringerDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.action.RingerDialog"
+        android:name="com.yeongil.focusaid.ui.action.RingerDialog"
         android:label="RingerDialog">
         <action
             android:id="@+id/action_ringerDialog_to_actionEditFragment"
@@ -313,7 +313,7 @@
     </dialog>
     <dialog
         android:id="@+id/appBlockEntryDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.action.AppBlockEntryDialog"
+        android:name="com.yeongil.focusaid.ui.action.AppBlockEntryDialog"
         android:label="AppBlockEntryDialog">
         <action
             android:id="@+id/action_appBlockEntryDialog_to_appBlockActionFragment"
@@ -323,7 +323,7 @@
     </dialog>
     <dialog
         android:id="@+id/notiHandlingDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.action.NotiHandlingDialog"
+        android:name="com.yeongil.focusaid.ui.action.NotiHandlingDialog"
         android:label="NotiHandlingDialog">
         <action
             android:id="@+id/action_notiHandlingDialog_to_notificationActionFragment"
@@ -333,7 +333,7 @@
     </dialog>
     <dialog
         android:id="@+id/ruleNameEditDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.description.RuleNameEditDialog"
+        android:name="com.yeongil.focusaid.ui.description.RuleNameEditDialog"
         android:label="RuleNameEditDialog">
         <action
             android:id="@+id/action_ruleNameEditDialog_to_descriptionFragment"
@@ -343,7 +343,7 @@
     </dialog>
     <fragment
         android:id="@+id/locationSearchFragment"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.LocationSearchFragment"
+        android:name="com.yeongil.focusaid.ui.trigger.LocationSearchFragment"
         android:label="LocationSearchFragment">
         <action
             android:id="@+id/action_locationSearchFragment_to_locationTriggerFragment"
@@ -353,7 +353,7 @@
     </fragment>
     <dialog
         android:id="@+id/deleteConfirmDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.main.RuleDeleteConfirmDialog"
+        android:name="com.yeongil.focusaid.ui.main.RuleDeleteConfirmDialog"
         android:label="DeleteConfirmDialog">
         <action
             android:id="@+id/action_deleteConfirmDialog_to_mainFragment"
@@ -363,7 +363,7 @@
     </dialog>
     <dialog
         android:id="@+id/emptyTriggerDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.EmptyTriggerDialog"
+        android:name="com.yeongil.focusaid.ui.trigger.EmptyTriggerDialog"
         android:label="EmptyTriggerDialog">
         <action
             android:id="@+id/action_emptyTriggerDialog_to_actionFragment"
@@ -378,7 +378,7 @@
     </dialog>
     <dialog
         android:id="@+id/triggerDeleteConfirmDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.trigger.TriggerDeleteConfirmDialog"
+        android:name="com.yeongil.focusaid.ui.trigger.TriggerDeleteConfirmDialog"
         android:label="TriggerDeleteConfirmDialog">
         <action
             android:id="@+id/action_triggerDeleteConfirmDialog_to_triggerFragment"
@@ -388,7 +388,7 @@
     </dialog>
     <dialog
         android:id="@+id/actionDeleteConfirmDialog"
-        android:name="com.yeongil.digitalwellbeing.ui.action.ActionDeleteConfirmDialog"
+        android:name="com.yeongil.focusaid.ui.action.ActionDeleteConfirmDialog"
         android:label="ActionDeleteConfirmDialog">
         <action
             android:id="@+id/action_actionDeleteConfirmDialog_to_actionFragment"

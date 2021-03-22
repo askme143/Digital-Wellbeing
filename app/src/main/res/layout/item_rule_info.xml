@@ -6,7 +6,7 @@
 
         <variable
             name="itemVM"
-            type="com.yeongil.digitalwellbeing.viewModel.itemViewModel.RuleInfoItemViewModel" />
+            type="com.yeongil.focusaid.viewModel.itemViewModel.RuleInfoItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
