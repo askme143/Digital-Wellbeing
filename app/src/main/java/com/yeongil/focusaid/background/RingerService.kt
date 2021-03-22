@@ -14,7 +14,7 @@ class RingerService : Service() {
     private val audioManager by lazy { getSystemService(AUDIO_SERVICE) as AudioManager }
     private val notificationManager by lazy { getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
     private val sharedPref by lazy {
-        getSharedPreferences("com.yeongil.digitalwellbeing.Ringer_Service", Context.MODE_PRIVATE)
+        getSharedPreferences("com.yeongil.focusaid.Ringer_Service", Context.MODE_PRIVATE)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

@@ -4,4 +4,4 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/app_block_service_description"
     android:notificationTimeout="100"
-    android:settingsActivity="com.yeongil.digitalwellbeing.background.AppBlockService" />
+    android:settingsActivity="com.yeongil.focusaid.background.AppBlockService" />

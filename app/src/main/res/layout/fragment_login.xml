@@ -8,7 +8,7 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Digital Wellbeing"
+        android:text="Focus Aid"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@id/id"
         app:layout_constraintLeft_toLeftOf="parent"

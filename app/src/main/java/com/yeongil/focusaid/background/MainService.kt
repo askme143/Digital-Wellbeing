@@ -116,10 +116,10 @@ class MainService : LifecycleService() {
             /* Create Notification Channel for ForegroundService */
             val serviceChannel = NotificationChannel(
                 CHANNEL_ID,
-                "Digitall Wellbeing Channel",
+                "FocusAid Channel",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Digital Wellbeing Background"
+                description = "FocusAid Background"
                 setShowBadge(false)
             }
             notificationManager.createNotificationChannel(serviceChannel)
@@ -127,10 +127,10 @@ class MainService : LifecycleService() {
             /* Create Notification Channel for Notified Rules */
             val notifyChannel = NotificationChannel(
                 RULE_NOTIFICATION_CHANNEL_ID,
-                "Digitall Wellbeing Rule Confirm Channel",
+                "FocusAid Rule Confirm Channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "Digital Wellbeing Rule Execution Confirm"
+                description = "FocusAid Rule Execution Confirm"
             }
 
             notificationManager.createNotificationChannel(notifyChannel)
@@ -525,7 +525,7 @@ class MainService : LifecycleService() {
         const val RULE_CHANGE = "RULE_CHANGE"
         const val RULE_EXEC_CONFIRM = "RULE_EXEC_CONFIRM"
 
-        const val MAIN_SERVICE_PREF_NAME = "com.yeongil.digitalwellbeing.MAIN_SERVICE"
+        const val MAIN_SERVICE_PREF_NAME = "com.yeongil.focusaid.MAIN_SERVICE"
 
         const val TIMESTAMP_TIME_TRIGGER_KEY = "TIMESTAMP_TIME_TRIGGER"
         const val TIMESTAMP_ACTIVITY_TRIGGER_KEY = "TIMESTAMP_ACTIVITY_TRIGGER"

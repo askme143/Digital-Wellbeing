@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 class SequenceNumber(context: Context) {
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(
-            "com.yeongil.digitalwellbeing.SEQUENCE_NUMBER",
+            "com.yeongil.focusaid.SEQUENCE_NUMBER",
             Context.MODE_PRIVATE
         )
     private val key = "sequence number"

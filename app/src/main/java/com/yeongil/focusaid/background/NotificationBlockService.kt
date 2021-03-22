@@ -62,7 +62,7 @@ class NotificationBlockService : NotificationListenerService() {
 
     companion object {
         const val NOTI_BLOCK_SERVICE_PREF_NAME =
-            "com.yeongil.digitalwellbeing.NOTIFICATION_BLOCK_SERVICE"
+            "com.yeongil.focusaid.NOTIFICATION_BLOCK_SERVICE"
 
         const val NOTIFICATION_ACTION_KEY = "NOTIFICATION_ACTION"
         const val NOTIFICATION_EXTRA_KEY = "NOTIFICATION_EXTRA"

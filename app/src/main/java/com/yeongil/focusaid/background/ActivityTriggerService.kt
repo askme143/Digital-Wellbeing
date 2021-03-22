@@ -113,7 +113,7 @@ class ActivityTriggerService : LifecycleService() {
     }
 
     companion object {
-        const val ACTIVITY_SERVICE_PREF_NAME = "com.yeongil.digitalwellbeing.ACTIVITY_SERVICE"
+        const val ACTIVITY_SERVICE_PREF_NAME = "com.yeongil.focusaid.ACTIVITY_SERVICE"
 
         const val TIMESTAMP_CURRENT_ACTIVITIES_KEY = "TIMESTAMP_CURRENT_ACTIVITIES"
         const val CURRENT_ACTIVITIES_KEY = "CURRENT_ACTIVITIES"
