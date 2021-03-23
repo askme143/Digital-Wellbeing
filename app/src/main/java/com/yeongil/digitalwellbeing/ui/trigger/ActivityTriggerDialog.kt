@@ -1,10 +1,16 @@
 package com.yeongil.digitalwellbeing.ui.trigger
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -34,6 +40,8 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = activityTriggerViewModel
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            checkPermission()
         initViewModel()
 
         binding.cancelBtn.setOnClickListener {
@@ -57,5 +65,41 @@ class ActivityTriggerDialog : BottomSheetDialogFragment() {
         if (trigger != null) {
             activityTriggerViewModel.init(trigger)
         } else activityTriggerViewModel.init()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun checkPermission() {
+        if (
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACTIVITY_RECOGNITION)) {
+                Toast.makeText(
+                    context, "활동 감지를 위해서는 권한을 설정해야 합니다",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            requestPermissions(arrayOf(Manifest.permission.ACTIVITY_RECOGNITION), 1)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == 1) {
+            if (!(grantResults.isNotEmpty() &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            ) {
+                findNavController().navigateSafe(directions.actionActivityTriggerDialogToTriggerEditFragment())
+                Toast.makeText(
+                    context, "활동 감지를 위해서는 설정에서 신체 활동 권한을 허용해야 합니다",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 }
