@@ -8,7 +8,6 @@ import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Intent
 import android.os.SystemClock
-import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import com.yeongil.focusaid.AppBlockActivity
 import com.yeongil.focusaid.data.BlockingApp
@@ -66,7 +65,8 @@ class AppBlockService : AccessibilityService() {
                     blockingAppRepo.updateBlockingApp(
                         blockingApp.copy(
                             timestamp = System.currentTimeMillis(),
-                            allowedTimeInSeconds = extraSeconds
+                            allowedTimeInSeconds = extraSeconds,
+                            allowedForThisExecution = false,
                         )
                     )
 
@@ -74,10 +74,22 @@ class AppBlockService : AccessibilityService() {
                 }
             }
             /* Remove the package from blocking apps */
-            ALLOW_FOR_THIS_TIME -> {
+            ALLOW_FOR_THIS_EXECUTION -> {
                 val packageName = intent.getStringExtra(PACKAGE_NAME_EXTRA_KEY)
                     ?: return START_STICKY
-                serviceScope.launch { blockingAppRepo.deleteBlockingApp(packageName) }
+
+                serviceScope.launch {
+                    val blockingApp = blockingAppRepo.getBlockingAppByPackageName(packageName)
+                        ?: return@launch
+
+                    blockingAppRepo.updateBlockingApp(
+                        blockingApp.copy(
+                            timestamp = System.currentTimeMillis(),
+                            allowedTimeInSeconds = 0,
+                            allowedForThisExecution = true
+                        )
+                    )
+                }
             }
         }
 
@@ -114,7 +126,10 @@ class AppBlockService : AccessibilityService() {
             blockingAppRepo.insertBlockingApp(
                 BlockingApp(
                     rid,
-                    BlockingApp.ALL_APP, System.currentTimeMillis(), 0,
+                    BlockingApp.ALL_APP,
+                    System.currentTimeMillis(),
+                    0,
+                    false,
                     when (action.allAppHandlingAction) {
                         CLOSE_IMMEDIATE -> BlockingAppActionType.CLOSE
                         ALERT -> BlockingAppActionType.ALERT
@@ -127,7 +142,10 @@ class AppBlockService : AccessibilityService() {
                 action.appBlockEntryList.map {
                     BlockingApp(
                         rid,
-                        it.packageName, System.currentTimeMillis(), it.allowedTimeInMinutes * 60,
+                        it.packageName,
+                        System.currentTimeMillis(),
+                        it.allowedTimeInMinutes * 60,
+                        false,
                         when (it.handlingAction) {
                             CLOSE_IMMEDIATE -> BlockingAppActionType.CLOSE
                             ALERT -> BlockingAppActionType.ALERT
@@ -150,15 +168,19 @@ class AppBlockService : AccessibilityService() {
         /* Check usage time */
         val from = blockingApp.timestamp
         val allowedTime = blockingApp.allowedTimeInSeconds
-        val (usageTime, lastEventType, lastPackageName) =
+        val allowedForThisExecution = blockingApp.allowedForThisExecution
+        val (usageTime, lastEventType, interrupted, lastPackageName) =
             getUsageStatus(blockingApp.packageName, from, allowedTime)
 
         if (usageTime / 1000 >= blockingApp.allowedTimeInSeconds) {
-            /* Block Application if the usage time exceeds allowed time */
-            if (isAllApp && lastPackageName != null) {
-                blockApp(blockingApp, lastPackageName)
-            } else if (!isAllApp) {
-                blockApp(blockingApp, packageName)
+            /* Check if this execution was allowed. Otherwise,
+            * Block Application if the usage time exceeds allowed time. */
+            if (!allowedForThisExecution || interrupted) {
+                if (isAllApp && lastPackageName != null) {
+                    blockApp(blockingApp, lastPackageName)
+                } else if (!isAllApp) {
+                    blockApp(blockingApp, packageName)
+                }
             }
         } else if (lastEventType == UsageEvents.Event.ACTIVITY_RESUMED) {
             /* If the user is currently using this application,
@@ -174,12 +196,13 @@ class AppBlockService : AccessibilityService() {
         packageName: String,
         from: Long,
         limit: Int
-    ): Triple<Long, Int, String?> {
+    ): UsageStatus {
         val events = usageStatsManager.queryEvents(from, System.currentTimeMillis())
 
         var offset = from
         var usageTime: Long = 0
         var lastEventType = UsageEvents.Event.ACTIVITY_PAUSED
+        var interrupted = false
         var lastPackageName: String? = null
 
         while (events.hasNextEvent()) {
@@ -196,6 +219,7 @@ class AppBlockService : AccessibilityService() {
                     if (offset != 0L) {
                         usageTime += (appEvent.timeStamp - offset)
                         offset = 0
+                        interrupted = true
 
                         if (usageTime / 1000 >= limit) break
                     }
@@ -211,7 +235,7 @@ class AppBlockService : AccessibilityService() {
         }
         if (offset != 0L) usageTime += System.currentTimeMillis() - offset
 
-        return Triple(usageTime, lastEventType, lastPackageName)
+        return UsageStatus(usageTime, lastEventType, interrupted, lastPackageName)
     }
 
     /* Block app by showing a dialog window. */
@@ -255,6 +279,13 @@ class AppBlockService : AccessibilityService() {
         )
     }
 
+    private data class UsageStatus(
+        val usageTime: Long = 0,
+        val lastEventType: Int = UsageEvents.Event.ACTIVITY_PAUSED,
+        val interrupted: Boolean = false,
+        val lastPackageName: String? = null,
+    )
+
     companion object {
         const val APP_BLOCK_EXTRA_KEY = "APP_BLOCK_EXTRA"
         const val RID_EXTRA_KEY = "RID"
@@ -264,6 +295,6 @@ class AppBlockService : AccessibilityService() {
         const val CHECK_APP_USAGE = "CHECK_APP_USAGE"
         const val SUBMIT_APP_BLOCK_ACTION = "SUBMIT_APP_BLOCK_ACTION"
         const val EXTEND_ALLOWED_TIME = "EXTEND_ALLOWED_TIME"
-        const val ALLOW_FOR_THIS_TIME = "ALLOW_FOR_THIS_TIME"
+        const val ALLOW_FOR_THIS_EXECUTION = "ALLOW_FOR_THIS_EXECUTION"
     }
 }

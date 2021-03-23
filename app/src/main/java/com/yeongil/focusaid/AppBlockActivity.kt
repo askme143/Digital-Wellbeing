@@ -115,7 +115,7 @@ class AppBlockActivity : AppCompatActivity() {
     private fun allowForThisTime() {
         val packageName = appBlockViewModel.blockingAppKey
         val intent = Intent(this, AppBlockService::class.java).apply {
-            action = AppBlockService.ALLOW_FOR_THIS_TIME
+            action = AppBlockService.ALLOW_FOR_THIS_EXECUTION
             putExtra(AppBlockService.PACKAGE_NAME_EXTRA_KEY, packageName)
         }
 
