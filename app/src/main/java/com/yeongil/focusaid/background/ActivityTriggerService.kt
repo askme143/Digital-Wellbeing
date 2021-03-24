@@ -2,9 +2,11 @@ package com.yeongil.focusaid.background
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
@@ -32,7 +34,7 @@ class ActivityTriggerService : LifecycleService() {
     }
     private val activityClient by lazy { ActivityRecognition.getClient(this) }
     private val pendingIntent by lazy {
-        Intent(this, MainActivity::class.java).let {
+        Intent(this, ActivityTriggerService::class.java).let {
             PendingIntent.getService(this, 0, it, 0)
         }
     }
@@ -48,7 +50,8 @@ class ActivityTriggerService : LifecycleService() {
             else
                 activityClient.requestActivityUpdates(5 * 1000, pendingIntent)
 
-            val activityResult = ActivityRecognitionResult.extractResult(intent)
+            val activityResult =
+                if (intent != null) ActivityRecognitionResult.extractResult(intent) else null
             val currActivities =
                 if (activityResult != null) {
                     getActivitiesFromResult(activityResult).also { updateCurrentActivities(it) }
