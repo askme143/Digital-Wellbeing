@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,7 +26,7 @@ class LocationSearchFragment : Fragment() {
     private val directions = LocationSearchFragmentDirections
 
     private val locationTriggerViewModel by activityViewModels<LocationTriggerViewModel> {
-        LocationTriggerViewModelFactory()
+        LocationTriggerViewModelFactory(requireContext())
     }
     private val locationSearchViewModel by activityViewModels<LocationSearchViewModel> {
         LocationSearchViewModelFactory()
@@ -40,6 +41,7 @@ class LocationSearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = locationSearchViewModel
 
+        /* Observe visible display size to adjust the layout when the keyboard is shown */
         binding.root.viewTreeObserver.addOnGlobalLayoutListener {
             val rect = Rect()
             activity?.window?.decorView?.getWindowVisibleDisplayFrame(rect).also {
@@ -49,6 +51,11 @@ class LocationSearchFragment : Fragment() {
 
         binding.resultRecyclerView.addItemDecoration(DividerItemDecoration(context, 1))
 
+        locationSearchViewModel.searchErrorEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                Toast.makeText(context, "검색 결과를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
         locationSearchViewModel.itemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 locationTriggerViewModel.submitSearchResult(it)

@@ -55,74 +55,59 @@ class NotificationBlockService : NotificationListenerService() {
     }
 
     private fun checkKeyword(extra: Bundle, keywordList: List<KeywordEntry>): Boolean {
-        val messages by lazy {
+        val messages =
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 extra.get(Notification.EXTRA_MESSAGES)
                     ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
             } else ""
-        }
-        val extraMessagingPerson by lazy {
+        val extraMessagingPerson =
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                 extra.get(Notification.EXTRA_MESSAGING_PERSON)
                     ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
             } else ""
-        }
-        val conversationTitle by lazy {
+        val conversationTitle =
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 extra.get(Notification.EXTRA_CONVERSATION_TITLE)
                     ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
             } else ""
-        }
-        val title by lazy {
-            extra.get(Notification.EXTRA_TITLE)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
-        }
-        val titleBig by lazy {
-            extra.get(Notification.EXTRA_TITLE_BIG)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
-        }
-        val text by lazy {
-            extra.get(Notification.EXTRA_TEXT)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() }
-                ?: ""
-        }
-        val subText by lazy {
-            extra.get(Notification.EXTRA_SUB_TEXT)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() }
-                ?: ""
-        }
-        val summaryText by lazy {
-            extra.get(Notification.EXTRA_SUMMARY_TEXT)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
-        }
-        val infoText by lazy {
-            extra.get(Notification.EXTRA_INFO_TEXT)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
-        }
-        val bigText by lazy {
-            extra.get(Notification.EXTRA_BIG_TEXT)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
-        }
-        val textLines by lazy {
-            extra.get(Notification.EXTRA_TEXT_LINES)
-                ?.let { if (it is SpannableString) it.toString() else it.toString() } ?: ""
-        }
+        val title = extra.get(Notification.EXTRA_TITLE)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
+        val titleBig = extra.get(Notification.EXTRA_TITLE_BIG)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
+        val text = extra.get(Notification.EXTRA_TEXT)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
+        val subText = extra.get(Notification.EXTRA_SUB_TEXT)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
+        val summaryText = extra.get(Notification.EXTRA_SUMMARY_TEXT)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
+        val infoText = extra.get(Notification.EXTRA_INFO_TEXT)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
+        val bigText = extra.get(Notification.EXTRA_BIG_TEXT)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
+        val textLines = extra.get(Notification.EXTRA_TEXT_LINES)
+            ?.let { if (it is SpannableString) it.toString() else it.toString() }
+            ?: ""
 
-        val strList by lazy {
-            listOf(
-                messages,
-                extraMessagingPerson,
-                conversationTitle,
-                title,
-                titleBig,
-                text,
-                subText,
-                summaryText,
-                infoText,
-                bigText,
-                textLines
-            )
-        }
+        val strList = listOf(
+            messages,
+            extraMessagingPerson,
+            conversationTitle,
+            title,
+            titleBig,
+            text,
+            subText,
+            summaryText,
+            infoText,
+            bigText,
+            textLines
+        )
 
         return keywordList.any {
             val keyword = it.keyword
