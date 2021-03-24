@@ -41,14 +41,16 @@ class RuleNameEditDialog : BottomSheetDialogFragment() {
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionRuleNameEditDialogToDescriptionFragment())
         }
-        binding.completeBtn.setOnClickListener {
-            editRuleName()
-        }
+        binding.completeBtn.setOnClickListener { descriptionViewModel.updateRuleName() }
         binding.ruleName.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == KeyEvent.KEYCODE_ENDCALL) {
-                editRuleName()
+                descriptionViewModel.updateRuleName()
                 false
             } else true
+        }
+
+        descriptionViewModel.nameUpdateEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { onComplete() }
         }
 
         return binding.root
@@ -63,18 +65,12 @@ class RuleNameEditDialog : BottomSheetDialogFragment() {
         inputMethodManager.showSoftInput(binding.ruleName, 0)
     }
 
-    private fun editRuleName() {
-        /* Submit new rule name */
-        descriptionViewModel.updateRuleName()
+    private fun onComplete() {
         /* Notify rule change */
         val intent = Intent(requireContext(), MainService::class.java)
         intent.action = MainService.RULE_CHANGE
         requireActivity().startService(intent)
         /* Navigate */
         findNavController().navigateSafe(directions.actionRuleNameEditDialogToDescriptionFragment())
-    }
-
-    private fun initViewModel() {
-        descriptionViewModel.refreshEditingRuleName()
     }
 }

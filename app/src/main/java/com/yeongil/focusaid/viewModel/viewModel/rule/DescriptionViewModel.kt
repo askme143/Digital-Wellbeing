@@ -11,6 +11,7 @@ import com.yeongil.focusaid.viewModel.item.TriggerActionItem
 import com.yeongil.focusaid.viewModel.itemViewModel.TriggerActionItemViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DescriptionViewModel(
     private val ruleRepo: RuleRepository,
@@ -27,6 +28,9 @@ class DescriptionViewModel(
     val onItemClick: (String) -> Unit = { id ->
         itemClickEvent.value = Event(id)
     }
+
+    val nameUpdateEvent = MutableLiveData<Event<Unit>>()
+    val errorText = MutableLiveData<String>()
 
     val triggerRecyclerItemList = _rule.map { rule ->
         val triggerActionItemList = listOfNotNull(
@@ -61,12 +65,24 @@ class DescriptionViewModel(
 
     val editingRuleName = MutableLiveData<String>()
     fun updateRuleName() {
-        val rule = _rule.value!!
+        val oldRule = _rule.value!!
         val ruleName = editingRuleName.value!!
-        _rule.value = rule.copy(ruleInfo = rule.ruleInfo.copy(ruleName = ruleName))
-
-        viewModelScope.launch(Dispatchers.IO) {
-            ruleRepo.updateRuleInfo(rule.ruleInfo.copy(ruleName = ruleName))
+        if (ruleName == "")
+            errorText.value = "규칙 이름을 설정하세요."
+        else {
+            _rule.value = oldRule.copy(ruleInfo = oldRule.ruleInfo.copy(ruleName = ruleName))
+            viewModelScope.launch(Dispatchers.IO) {
+                val success = ruleRepo.updateRuleInfo(oldRule.ruleInfo.copy(ruleName = ruleName))
+                withContext(Dispatchers.Main) {
+                    if (success) {
+                        errorText.value = ""
+                        nameUpdateEvent.value = Event(Unit)
+                    } else {
+                        errorText.value = "이미 존재하는 이름입니다."
+                        _rule.value = oldRule
+                    }
+                }
+            }
         }
     }
 
@@ -86,5 +102,6 @@ class DescriptionViewModel(
 
     fun refreshEditingRuleName() {
         editingRuleName.value = ruleName.value
+        errorText.value = ""
     }
 }

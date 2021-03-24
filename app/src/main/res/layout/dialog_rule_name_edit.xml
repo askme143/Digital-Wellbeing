@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="규칙 이름을 설정해 주세요."
-                android:textSize="30sp"
+                android:textSize="24sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,17 +43,29 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="4dp"
+                android:hint="규칙 이름"
+                android:imeOptions="actionDone"
                 android:inputType="text"
                 android:maxLines="1"
-                android:imeOptions="actionDone"
-                android:hint="규칙 이름"
                 android:text="@={vm.editingRuleName}"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@id/btn_barrier"
+                app:layout_constraintBottom_toTopOf="@id/error_text"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/header_barrier"
                 app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/error_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.errorText}"
+                android:textColor="#DC143C"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/btn_barrier"
+                app:layout_constraintLeft_toLeftOf="@id/rule_name"
+                app:layout_constraintTop_toBottomOf="@id/rule_name" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/btn_barrier"
@@ -66,10 +78,11 @@
                 android:id="@+id/cancel_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="취소"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rule_name"
+                app:layout_constraintTop_toBottomOf="@id/error_text"
                 app:layout_constraintWidth_default="percent"
                 app:layout_constraintWidth_percent="0.45" />
 
@@ -77,10 +90,11 @@
                 android:id="@+id/complete_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="완료"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rule_name"
+                app:layout_constraintTop_toBottomOf="@id/error_text"
                 app:layout_constraintWidth_default="percent"
                 app:layout_constraintWidth_percent="0.45" />
         </androidx.constraintlayout.widget.ConstraintLayout>

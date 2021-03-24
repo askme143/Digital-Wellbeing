@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RuleInfoDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertRuleInfo(ruleInfoDto: RuleInfoDto)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun updateRuleInfo(ruleInfoDto: RuleInfoDto)
 
     @Query("DELETE FROM rule_info WHERE rid = :rid")

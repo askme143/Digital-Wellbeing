@@ -24,6 +24,7 @@ import com.yeongil.focusaid.viewModel.itemViewModel.TriggerActionItemViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RuleEditViewModel(
     private val ruleRepo: RuleRepository,
@@ -102,6 +103,8 @@ class RuleEditViewModel(
         actionRecyclerItemList.asFlow().collect { emit(it.isEmpty()) }
     }
 
+    val errorText = MutableLiveData<String>("")
+    val insertEvent = MutableLiveData<Event<Unit>>()
     val ruleName = MutableLiveData<String>()
 
     /* For Confirm Fragment */
@@ -296,6 +299,10 @@ class RuleEditViewModel(
         initTriggerActionItemList()
     }
 
+    fun clearErrorMessage() {
+        errorText.value = ""
+    }
+
     private fun initTriggerActionItemList() {
         triggerActionItemList.value = listOf()
 
@@ -318,12 +325,23 @@ class RuleEditViewModel(
 
     fun saveRule() {
         val rule = editingRule.value ?: return
-        val ruleInfo = rule.ruleInfo.copy(ruleName = ruleName.value ?: "규칙 이름")
+        val ruleInfo = rule.ruleInfo.copy(ruleName = ruleName.value ?: "")
         val savingRule = rule.copy(ruleInfo = ruleInfo)
         editingRule.value = savingRule
 
-        viewModelScope.launch(Dispatchers.IO) {
-            ruleRepo.insertOrUpdateRule(savingRule)
+        if (ruleInfo.ruleName == "")
+            errorText.value = "규칙 이름을 설정하세요."
+        else {
+            viewModelScope.launch(Dispatchers.IO) {
+                val success = ruleRepo.insertOrUpdateRule(savingRule)
+                withContext(Dispatchers.Main) {
+                    if (success) {
+                        errorText.value = ""
+                        insertEvent.value = Event(Unit)
+                    } else
+                        errorText.value = "이미 존재하는 이름입니다."
+                }
+            }
         }
     }
 
