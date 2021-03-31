@@ -26,33 +26,16 @@ class AppBlockEntryViewModel : ViewModel() {
         this.handlingAction.value = handlingAction
     }
 
-    val doNotAllow = pickerHour
-        .combineWith(pickerMinute) { h, m -> Pair(h, m) }
-        .map { (h, m) -> h == 0 && m == 0 }
-    var oldHour: Int = 0
-    var oldMinute: Int = 0
-
     fun onDoNotAllowClick() {
-        val oldValue = doNotAllow.value ?: false
-        if (oldValue) {
-            pickerHour.value = oldHour
-            pickerMinute.value = oldMinute
-        } else {
-            oldHour = pickerHour.value ?: 0
-            oldMinute = pickerMinute.value ?: 0
-            pickerHour.value = 0
-            pickerMinute.value = 0
-        }
+        pickerHour.value = 0
+        pickerMinute.value = 0
     }
 
     fun putAppBlockEntry(entry: AppBlockEntry) {
         packageName = entry.packageName
 
         pickerHour.value = entry.allowedTimeInMinutes / 60
-        oldHour = entry.allowedTimeInMinutes / 60
-
         pickerMinute.value = entry.allowedTimeInMinutes % 60
-        oldMinute = entry.allowedTimeInMinutes % 60
 
         handlingAction.value = entry.handlingAction
     }

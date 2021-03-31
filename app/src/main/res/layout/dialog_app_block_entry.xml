@@ -48,40 +48,18 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hour_min_text" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/do_not_allow_checkbox"
-            android:layout_width="34dp"
-            android:layout_height="wrap_content"
-            android:checked="@{vm.doNotAllow}"
-            android:clickable="false"
-            app:layout_constraintBottom_toTopOf="@id/line"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintLeft_toLeftOf="@id/time_picker"
-            app:layout_constraintRight_toLeftOf="@id/do_not_allow_text"
-            app:layout_constraintTop_toBottomOf="@id/time_picker" />
-
-        <TextView
-            android:id="@+id/do_not_allow_text"
+        <Button
+            android:id="@+id/do_not_allow_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> vm.onDoNotAllowClick()}"
-            android:text="사용을 허용하지 않음"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@id/do_not_allow_checkbox"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintLeft_toRightOf="@id/do_not_allow_checkbox"
+            android:text="사용을 허용하지 않음\n(허용 시간을 0분으로 설정합니다)"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/line"
+            app:layout_constraintLeft_toLeftOf="@id/time_picker"
             app:layout_constraintRight_toRightOf="@id/time_picker"
-            app:layout_constraintTop_toTopOf="@id/do_not_allow_checkbox" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:onClick="@{() -> vm.onDoNotAllowClick()}"
-            app:layout_constraintBottom_toBottomOf="@id/do_not_allow_checkbox"
-            app:layout_constraintLeft_toLeftOf="@id/do_not_allow_checkbox"
-            app:layout_constraintRight_toRightOf="@id/do_not_allow_checkbox"
-            app:layout_constraintTop_toTopOf="@id/do_not_allow_checkbox" />
+            app:layout_constraintTop_toBottomOf="@id/time_picker" />
 
         <View
             android:id="@+id/line"
@@ -91,7 +69,7 @@
             android:background="#454545"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/do_not_allow_checkbox"
+            app:layout_constraintTop_toBottomOf="@id/do_not_allow_btn"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.8" />
 

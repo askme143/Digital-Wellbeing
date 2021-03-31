@@ -1,5 +1,6 @@
 package com.yeongil.focusaid.ui.action
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,7 @@ class AppBlockEntryDialog : BottomSheetDialogFragment() {
         binding.vm = appBlockEntryViewModel
 
         binding.timePicker.setIs24HourView(true)
+        binding.doNotAllowBtn.setBackgroundColor(Color.GRAY)
 
         disableTimePicker()
 
