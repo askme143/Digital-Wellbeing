@@ -1,9 +1,12 @@
 package com.yeongil.focusaid.ui.main
 
+import android.content.Context
+import android.graphics.Point
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +23,10 @@ class RuleDeleteConfirmDialog : DialogFragment() {
 
     private val ruleInfoViewModel by activityViewModels<RuleInfoViewModel> {
         RuleInfoViewModelFactory(requireContext())
+    }
+
+    private val windowManager by lazy {
+        requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 
     override fun onCreateView(
@@ -40,5 +47,23 @@ class RuleDeleteConfirmDialog : DialogFragment() {
         }
 
         return binding.root
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onResume() {
+        super.onResume()
+
+        val display =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R)
+                requireContext().display ?: return
+            else
+                windowManager.defaultDisplay ?: return
+
+        val size = Point()
+        display.getSize(size)
+
+        val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
+        params?.width = (size.x * 0.75).toInt()
+        dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 }
