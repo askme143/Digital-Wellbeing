@@ -55,6 +55,8 @@ class NotificationBlockService : NotificationListenerService() {
     }
 
     private fun checkKeyword(extra: Bundle, keywordList: List<KeywordEntry>): Boolean {
+        if (keywordList.isEmpty()) return true
+
         val messages =
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 extra.get(Notification.EXTRA_MESSAGES)
