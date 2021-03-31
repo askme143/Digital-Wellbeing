@@ -61,9 +61,9 @@ class RuleEditViewModel(
     val triggerRecyclerItemListWithHelpPhrase = triggerRecyclerItemList.map {
         val text =
             if (it.isNotEmpty())
-                "설정한 조건을 모두 충족하면\n액션을 실행합니다."
+                "설정한 조건을 모두 충족하면 \n액션을 실행합니다."
             else
-                "설정한 조건을 모두 충족하면\n액션을 실행합니다.\n\n조건 추가 버튼을 터치하여\n조건을 추가해 주세요."
+                "설정한 조건을 모두 충족하면 \n액션을 실행합니다. \n\n조건 추가 버튼을 터치하여 \n조건을 추가해 주세요. "
 
         it + HelpPhraseItemViewModel(text).toRecyclerItem()
     }
@@ -83,10 +83,10 @@ class RuleEditViewModel(
     val actionRecyclerItemListWithHelpPhrase = actionRecyclerItemList.map {
         val text =
             if (it.isNotEmpty())
-                "이전 페이지에서 설정한 조건이\n모두 충족되면 액션이 실행됩니다.\n"
+                "이전 페이지에서 설정한 조건이 \n모두 충족되면 액션이 실행됩니다. \n"
             else
-                "이전 페이지에서 설정한 조건이\n모두 충족되면 액션이 실행됩니다.\n" +
-                        "\n액션 추가 버튼을 터치하여\n액션을 추가해 주세요."
+                "이전 페이지에서 설정한 조건이 \n모두 충족되면 액션이 실행됩니다. \n" +
+                        "\n액션 추가 버튼을 터치하여 \n액션을 추가해 주세요. "
 
         it + HelpPhraseItemViewModel(text).toRecyclerItem()
     }
