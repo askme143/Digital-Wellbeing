@@ -63,22 +63,63 @@ class TimeTriggerService : LifecycleService() {
     }
 
     private fun checkTimeRules(rules: List<Rule>): Pair<Set<Int>, Int?> {
-        /* TODO: Consider for the case if the start time is bigger than or equals to the end time. */
         val timeRules = rules.filter { it.timeTrigger != null }
         if (timeRules.isEmpty()) return Pair(emptySet(), null)
 
         val calendar = Calendar.getInstance()
-        val curr = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        val today = calendar.get(Calendar.DAY_OF_WEEK) - 1
+        val yesterday = (today + 6) % 7
+        val curr = calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60 +
+                calendar.get(Calendar.MINUTE) * 60 +
+                calendar.get(Calendar.SECOND)
 
-        val checkResults = timeRules.map {
-            with(it.timeTrigger!!) {
-                val triggered = curr in startTimeInMinutes until endTimeInMinutes
-                val timeRemaining = when {
-                    curr < startTimeInMinutes -> (startTimeInMinutes - curr) * 60
-                    curr < endTimeInMinutes -> (endTimeInMinutes - curr) * 60
-                    else -> (startTimeInMinutes + 24 * 60 - curr) * 60
-                }
-                Triple(triggered, it.ruleInfo.ruleId, timeRemaining)
+        val secInDay = 24 * 60 * 60
+
+        val checkResults = timeRules.map { rule ->
+            with(rule.timeTrigger!!) {
+                val start = startTimeInMinutes * 60
+                val end = endTimeInMinutes * 60
+
+                val repeatDayFromToday = repeatDay.drop(today) + repeatDay.slice(0 until today + 1)
+                val untilNearestStart =
+                    if (repeatDayFromToday[0] && curr < start) start - curr
+                    else (repeatDayFromToday.indexOfFirst { it } - 1) * secInDay + (secInDay - curr) + start
+
+                val (triggered, timeRemaining) =
+                    when {
+                        start == end -> {
+                            when {
+                                repeatDay[yesterday] && repeatDay[today] && curr - start in 0..29 ->
+                                    Pair(false, 30 - curr + start)
+                                curr < end && repeatDay[yesterday] ->
+                                    Pair(true, end - curr)
+                                start <= curr && repeatDay[today] ->
+                                    Pair(true, secInDay - curr + end)
+                                else ->
+                                    Pair(false, untilNearestStart)
+                            }
+                        }
+                        start < end -> {
+                            when {
+                                repeatDay[today] && curr in start until end ->
+                                    Pair(true, end - curr)
+                                else ->
+                                    Pair(false, untilNearestStart)
+                            }
+                        }
+                        else -> {
+                            when {
+                                curr < end && repeatDay[yesterday] ->
+                                    Pair(true, end - curr)
+                                start < curr && repeatDay[today] ->
+                                    Pair(true, secInDay - curr + end)
+                                else ->
+                                    Pair(false, untilNearestStart)
+                            }
+                        }
+                    }
+
+                Triple(triggered, rule.ruleInfo.ruleId, timeRemaining)
             }
         }
         val triggeredSet = checkResults.filter { it.first }.map { it.second }.toSet()

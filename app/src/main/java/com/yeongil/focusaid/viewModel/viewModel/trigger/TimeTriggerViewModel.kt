@@ -18,7 +18,7 @@ class TimeTriggerViewModel : ViewModel() {
     val endPickerHour = MutableLiveData(0)
     val endPickerMin = MutableLiveData(0)
 
-    val repeatDay = (1..10).map { MutableLiveData(false) }
+    val repeatDay = (1..7).map { MutableLiveData(false) }
 
     private val startTimeInMinutes = liveData {
         startPickerHour.asFlow()
@@ -66,14 +66,13 @@ class TimeTriggerViewModel : ViewModel() {
     fun onClickStartTab() {
         startPickerVisible.value = true
     }
+
     fun onClickFinishTab() {
         startPickerVisible.value = false
     }
 
     fun onClickRepeatDay(index: Int) {
-        val trueDayNum = repeatDay.fold(0) { acc, day ->
-            if (day.value == true) acc + 1 else acc
-        }
+        val trueDayNum = repeatDay.count { it.value == true }
         val dayItem = repeatDay[index]
 
         if (trueDayNum >= 2 || dayItem.value != true) {
