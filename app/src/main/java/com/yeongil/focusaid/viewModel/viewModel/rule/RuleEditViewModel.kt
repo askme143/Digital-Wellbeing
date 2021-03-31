@@ -181,20 +181,31 @@ class RuleEditViewModel(
 
         val notificationHtml = rule.notificationAction?.let { action ->
             val header = "알림 숨김:"
-            val appText =
-                if (action.allApp)
-                    "모든 앱에서 발생한 알림 중"
-                else
-                    action.appList.joinToString(", ") { pmRepo.getLabel(it) } +
-                            " 앱에서 발생한 알림 중,"
-            val keywordText =
-                action.keywordList.joinToString("하거나$breakTag") {
-                    val inclusion = if (it.inclusion) "포함" else "미포함"
-                    "${it.keyword}을(를) $inclusion"
-                } + "한 알림은 숨김"
             val end = if (dndHtml != null || ringerHtml != null) breakTag else ""
 
-            "$header$breakTag$appText$breakTag$keywordText$end"
+            if (action.keywordList.isEmpty()) {
+                val appText = if (action.allApp)
+                    "모든 앱에서 발생한 알림은 숨김"
+                else
+                    action.appList.joinToString(", ") { pmRepo.getLabel(it) } +
+                            " 앱에서 발생한 알림은 숨김"
+
+                "$header$breakTag$appText$end"
+            } else {
+                val appText =
+                    if (action.allApp)
+                        "모든 앱에서 발생한 알림 중"
+                    else
+                        action.appList.joinToString(", ") { pmRepo.getLabel(it) } +
+                                " 앱에서 발생한 알림 중"
+                val keywordText =
+                    action.keywordList.joinToString("하거나$breakTag") {
+                        val inclusion = if (it.inclusion) "포함" else "미포함"
+                        "${it.keyword}을(를) $inclusion"
+                    } + "한 알림은 숨김"
+
+                "$header$breakTag$appText$breakTag$keywordText$end"
+            }
         }
 
         val appBlockHtml = rule.appBlockAction?.let { action ->
