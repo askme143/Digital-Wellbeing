@@ -48,10 +48,10 @@
 
         <ImageView
             android:id="@+id/delete_btn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:onClick="@{() -> itemVM.onClickDelete()}"
-            android:src="@drawable/ic_garbage_deprecated"
+            android:src="@drawable/ic_garbage"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

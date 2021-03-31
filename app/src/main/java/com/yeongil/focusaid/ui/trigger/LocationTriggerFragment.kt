@@ -1,9 +1,7 @@
 package com.yeongil.focusaid.ui.trigger
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.yeongil.focusaid.R
-import com.yeongil.focusaid.data.rule.trigger.LocationTrigger
 import com.yeongil.focusaid.databinding.FragmentLocationTriggerBinding
 import com.yeongil.focusaid.utils.NetworkStatus
 import com.yeongil.focusaid.utils.navigateSafe
@@ -39,16 +34,13 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         RuleEditViewModelFactory(requireContext())
     }
     private val locationTriggerViewModel by activityViewModels<LocationTriggerViewModel> {
-        LocationTriggerViewModelFactory()
+        LocationTriggerViewModelFactory(requireContext())
     }
     private val locationSearchViewModel by activityViewModels<LocationSearchViewModel> {
         LocationSearchViewModelFactory()
     }
 
     private lateinit var map: GoogleMap
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    private val isNetworkAvailable by lazy { NetworkStatus.isNetworkAvailable(requireContext()) }
 
     private var marker: Marker? = null
     private var circle: Circle? = null
@@ -62,7 +54,18 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         binding.vm = locationTriggerViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        checkPermission()
+        if (checkPermission()) {
+            val fromSearchFragment =
+                locationTriggerViewModel.fromSearchFragment.getContentIfNotHandled() ?: false
+
+            if (!fromSearchFragment) {
+                locationTriggerViewModel.putLocationTrigger(ruleEditViewModel.editingRule.value?.locationTrigger)
+            }
+
+            startGoogleMap()
+        } else {
+            requestPermission()
+        }
 
         return binding.root
     }
@@ -73,74 +76,49 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
+        if (!checkPermission()) return
+
         map = googleMap
         map.isMyLocationEnabled = true
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
-        initViewModel()
         setListeners()
     }
 
-    @SuppressLint("MissingPermission")
-    private fun initViewModel() {
-        if (!locationTriggerViewModel.editing) {
-            val trigger = ruleEditViewModel.editingRule.value?.locationTrigger
-            if (trigger != null) {
-                locationTriggerViewModel.init(trigger)
-            } else {
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    location?.let {
-                        val latLng = LatLng(it.latitude, it.longitude)
-                        locationTriggerViewModel.init(latLng)
-                        locationSearchViewModel.init(latLng)
-                    }
-                }
-            }
-            locationTriggerViewModel.editing = true
-        }
-    }
-
     private fun setListeners() {
-        if (isNetworkAvailable) {
+        if (checkNetwork()) {
             locationTriggerViewModel.latLng.observe(viewLifecycleOwner) {
-                moveCamera(it)
+                /* Latitude or longitude changed. */
+                val noAnimation =
+                    locationTriggerViewModel.noAnimation.getContentIfNotHandled() ?: false
+                moveCamera(it, noAnimation)
                 drawMarker(it)
             }
             locationTriggerViewModel.locationTrigger.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    drawCircle(it)
-                }
+                /* Latitude or longitude or range changed. */
+                if (it != null) drawCircle(LatLng(it.latitude, it.longitude), it.range)
             }
-            map.setOnMapLongClickListener {
-                locationTriggerViewModel.latLng.value = it
-                locationTriggerViewModel.doReverseGeocoding()
+            locationTriggerViewModel.internetErrorEvent.observe(viewLifecycleOwner) { event ->
+                event.getContentIfNotHandled()?.let {
+                    Toast.makeText(context, "인터넷 연결을 확인하세요.", Toast.LENGTH_SHORT).show()
+                }
             }
 
+            map.setOnMapLongClickListener {
+                /* Change coordinate to a long clicked position */
+                locationTriggerViewModel.updateLatLng(it)
+            }
             binding.searchBar.setOnClickListener {
                 val keyword = locationTriggerViewModel.locationName.value!!
+                val latLng = locationTriggerViewModel.latLng.value!!
                 locationSearchViewModel.setKeyword(keyword)
+                locationSearchViewModel.putLatLng(latLng)
                 findNavController().navigateSafe(directions.actionLocationTriggerFragmentToLocationSearchFragment())
             }
-            binding.beforeBtn.setOnClickListener {
-                locationTriggerViewModel.editing = false
-                val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
-                if (goToEditFragment)
-                    findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
-                else
-                    findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
-            }
-            binding.completeBtn.setOnClickListener {
-                locationTriggerViewModel.editing = false
-                locationTriggerViewModel.locationTrigger.value?.let {
-                    ruleEditViewModel.addTriggerAction(it)
-                }
-                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
-            }
+            binding.completeBtn.isEnabled = true
         } else {
+            binding.completeBtn.isEnabled = false
+
             binding.beforeBtn.setOnClickListener {
-                locationTriggerViewModel.editing = false
                 val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
                 if (goToEditFragment)
                     findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
@@ -148,17 +126,33 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
                     findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             }
             map.setOnMapLongClickListener {
-                Toast.makeText(requireContext(), "연결된 인터넷이 없습니다.", Toast.LENGTH_LONG).show()
+                if (checkNetwork()) setListeners()
+                else Toast.makeText(requireContext(), "인터넷 연결을 확인하세요.", Toast.LENGTH_LONG).show()
             }
+
+            Toast.makeText(requireContext(), "인터넷 연결을 확인하세요.", Toast.LENGTH_LONG).show()
+        }
+
+        binding.beforeBtn.setOnClickListener {
+            val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
+            if (goToEditFragment)
+                findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
+            else
+                findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
+        }
+        binding.completeBtn.setOnClickListener {
+            locationTriggerViewModel.locationTrigger.value?.let {
+                ruleEditViewModel.addTriggerAction(it)
+            }
+            findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
         }
     }
 
-    private fun moveCamera(latLng: LatLng) {
+    private fun moveCamera(latLng: LatLng, noAnimation: Boolean) {
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16F)
 
-        locationTriggerViewModel.cameraMoveFast.getContentIfNotHandled()
-            ?.let { map.moveCamera(cameraUpdate) }
-            ?: map.animateCamera(cameraUpdate)
+        if (noAnimation) map.moveCamera(cameraUpdate)
+        else map.animateCamera(cameraUpdate)
     }
 
     private fun drawMarker(latLng: LatLng) {
@@ -168,9 +162,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         marker = map.addMarker(newMarker)
     }
 
-    private fun drawCircle(locationTrigger: LocationTrigger) {
-        val latLng = LatLng(locationTrigger.latitude, locationTrigger.longitude)
-        val range = locationTrigger.range
+    private fun drawCircle(latLng: LatLng, range: Int) {
         val newCircle = CircleOptions()
             .center(latLng)
             .radius(range.toDouble())
@@ -181,23 +173,25 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         circle = map.addCircle(newCircle)
     }
 
-    private fun checkPermission() {
-        if (
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            startGoogleMap()
-        } else {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(
-                    context, "위치 설정을 위해서는 권한을 설정해야 합니다",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+    private fun checkNetwork(): Boolean {
+        return NetworkStatus.isNetworkAvailable(requireContext())
+    }
+
+    private fun checkPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermission() {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Toast.makeText(
+                context, "위치 설정을 위해서는 권한을 설정해야 합니다",
+                Toast.LENGTH_LONG
+            ).show()
         }
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
     }
 
     override fun onRequestPermissionsResult(
@@ -210,6 +204,17 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
                         grantResults[0] == PackageManager.PERMISSION_GRANTED)
             ) {
                 startGoogleMap()
+            } else {
+                Toast.makeText(
+                    context, "위치 설정을 위해서는 권한을 설정해야 합니다",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                val goToEditFragment = ruleEditViewModel.editingRule.value?.locationTrigger == null
+                if (goToEditFragment)
+                    findNavController().navigateSafe(directions.actionLocationTriggerFragmentToTriggerEditFragment())
+                else
+                    findNavController().navigateSafe(directions.actionGlobalTriggerFragment())
             }
         }
     }

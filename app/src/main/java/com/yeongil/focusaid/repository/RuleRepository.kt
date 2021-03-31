@@ -1,5 +1,6 @@
 package com.yeongil.focusaid.repository
 
+import android.database.sqlite.SQLiteConstraintException
 import com.yeongil.focusaid.data.rule.Rule
 import com.yeongil.focusaid.data.rule.RuleInfo
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.RuleDao
@@ -21,7 +22,7 @@ class RuleRepository(
     private val sequenceNumber: SequenceNumber,
     private val ruleDao: RuleDao,
 ) {
-    suspend fun insertOrUpdateRule(rule: Rule) {
+    suspend fun insertOrUpdateRule(rule: Rule): Boolean {
         val rid =
             if (rule.ruleInfo.ruleId != TEMPORAL_RULE_ID)
                 rule.ruleInfo.ruleId
@@ -44,10 +45,16 @@ class RuleRepository(
             rule.ringerAction?.let { RingerActionDto(rid, it) },
         )
 
-        if (rule.ruleInfo.ruleId == TEMPORAL_RULE_ID) {
-            ruleDao.insertRule(ruleDto)
+        return if (rule.ruleInfo.ruleId == TEMPORAL_RULE_ID) {
+            try {
+                ruleDao.insertRule(ruleDto)
+                true
+            } catch (exception: SQLiteConstraintException) {
+                false
+            }
         } else {
             ruleDao.updateRule(ruleDto)
+            true
         }
     }
 
@@ -55,8 +62,13 @@ class RuleRepository(
         ruleDao.deleteRuleByRid(rid)
     }
 
-    suspend fun updateRuleInfo(ruleInfo: RuleInfo) {
-        ruleDao.updateRuleInfo(RuleInfoDto(ruleInfo.ruleId, ruleInfo))
+    suspend fun updateRuleInfo(ruleInfo: RuleInfo): Boolean {
+        return try {
+            ruleDao.updateRuleInfo(RuleInfoDto(ruleInfo.ruleId, ruleInfo))
+            true
+        } catch (exception: SQLiteConstraintException) {
+            false
+        }
     }
 
     suspend fun getRuleByRid(rid: Int): Rule {

@@ -124,12 +124,16 @@ class TriggerActionItem(val title: String, val description: Spanned) {
             val apps =
                 if (action.allApp) "모든 앱"
                 else action.appList.joinToString(", ") { pmRepo.getLabel(it) }
-            val keywords = action.keywordList
-                .joinToString(", ") {
-                    val keyword = it.keyword
-                    val inclusion = if (it.inclusion) "포함" else "미포함"
-                    "$keyword (${inclusion})"
-                }
+            val keywords =
+                if (action.keywordList.isEmpty())
+                    "없음"
+                else
+                    action.keywordList
+                        .joinToString(", ") {
+                            val keyword = it.keyword
+                            val inclusion = if (it.inclusion) "포함" else "미포함"
+                            "$keyword (${inclusion})"
+                        }
             val html = "${boldStart}지정한 앱:$boldEnd $apps$breakTag" +
                     "${boldStart}지정한 키워드:$boldEnd $keywords"
 

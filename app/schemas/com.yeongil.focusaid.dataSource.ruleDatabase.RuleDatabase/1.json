@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f72800a1c5ae1ddf09fd9532968b4cb2",
+    "identityHash": "c1fcfb5d08184442fc6789c2b20e608e",
     "entities": [
       {
         "tableName": "rule_info",
@@ -45,7 +45,16 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_rule_info_rule_name",
+            "unique": true,
+            "columnNames": [
+              "rule_name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rule_info_rule_name` ON `${TABLE_NAME}` (`rule_name`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -294,7 +303,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f72800a1c5ae1ddf09fd9532968b4cb2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c1fcfb5d08184442fc6789c2b20e608e')"
     ]
   }
 }

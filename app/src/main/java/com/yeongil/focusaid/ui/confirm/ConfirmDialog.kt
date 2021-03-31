@@ -40,11 +40,16 @@ class ConfirmDialog : BottomSheetDialogFragment() {
         binding.cancelBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionConfirmDialogToConfirmFragment())
         }
-        binding.completeBtn.setOnClickListener { onComplete() }
+        binding.completeBtn.setOnClickListener { ruleEditViewModel.saveRule() }
         binding.ruleName.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == KeyEvent.KEYCODE_ENDCALL) {
-                onComplete(); false
+                ruleEditViewModel.saveRule(); false
             } else true
+        }
+
+        ruleEditViewModel.clearErrorMessage()
+        ruleEditViewModel.insertEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { onComplete() }
         }
 
         return binding.root
@@ -60,8 +65,6 @@ class ConfirmDialog : BottomSheetDialogFragment() {
     }
 
     private fun onComplete() {
-        ruleEditViewModel.saveRule()
-
         val rule = ruleEditViewModel.editingRule.value!!
         val intent = Intent(requireContext(), MainService::class.java)
         intent.action = MainService.RULE_CHANGE

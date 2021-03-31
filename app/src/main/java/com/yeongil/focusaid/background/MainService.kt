@@ -252,7 +252,8 @@ class MainService : LifecycleService() {
                 else -> "현재 [${rulesToRun[0].ruleInfo.ruleName}]외 ${rulesToRun.size - 1}개 규칙이 수행 중입니다."
             }
         )
-        startForeground(1, builder.build())
+        builder.setWhen(System.currentTimeMillis())
+        notificationManager.notify(1, builder.build())
 
         /* make notification */
         notifyRules(rulesToNotify, ruleSet.notified)

@@ -29,7 +29,7 @@ class RuleInfoViewModel(
     }
     val recyclerItemList = ruleInfoItemList.map {
         if (it.isNotEmpty()) {
-            val text = "현재 ${it.size}개의 방해 관리\n규칙이 있습니다."
+            val text = "현재 ${it.size}개의 방해 관리 \n규칙이 있습니다."
             it + HelpPhraseItemViewModel(text).toRecyclerItem()
         } else it
     }

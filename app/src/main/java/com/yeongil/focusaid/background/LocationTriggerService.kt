@@ -79,7 +79,7 @@ class LocationTriggerService : LifecycleService() {
         if (locationRules.isEmpty()) return Pair(setOf(), null)
 
         val location = try {
-            fusedLocationClient.getLastLocation()
+            fusedLocationClient.getLastLocation() ?: return Pair(setOf(), 0f)
         } catch (error: Exception) {
             return Pair(setOf(), 0f)
         }

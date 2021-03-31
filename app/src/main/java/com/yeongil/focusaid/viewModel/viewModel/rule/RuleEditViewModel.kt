@@ -24,6 +24,7 @@ import com.yeongil.focusaid.viewModel.itemViewModel.TriggerActionItemViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RuleEditViewModel(
     private val ruleRepo: RuleRepository,
@@ -60,9 +61,9 @@ class RuleEditViewModel(
     val triggerRecyclerItemListWithHelpPhrase = triggerRecyclerItemList.map {
         val text =
             if (it.isNotEmpty())
-                "설정한 조건을 모두 충족하면\n액션을 실행합니다."
+                "설정한 조건을 모두 충족하면 \n액션을 실행합니다."
             else
-                "설정한 조건을 모두 충족하면\n액션을 실행합니다.\n\n조건 추가 버튼을 터치하여\n조건을 추가해 주세요."
+                "설정한 조건을 모두 충족하면 \n액션을 실행합니다. \n\n조건 추가 버튼을 터치하여 \n조건을 추가해 주세요. "
 
         it + HelpPhraseItemViewModel(text).toRecyclerItem()
     }
@@ -82,10 +83,10 @@ class RuleEditViewModel(
     val actionRecyclerItemListWithHelpPhrase = actionRecyclerItemList.map {
         val text =
             if (it.isNotEmpty())
-                "이전 페이지에서 설정한 조건이\n모두 충족되면 액션이 실행됩니다.\n"
+                "이전 페이지에서 설정한 조건이 \n모두 충족되면 액션이 실행됩니다. \n"
             else
-                "이전 페이지에서 설정한 조건이\n모두 충족되면 액션이 실행됩니다.\n" +
-                        "\n액션 추가 버튼을 터치하여\n액션을 추가해 주세요."
+                "이전 페이지에서 설정한 조건이 \n모두 충족되면 액션이 실행됩니다. \n" +
+                        "\n액션 추가 버튼을 터치하여 \n액션을 추가해 주세요. "
 
         it + HelpPhraseItemViewModel(text).toRecyclerItem()
     }
@@ -102,6 +103,8 @@ class RuleEditViewModel(
         actionRecyclerItemList.asFlow().collect { emit(it.isEmpty()) }
     }
 
+    val errorText = MutableLiveData<String>("")
+    val insertEvent = MutableLiveData<Event<Unit>>()
     val ruleName = MutableLiveData<String>()
 
     /* For Confirm Fragment */
@@ -178,20 +181,31 @@ class RuleEditViewModel(
 
         val notificationHtml = rule.notificationAction?.let { action ->
             val header = "알림 숨김:"
-            val appText =
-                if (action.allApp)
-                    "모든 앱에서 발생한 알림 중"
-                else
-                    action.appList.joinToString(", ") { pmRepo.getLabel(it) } +
-                            " 앱에서 발생한 알림 중,"
-            val keywordText =
-                action.keywordList.joinToString("하거나$breakTag") {
-                    val inclusion = if (it.inclusion) "포함" else "미포함"
-                    "${it.keyword}을(를) $inclusion"
-                } + "한 알림은 숨김"
             val end = if (dndHtml != null || ringerHtml != null) breakTag else ""
 
-            "$header$breakTag$appText$breakTag$keywordText$end"
+            if (action.keywordList.isEmpty()) {
+                val appText = if (action.allApp)
+                    "모든 앱에서 발생한 알림은 숨김"
+                else
+                    action.appList.joinToString(", ") { pmRepo.getLabel(it) } +
+                            " 앱에서 발생한 알림은 숨김"
+
+                "$header$breakTag$appText$end"
+            } else {
+                val appText =
+                    if (action.allApp)
+                        "모든 앱에서 발생한 알림 중"
+                    else
+                        action.appList.joinToString(", ") { pmRepo.getLabel(it) } +
+                                " 앱에서 발생한 알림 중"
+                val keywordText =
+                    action.keywordList.joinToString("하거나$breakTag") {
+                        val inclusion = if (it.inclusion) "포함" else "미포함"
+                        "${it.keyword}을(를) $inclusion"
+                    } + "한 알림은 숨김"
+
+                "$header$breakTag$appText$breakTag$keywordText$end"
+            }
         }
 
         val appBlockHtml = rule.appBlockAction?.let { action ->
@@ -296,6 +310,10 @@ class RuleEditViewModel(
         initTriggerActionItemList()
     }
 
+    fun clearErrorMessage() {
+        errorText.value = ""
+    }
+
     private fun initTriggerActionItemList() {
         triggerActionItemList.value = listOf()
 
@@ -318,12 +336,23 @@ class RuleEditViewModel(
 
     fun saveRule() {
         val rule = editingRule.value ?: return
-        val ruleInfo = rule.ruleInfo.copy(ruleName = ruleName.value ?: "규칙 이름")
+        val ruleInfo = rule.ruleInfo.copy(ruleName = ruleName.value ?: "")
         val savingRule = rule.copy(ruleInfo = ruleInfo)
         editingRule.value = savingRule
 
-        viewModelScope.launch(Dispatchers.IO) {
-            ruleRepo.insertOrUpdateRule(savingRule)
+        if (ruleInfo.ruleName == "")
+            errorText.value = "규칙 이름을 설정하세요."
+        else {
+            viewModelScope.launch(Dispatchers.IO) {
+                val success = ruleRepo.insertOrUpdateRule(savingRule)
+                withContext(Dispatchers.Main) {
+                    if (success) {
+                        errorText.value = ""
+                        insertEvent.value = Event(Unit)
+                    } else
+                        errorText.value = "이미 존재하는 이름입니다."
+                }
+            }
         }
     }
 

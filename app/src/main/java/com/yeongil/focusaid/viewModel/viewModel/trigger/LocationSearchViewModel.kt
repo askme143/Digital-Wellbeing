@@ -14,9 +14,10 @@ import kotlinx.coroutines.launch
 class LocationSearchViewModel(
     private val locationRepo: LocationRepository
 ) : ViewModel() {
-    var latLng: LatLng? = null
+    private var latLng: LatLng? = null
 
     val keyword = MutableLiveData<String>()
+    val searchErrorEvent = MutableLiveData<Event<Unit>>()
 
     private val locationList = MutableLiveData<List<Location>>()
     val locationRecyclerItemList = liveData<List<RecyclerItem>> {
@@ -39,8 +40,15 @@ class LocationSearchViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             locationRepo.getKeywordLocationList(keyword, latLng)
-                .also {
-                    launch(Dispatchers.Main) { locationList.value = it }
+                .also { list ->
+                    launch(Dispatchers.Main) {
+                        if (list == null) {
+                            locationList.value = emptyList()
+                            searchErrorEvent.value = Event(Unit)
+                        } else {
+                            locationList.value = list
+                        }
+                    }
                 }
         }
     }
@@ -50,7 +58,7 @@ class LocationSearchViewModel(
         locationList.value = listOf()
     }
 
-    fun init(latLng: LatLng?) {
+    fun putLatLng(latLng: LatLng?) {
         this.latLng = latLng
     }
 }
