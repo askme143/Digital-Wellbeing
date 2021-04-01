@@ -24,24 +24,56 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/title_prefix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text='@{"[" + vm.ruleName + "] 상세 정보"}'
+            android:text="["
             android:textColor="@color/white"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="@id/header_bg"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/header_bg" />
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text='@{vm.ruleName}'
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/header_bg"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@id/title_prefix"
+            app:layout_constraintRight_toLeftOf="@id/title_suffix"
+            app:layout_constraintTop_toTopOf="@id/header_bg" />
+
+        <TextView
+            android:id="@+id/title_suffix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="] 상세 정보"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@id/title"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@id/title"
+            app:layout_constraintRight_toLeftOf="@id/menu_btn"
+            app:layout_constraintTop_toTopOf="@id/title" />
+
 
         <ImageView
             android:id="@+id/menu_btn"
             android:layout_width="32sp"
             android:layout_height="32sp"
-            android:padding="6dp"
             android:layout_marginEnd="10dp"
+            android:padding="6dp"
             android:src="@drawable/ic_menu"
             app:layout_constraintBottom_toBottomOf="@id/header_bg"
             app:layout_constraintRight_toRightOf="parent"
