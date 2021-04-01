@@ -10,11 +10,20 @@ import java.lang.Exception
 class LocationRepository(
     private val kakaoApiService: KakaoApiService
 ) {
-    suspend fun getKeywordLocationList(keyword: String, latLng: LatLng?): List<Location>? {
+    suspend fun getKeywordLocationList(
+        keyword: String,
+        latLng: LatLng?,
+        locationBased: Boolean
+    ): List<Location>? {
         return try {
-            val response =
-                kakaoApiService.getKeywordLocations(keyword, latLng?.latitude, latLng?.longitude)
-                    .await()
+            val response = kakaoApiService
+                .getKeywordLocations(
+                    keyword,
+                    latLng?.latitude,
+                    latLng?.longitude,
+                    if (locationBased) "distance" else "accuracy"
+                ).await()
+
             response.documents.map {
                 val address = if (it.roadAddressName != "") it.roadAddressName else it.addressName
                 Location(

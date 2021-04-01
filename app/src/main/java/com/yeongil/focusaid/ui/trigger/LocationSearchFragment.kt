@@ -29,7 +29,7 @@ class LocationSearchFragment : Fragment() {
         LocationTriggerViewModelFactory(requireContext())
     }
     private val locationSearchViewModel by activityViewModels<LocationSearchViewModel> {
-        LocationSearchViewModelFactory()
+        LocationSearchViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
@@ -51,6 +51,13 @@ class LocationSearchFragment : Fragment() {
 
         binding.resultRecyclerView.addItemDecoration(DividerItemDecoration(context, 1))
 
+        locationSearchViewModel.currLocationErrorEvent.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
+                Toast
+                    .makeText(context, "현재 위치를 불러올 수 없습니다. (위치 기반 검색 불가)", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
         locationSearchViewModel.searchErrorEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 Toast.makeText(context, "검색 결과를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
@@ -68,6 +75,8 @@ class LocationSearchFragment : Fragment() {
                 false
             } else true
         }
+
+        locationSearchViewModel.updateCurrentLocation()
 
         return binding.root
     }

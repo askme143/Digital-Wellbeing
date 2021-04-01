@@ -37,7 +37,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         LocationTriggerViewModelFactory(requireContext())
     }
     private val locationSearchViewModel by activityViewModels<LocationSearchViewModel> {
-        LocationSearchViewModelFactory()
+        LocationSearchViewModelFactory(requireContext())
     }
 
     private lateinit var map: GoogleMap
@@ -111,9 +111,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             }
             binding.searchBar.setOnClickListener {
                 val keyword = locationTriggerViewModel.locationName.value!!
-                val latLng = locationTriggerViewModel.latLng.value!!
                 locationSearchViewModel.setKeyword(keyword)
-                locationSearchViewModel.putLatLng(latLng)
                 findNavController().navigateSafe(directions.actionLocationTriggerFragmentToLocationSearchFragment())
             }
             binding.completeBtn.isEnabled = true
