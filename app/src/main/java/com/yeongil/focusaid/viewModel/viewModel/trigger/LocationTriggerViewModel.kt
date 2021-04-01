@@ -72,10 +72,13 @@ class LocationTriggerViewModel(
 
     fun submitSearchResult(location: Location) {
         noAnimation = Event(true)
-        fromSearchFragment = Event(true)
 
         latLng.value = location.latLng
         locationName.value = location.locationName
+    }
+
+    fun startSearch() {
+        fromSearchFragment = Event(true)
     }
 
     fun updateLatLng(newLatLng: LatLng) {

@@ -51,6 +51,9 @@ class LocationSearchFragment : Fragment() {
 
         binding.resultRecyclerView.addItemDecoration(DividerItemDecoration(context, 1))
 
+        locationSearchViewModel.updateCurrentLocation()
+        locationTriggerViewModel.startSearch()
+
         locationSearchViewModel.currLocationErrorEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 Toast
@@ -75,8 +78,6 @@ class LocationSearchFragment : Fragment() {
                 false
             } else true
         }
-
-        locationSearchViewModel.updateCurrentLocation()
 
         return binding.root
     }
