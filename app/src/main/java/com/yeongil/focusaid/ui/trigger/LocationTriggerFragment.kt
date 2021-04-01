@@ -55,14 +55,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = viewLifecycleOwner
 
         if (checkPermission()) {
-            val fromSearchFragment =
-                locationTriggerViewModel.fromSearchFragment.getContentIfNotHandled() ?: false
-
-            if (!fromSearchFragment) {
-                locationTriggerViewModel.putLocationTrigger(ruleEditViewModel.editingRule.value?.locationTrigger)
-            }
-
-            startGoogleMap()
+            initLocationFragment()
         } else {
             requestPermission()
         }
@@ -70,7 +63,16 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun startGoogleMap() {
+    private fun initLocationFragment() {
+        val fromSearchFragment =
+            locationTriggerViewModel.fromSearchFragment.getContentIfNotHandled() ?: false
+
+        if (!fromSearchFragment) {
+            locationTriggerViewModel.putLocationTrigger(
+                ruleEditViewModel.editingRule.value?.locationTrigger
+            )
+        }
+
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -203,7 +205,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             if ((grantResults.isNotEmpty() &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED)
             ) {
-                startGoogleMap()
+                initLocationFragment()
             } else {
                 Toast.makeText(
                     context, "위치 설정을 위해서는 권한을 설정해야 합니다",
