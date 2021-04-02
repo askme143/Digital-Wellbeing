@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/bg_round_corner_gray"
+    android:drawable="@drawable/bg_round_corner_purple"
     android:insetTop="6dp"
     android:insetBottom="6dp" />

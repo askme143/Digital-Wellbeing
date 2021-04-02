@@ -24,6 +24,7 @@
             android:maxLines="1"
             android:paddingHorizontal="20dp"
             android:text="@={vm.keyword}"
+            android:textColor="@color/purple_text"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -34,10 +35,9 @@
             recycler_item_list="@{vm.locationRecyclerItemList}"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_bar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/search_bar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_round_corner"
+        android:background="@drawable/bg_round_corner_purple"
         android:onClick="@{() -> itemVM.onClickItem()}"
         android:padding="20dp">
 
@@ -24,6 +24,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{itemVM.ruleInfo.ruleName}"
+            android:textColor="@color/purple_text"
             android:textSize="30sp"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -32,12 +33,13 @@
 
         <ImageView
             android:id="@+id/delete_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:onClick="@{() -> itemVM.onClickDelete()}"
             android:src="@drawable/ic_garbage"
+            app:layout_constraintBottom_toBottomOf="@id/title"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/title" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/header_barrier"
@@ -50,21 +52,27 @@
             android:id="@+id/activation_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:onClick="@{() -> itemVM.onClickActivate()}"
-            android:text="규칙 활성화"
-            android:textColor="@color/black"
+            android:paddingHorizontal="10dp"
+            android:text="규칙\n활성화"
+            android:textAlignment="center"
+            android:textColor="@color/purple_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/activation_checkbox"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/activation_checkbox" />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/activation_checkbox"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:background="@android:color/transparent"
+            android:button="@null"
             android:checked="@{itemVM.ruleInfo.activated}"
+            android:drawableEnd="@drawable/ckb_white"
+            android:gravity="end|center"
             android:onClick="@{() -> itemVM.onClickActivate()}"
             app:layout_constraintLeft_toRightOf="@id/activation_text"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
@@ -74,8 +82,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> itemVM.onClickNotiOnTrigger()}"
-            android:text="사용자 확인 후 규칙 실행"
-            android:textColor="@color/black"
+            android:paddingHorizontal="10dp"
+            android:text="사용자 확인 후\n규칙 실행"
+            android:textAlignment="center"
+            android:textColor="@color/purple_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/noti_checkbox"
             app:layout_constraintRight_toLeftOf="@id/noti_checkbox"
@@ -85,9 +95,13 @@
             android:id="@+id/noti_checkbox"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
+            android:button="@null"
             android:checked="@{itemVM.ruleInfo.notiOnTrigger}"
+            android:drawableEnd="@drawable/ckb_white"
+            android:gravity="end|center"
             android:onClick="@{() -> itemVM.onClickNotiOnTrigger()}"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />

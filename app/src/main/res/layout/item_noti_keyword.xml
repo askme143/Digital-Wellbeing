@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{itemVM.notiKeywordItem.keyword}"
-            android:textColor="@color/black"
+            android:textColor="@color/purple_text"
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,6 +32,7 @@
             android:id="@+id/handling_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/purple_text"
             android:text='@{itemVM.notiKeywordItem.inclusion ? Html.fromHtml(@string/include) : Html.fromHtml(@string/exclude)}'
             android:textSize="12sp"
             app:layout_constraintLeft_toLeftOf="@id/keyword"
@@ -41,6 +42,7 @@
             android:id="@+id/handling_checkbox"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:buttonTint="@color/purple_text"
             android:checked="@={itemVM.notiKeywordItem.inclusion}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@id/delete_btn"
@@ -48,10 +50,10 @@
 
         <ImageView
             android:id="@+id/delete_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:onClick="@{() -> itemVM.onClickDelete()}"
-            android:src="@drawable/ic_garbage"
+            android:src="@drawable/ic_garbage_purple"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

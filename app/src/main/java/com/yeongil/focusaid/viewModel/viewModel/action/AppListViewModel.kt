@@ -54,6 +54,12 @@ class AppListViewModel(
         else itemCount.value = oldCount - 1
     }
 
+    fun onClickAllText() {
+        val bool = appItemAllChecked.value ?: false
+        appItemAllChecked.value = !bool
+        onClickAll()
+    }
+
     ////////////////////////////////////////
     /* View Model Communication Functions */
     ////////////////////////////////////////
