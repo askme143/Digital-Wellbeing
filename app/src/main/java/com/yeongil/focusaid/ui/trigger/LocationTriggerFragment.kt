@@ -44,6 +44,7 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
 
     private var marker: Marker? = null
     private var circle: Circle? = null
+    private var firstCameraMove: Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,7 +92,10 @@ class LocationTriggerFragment : Fragment(), OnMapReadyCallback {
             locationTriggerViewModel.latLng.observe(viewLifecycleOwner) {
                 /* Latitude or longitude changed. */
                 val noAnimation =
-                    locationTriggerViewModel.noAnimation.getContentIfNotHandled() ?: false
+                    firstCameraMove ||
+                            locationTriggerViewModel.noAnimation.getContentIfNotHandled() ?: false
+                firstCameraMove = false
+
                 moveCamera(it, noAnimation)
                 drawMarker(it)
             }
