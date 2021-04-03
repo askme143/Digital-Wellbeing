@@ -3,11 +3,11 @@
     android:shape="oval"
     android:useLevel="false">
     <!-- 배경 -->
-    <solid android:color="@color/white" />
+    <solid android:color="@color/purple_text" />
     <!-- 테두리 -->
     <stroke
         android:width="2dp"
-        android:color="@color/white" />
+        android:color="@color/purple_text" />
     <!-- 크기 -->
     <size
         android:width="18dp"

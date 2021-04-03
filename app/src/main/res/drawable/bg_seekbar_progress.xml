@@ -3,14 +3,8 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="10dp" />
-            <solid android:color="@color/black" />
+            <solid android:color="@color/purple_text" />
             <stroke android:width="4dp" android:color="@android:color/transparent" />
-            <padding
-                android:bottom="5dp"
-                android:left="0dp"
-                android:right="-4dp"
-                android:top="5dp"
-                />
         </shape>
     </item>
 </selector>

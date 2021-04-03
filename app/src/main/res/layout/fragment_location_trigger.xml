@@ -24,12 +24,12 @@
             app:layout_constraintTop_toTopOf="parent" />
         <!--        app:layout_constraintTop_toBottomOf="@id/header_bg"-->
 
-        <View
+        <ImageView
             android:id="@+id/header_bg"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:alpha="0.25"
-            android:background="@android:color/transparent"
+            android:src="@drawable/bg_gradient"
+            android:alpha="0.5"
             app:layout_constraintBottom_toBottomOf="@id/range_text"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -63,8 +63,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:elevation="100dp"
             android:max="1850"
+            android:maxHeight="8dp"
+            android:minHeight="8dp"
             android:progress="@={vm.progress}"
+            android:progressDrawable="@drawable/seekbar_custom"
+            android:splitTrack="false"
             android:thumb="@drawable/thumb_seekbar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -77,10 +82,14 @@
             android:id="@+id/range_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:paddingBottom="5dp"
+            android:shadowColor="@color/gray"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="5.0"
             android:text="@{vm.rangeText}"
-            android:textColor="@color/white"
+            android:textColor="@color/purple_text"
             android:textSize="16sp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/range" />
