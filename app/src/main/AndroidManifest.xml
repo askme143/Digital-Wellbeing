@@ -19,6 +19,7 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="androidx.multidex.MultiDexApplication"
@@ -39,6 +40,12 @@
         <activity
             android:name="com.yeongil.focusaid.AppBlockActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
+
+        <receiver android:name=".background.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name="com.yeongil.focusaid.background.MainService"
