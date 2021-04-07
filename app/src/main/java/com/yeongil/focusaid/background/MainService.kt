@@ -39,7 +39,7 @@ class MainService : LifecycleService() {
     private val midnightIntent by lazy {
         Intent(this, MainService::class.java)
             .apply { action = MIDNIGHT_RESET }
-            .let { PendingIntent.getService(this, 0, it, 0) }
+            .let { PendingIntent.getService(this, MIDNIGHT_REQ_CODE, it, 0) }
     }
     private val builder by lazy {
         NotificationCompat.Builder(this, CHANNEL_ID)
@@ -51,7 +51,7 @@ class MainService : LifecycleService() {
                     addNextIntentWithParentStack(
                         Intent(this@MainService, MainActivity::class.java)
                     )
-                    getPendingIntent(0, 0)
+                    getPendingIntent(NOTI_BUILDER_REQ_CODE, 0)
                 }
             )
             .setOngoing(true)
@@ -106,6 +106,7 @@ class MainService : LifecycleService() {
             RULE_EXEC_CONFIRM -> {
                 Log.e("hello", RULE_EXEC_CONFIRM)
                 val ruleId = intent.getIntExtra(CONFIRMED_RULE_ID_KEY, 0)
+                Log.e("hello", "Notification Confirm: ${ruleId}")
                 lifecycleScope.launch(Dispatchers.Default) {
                     if (ruleId != 0) confirmRuleExec(ruleId)
                 }
@@ -406,10 +407,14 @@ class MainService : LifecycleService() {
                         .apply {
                             action = RULE_EXEC_CONFIRM
                             putExtra(CONFIRMED_RULE_ID_KEY, it.ruleInfo.ruleId)
+                            Log.e("hello", "Notification Create: ${it.ruleInfo.ruleId}")
                         }
                         .let { intent ->
                             PendingIntent.getService(
-                                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+                                this,
+                                it.ruleInfo.ruleId + REQ_CODE_OFFSET,
+                                intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
                             )
                         }
                 )
@@ -616,6 +621,11 @@ class MainService : LifecycleService() {
         const val CHANGED_RULE_ID_KEY = "CHANGED_RULE_ID"
         const val DEFAULT_RINGER_KEY = "DEFAULT_RINGER"
         const val DEFAULT_DND_KEY = "DEFAULT_DND"
+
+        /* Request codes for pending intents */
+        const val NOTI_BUILDER_REQ_CODE = 0
+        const val MIDNIGHT_REQ_CODE = 1
+        const val REQ_CODE_OFFSET = 2
 
 
         val emptySetStr = Json.encodeToString(emptySet<Unit>())
