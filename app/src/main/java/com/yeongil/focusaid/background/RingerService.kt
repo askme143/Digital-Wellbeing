@@ -1,6 +1,5 @@
 package com.yeongil.focusaid.background
 
-import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -12,7 +11,6 @@ import com.yeongil.focusaid.data.rule.action.RingerAction.RingerMode
 
 class RingerService : Service() {
     private val audioManager by lazy { getSystemService(AUDIO_SERVICE) as AudioManager }
-    private val notificationManager by lazy { getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
     private val sharedPref by lazy {
         getSharedPreferences("com.yeongil.focusaid.Ringer_Service", Context.MODE_PRIVATE)
     }
@@ -24,19 +22,34 @@ class RingerService : Service() {
 
         when (intent.action) {
             RINGER_MODE_CHANGE_DETECTED -> {
-                if (isRingerChangeEpoch())
+                if (isRingerChangeEpoch()) {
                     endRingerChangeEpoch()
-                else
+                } else {
                     updateDefaultRingerMode()
+                }
             }
             RUN_ACTION -> {
                 val ringerMode =
-                    intent.getParcelableExtra(RINGER_EXTRA_KEY) ?: getDefaultRingerMode()
-                val dndExtra = intent.getBooleanExtra(DND_EXTRA_KEY, false)
+                    intent.getParcelableExtra<RingerMode>(RINGER_EXTRA_KEY)
 
-                /* DND First (Ringer mode can be affected by the change of dnd mode) */
-                changeDndMode(dndExtra)
+                if (ringerMode != null) {
+                    updateDefaultRingerMode()
+                    startRingerChangeEpoch()
+                    changeRingerMode(ringerMode)
+                }
+            }
+            STOP_ACTION -> {
+                val ringerMode = getDefaultRingerMode()
                 changeRingerMode(ringerMode)
+            }
+            CHANGE_ACTION -> {
+                val ringerMode =
+                    intent.getParcelableExtra<RingerMode>(RINGER_EXTRA_KEY)
+
+                if (ringerMode != null) {
+                    startRingerChangeEpoch()
+                    changeRingerMode(ringerMode)
+                }
             }
         }
 
@@ -50,21 +63,10 @@ class RingerService : Service() {
     }
 
     private fun changeRingerMode(ringerMode: RingerMode) {
-        updateDefaultRingerMode()
-        startRingerChangeEpoch()
-
         when (ringerMode) {
             RingerMode.VIBRATE -> audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
             RingerMode.RING -> audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
             RingerMode.SILENT -> audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
-        }
-    }
-
-    private fun changeDndMode(turnOn: Boolean) {
-        if (turnOn) {
-            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-        } else {
-            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
         }
     }
 
@@ -101,16 +103,24 @@ class RingerService : Service() {
     }
 
     private fun getDefaultRingerMode(): RingerMode {
-        val idx = sharedPref.getInt(DEFAULT_RINGER_MODE_KEY, 0)
+        val currMode = when (audioManager.ringerMode) {
+            AudioManager.RINGER_MODE_VIBRATE -> RingerMode.VIBRATE
+            AudioManager.RINGER_MODE_NORMAL -> RingerMode.RING
+            AudioManager.RINGER_MODE_SILENT -> RingerMode.SILENT
+            else -> RingerMode.VIBRATE
+        }
+        val idx = sharedPref.getInt(DEFAULT_RINGER_MODE_KEY, currMode.ordinal)
+
         return enumValues<RingerMode>()[idx]
     }
 
     companion object {
         const val RINGER_MODE_CHANGE_DETECTED = "RINGER_MODE_CHANGE_DETECTED"
         const val RUN_ACTION = "RUN_ACTION"
+        const val STOP_ACTION = "STOP_ACTION"
+        const val CHANGE_ACTION = "CHANGE_ACTION"
 
         const val RINGER_EXTRA_KEY = "RINGER_EXTRA"
-        const val DND_EXTRA_KEY = "DND_EXTRA"
 
         const val DEFAULT_RINGER_MODE_KEY = "DEFAULT_RINGER_MODE"
         const val RINGER_CHANGE_EPOCH_KEY = "RINGER_CHANGE_EPOCH"

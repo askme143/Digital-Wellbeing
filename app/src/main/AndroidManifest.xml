@@ -47,6 +47,7 @@
         <service android:name="com.yeongil.focusaid.background.LocationTriggerService" />
         <service android:name="com.yeongil.focusaid.background.ActivityTriggerService" />
         <service android:name="com.yeongil.focusaid.background.RingerService" />
+        <service android:name="com.yeongil.focusaid.background.DndService" />
         <service
             android:name="com.yeongil.focusaid.background.NotificationBlockService"
             android:enabled="true"

@@ -293,18 +293,31 @@ class MainService : LifecycleService() {
             if (it.ringerAction != null) stopRingerAction = true
         }
 
+        val dndIntent by lazy { Intent(this, DndService::class.java) }
         val ringerIntent by lazy { Intent(this, RingerService::class.java) }
         val notificationIntent by lazy { Intent(this, NotificationBlockService::class.java) }
         val appBlockIntent by lazy { Intent(this, AppBlockService::class.java) }
 
-        /* RingerAction / DNDAction */
-        if (ringerMode != null || dndAction != null || stopRingerAction || stopDndAction) {
-            if (ringerMode != null)
-                ringerIntent.putExtra(RingerService.RINGER_EXTRA_KEY, ringerMode as Parcelable)
+        /* DNDAction */
+        if (dndAction != null || stopDndAction) {
             if (dndAction != null)
-                ringerIntent.putExtra(RingerService.DND_EXTRA_KEY, true)
+                dndIntent.putExtra(DndService.DND_EXTRA_KEY, true)
 
-            ringerIntent.action = RingerService.RUN_ACTION
+            dndIntent.action = DndService.RUN_ACTION
+            startService(dndIntent)
+        }
+        /* RingerAction */
+        if (ringerMode != null || stopRingerAction) {
+            if (ringerMode != null) {
+                ringerIntent.putExtra(RingerService.RINGER_EXTRA_KEY, ringerMode as Parcelable)
+
+                ringerIntent.action =
+                    if (stopRingerAction) RingerService.CHANGE_ACTION
+                    else RingerService.RUN_ACTION
+            } else {
+                ringerIntent.action = RingerService.STOP_ACTION
+            }
+
             startService(ringerIntent)
         }
         /* Notification Action */
