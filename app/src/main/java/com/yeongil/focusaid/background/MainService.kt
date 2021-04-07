@@ -1,9 +1,6 @@
 package com.yeongil.focusaid.background
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -31,11 +28,18 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.*
 
 class MainService : LifecycleService() {
     private val sharedPref by lazy { getSharedPreferences(MAIN_SERVICE_PREF_NAME, MODE_PRIVATE) }
     private val ruleRepo by lazy {
         RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleDao())
+    }
+
+    private val midnightIntent by lazy {
+        Intent(this, MainService::class.java)
+            .apply { action = MIDNIGHT_RESET }
+            .let { PendingIntent.getService(this, 0, it, 0) }
     }
     private val builder by lazy {
         NotificationCompat.Builder(this, CHANNEL_ID)
@@ -52,14 +56,16 @@ class MainService : LifecycleService() {
             )
             .setOngoing(true)
     }
+
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+    private val alarmManager by lazy { getSystemService(ALARM_SERVICE) as AlarmManager }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
         when (intent?.action) {
             TIME_TRIGGER -> {
-                Log.e("hello", "TIME_TRIGGER")
+                Log.e("hello", TIME_TRIGGER)
                 val intentStr = intent.getStringExtra(TIME_TRIGGERED_RULES_KEY) ?: emptySetStr
                 val ruleIdSet = Json.decodeFromString<Set<Int>>(intentStr)
 
@@ -69,7 +75,7 @@ class MainService : LifecycleService() {
                 }
             }
             ACTIVITY_TRIGGER -> {
-                Log.e("hello", "ACTIVITY_TRIGGER")
+                Log.e("hello", ACTIVITY_TRIGGER)
                 val intentStr = intent.getStringExtra(ACTIVITY_TRIGGERED_RULES_KEY) ?: emptySetStr
                 val ruleIdSet = Json.decodeFromString<Set<Int>>(intentStr)
 
@@ -79,7 +85,7 @@ class MainService : LifecycleService() {
                 }
             }
             LOCATION_TRIGGER -> {
-                Log.e("hello", "LOCATION_TRIGGER")
+                Log.e("hello", LOCATION_TRIGGER)
                 val intentStr = intent.getStringExtra(LOCATION_TRIGGERED_RULES_KEY) ?: emptySetStr
                 val ruleIdSet = Json.decodeFromString<Set<Int>>(intentStr)
 
@@ -89,20 +95,37 @@ class MainService : LifecycleService() {
                 }
             }
             START_BACKGROUND -> {
-                Log.e("hello", "START_BACKGROUND")
+                Log.e("hello", START_BACKGROUND)
                 reset()
                 startTriggerObserving()
             }
             RULE_CHANGE -> {
-                Log.e("hello", "RULE_CHANGE")
+                Log.e("hello", RULE_CHANGE)
                 startTriggerObserving()
             }
             RULE_EXEC_CONFIRM -> {
-                Log.e("hello", "RULE_EXEC_CONFIRM")
+                Log.e("hello", RULE_EXEC_CONFIRM)
                 val ruleId = intent.getIntExtra(CONFIRMED_RULE_ID_KEY, 0)
                 lifecycleScope.launch(Dispatchers.Default) {
                     if (ruleId != 0) confirmRuleExec(ruleId)
                 }
+            }
+            MIDNIGHT_RESET -> {
+                Log.e("hello", MIDNIGHT_RESET)
+
+                resetManualTriggerRules()
+
+                val calendar = Calendar.getInstance().apply {
+                    add(Calendar.DATE, 1)
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                }
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    midnightIntent
+                )
             }
         }
 
@@ -149,6 +172,19 @@ class MainService : LifecycleService() {
         }
         val filter = IntentFilter().apply { addAction(AudioManager.RINGER_MODE_CHANGED_ACTION) }
         registerReceiver(ringerChangeReceiver, filter)
+
+        /* Call when it's midnight */
+        val calendar = Calendar.getInstance().apply {
+            add(Calendar.DATE, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+        }
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            midnightIntent
+        )
 
         startForeground(1, builder.build())
     }
@@ -383,47 +419,6 @@ class MainService : LifecycleService() {
         }
     }
 
-    private suspend fun confirmRuleExec(ruleId: Int) {
-        val timeTriggerSet by lazy { getTimeTriggeredRules() }
-        val activityTriggerSet by lazy { getActivityTriggeredRules() }
-        val locationTriggerSet by lazy { getLocationTriggeredRules() }
-
-        val rule = ruleRepo.getRuleByRid(ruleId)
-
-        if (rule.timeTrigger != null && ruleId !in timeTriggerSet) return
-        if (rule.locationTrigger != null && ruleId !in locationTriggerSet) return
-        if (rule.activityTrigger != null && ruleId !in activityTriggerSet) return
-
-        val ruleSet = getRuleSet()
-        if (rule !in ruleSet.notified) return
-
-        val rulesToRun =
-            handleConflict(ruleSet.running + rule, ruleSet.conflicting, ruleSet.running)
-
-        if (rule in rulesToRun) {
-            updateRuleSet(
-                RuleSet(ruleSet.notified - rule, ruleSet.conflicting, ruleSet.running + rule)
-            )
-
-            /* Notification Update */
-            builder.setContentText(
-                when (rulesToRun.size) {
-                    0 -> "수행 중인 규칙이 없습니다."
-                    1 -> "현재 [${rulesToRun[0].ruleInfo.ruleName}] 규칙이 수행 중입니다."
-                    else -> "현재 [${rulesToRun[0].ruleInfo.ruleName}]외 ${rulesToRun.size - 1}개 규칙이 수행 중입니다."
-                }
-            )
-            startForeground(1, builder.build())
-
-            /* Apply Action */
-            applyRuleSetChange(listOf(rule), emptyList())
-        } else {
-            updateRuleSet(
-                RuleSet(ruleSet.notified - rule, ruleSet.conflicting + rule, ruleSet.running)
-            )
-        }
-    }
-
     private fun handleConflict(
         rules: List<Rule>,
         conflictingRules: List<Rule>,
@@ -528,6 +523,70 @@ class MainService : LifecycleService() {
         startService(locationIntent)
     }
 
+    private suspend fun confirmRuleExec(ruleId: Int) {
+        val timeTriggerSet by lazy { getTimeTriggeredRules() }
+        val activityTriggerSet by lazy { getActivityTriggeredRules() }
+        val locationTriggerSet by lazy { getLocationTriggeredRules() }
+
+        val rule = ruleRepo.getRuleByRid(ruleId)
+
+        if (rule.timeTrigger != null && ruleId !in timeTriggerSet) return
+        if (rule.locationTrigger != null && ruleId !in locationTriggerSet) return
+        if (rule.activityTrigger != null && ruleId !in activityTriggerSet) return
+
+        val ruleSet = getRuleSet()
+        if (rule !in ruleSet.notified) return
+
+        val rulesToRun =
+            handleConflict(ruleSet.running + rule, ruleSet.conflicting, ruleSet.running)
+
+        if (rule in rulesToRun) {
+            updateRuleSet(
+                RuleSet(ruleSet.notified - rule, ruleSet.conflicting, ruleSet.running + rule)
+            )
+
+            /* Notification Update */
+            builder.setContentText(
+                when (rulesToRun.size) {
+                    0 -> "수행 중인 규칙이 없습니다."
+                    1 -> "현재 [${rulesToRun[0].ruleInfo.ruleName}] 규칙이 수행 중입니다."
+                    else -> "현재 [${rulesToRun[0].ruleInfo.ruleName}]외 ${rulesToRun.size - 1}개 규칙이 수행 중입니다."
+                }
+            )
+            startForeground(1, builder.build())
+
+            /* Apply Action */
+            applyRuleSetChange(listOf(rule), emptyList())
+        } else {
+            updateRuleSet(
+                RuleSet(ruleSet.notified - rule, ruleSet.conflicting + rule, ruleSet.running)
+            )
+        }
+    }
+
+    private fun resetManualTriggerRules() {
+        val ruleSet = getRuleSet()
+
+        /* Reset AppBlockManualTriggerRule */
+        val appBlockManualRule = ruleSet.running
+            .firstOrNull {
+                it.appBlockAction != null && it.timeTrigger == null
+                        && it.locationTrigger == null && it.activityTrigger == null
+            }
+        if (appBlockManualRule != null) {
+            val rid = appBlockManualRule.ruleInfo.ruleId
+            val appBlockAction = appBlockManualRule.appBlockAction ?: return
+            val appBlockIntent by lazy { Intent(this, AppBlockService::class.java) }
+
+            appBlockIntent.apply {
+                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
+                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, appBlockAction)
+                putExtra(AppBlockService.RID_EXTRA_KEY, rid)
+            }
+            startService(appBlockIntent)
+        }
+    }
+
     companion object {
         const val CHANNEL_ID = "focus_aid_service_channel"
         const val RULE_NOTIFICATION_CHANNEL_ID = "focus_aid_rule_notification_channel"
@@ -538,6 +597,7 @@ class MainService : LifecycleService() {
         const val START_BACKGROUND = "START_BACKGROUND"
         const val RULE_CHANGE = "RULE_CHANGE"
         const val RULE_EXEC_CONFIRM = "RULE_EXEC_CONFIRM"
+        const val MIDNIGHT_RESET = "MIDNIGHT_RESET"
 
         const val MAIN_SERVICE_PREF_NAME = "com.yeongil.focusaid.MAIN_SERVICE"
 
