@@ -17,6 +17,9 @@
     <!--  helper string in app block action fragment  -->
     <string name="app_block_entry_item_first_click"><![CDATA[<i>터치하여 추가 설정 </i>]]></string>
 
+    <!-- strings in AppBlockEntryDialog -->
+    <string name="app_block_entry_dialog_do_not_allow"><![CDATA[<big>사용을 허용하지 않음</big><br>(허용 시간을 0분으로 설정합니다)]]></string>
+
     <!--  Titles of items in description menu  -->
     <string name="edit_rule_name">규칙 이름 수정</string>
     <string name="edit_trigger_action">조건 및 액션 수정</string>
