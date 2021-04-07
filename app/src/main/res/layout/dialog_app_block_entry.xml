@@ -5,6 +5,8 @@
 
         <import type="com.yeongil.focusaid.utils.ConstantsKt" />
 
+        <import type="android.text.Html" />
+
         <variable
             name="vm"
             type="com.yeongil.focusaid.viewModel.viewModel.action.AppBlockEntryViewModel" />
@@ -53,8 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> vm.onDoNotAllowClick()}"
-            android:text="사용을 허용하지 않음\n(허용 시간을 0분으로 설정합니다)"
-            android:textColor="@color/white"
+            android:text='@{Html.fromHtml(@string/app_block_entry_dialog_do_not_allow)}'
+            android:textColor="@color/purple_text"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@id/line"
             app:layout_constraintLeft_toLeftOf="@id/time_picker"

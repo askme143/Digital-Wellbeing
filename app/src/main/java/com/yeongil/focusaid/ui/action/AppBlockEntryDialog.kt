@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.yeongil.focusaid.R
 import com.yeongil.focusaid.databinding.DialogAppBlockEntryBinding
 import com.yeongil.focusaid.utils.navigateSafe
 import com.yeongil.focusaid.viewModel.viewModel.action.AppBlockActionViewModel
@@ -36,7 +38,9 @@ class AppBlockEntryDialog : BottomSheetDialogFragment() {
         binding.vm = appBlockEntryViewModel
 
         binding.timePicker.setIs24HourView(true)
-        binding.doNotAllowBtn.setBackgroundColor(Color.GRAY)
+        binding.doNotAllowBtn.setBackgroundColor(
+            ContextCompat.getColor(requireContext(), R.color.purple_background)
+        )
 
         disableTimePicker()
 
