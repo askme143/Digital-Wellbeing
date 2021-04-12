@@ -14,6 +14,7 @@ import com.yeongil.focusaid.dataSource.logDatabase.dao.LogDao
 import com.yeongil.focusaid.dataSource.logDatabase.dto.*
 import com.yeongil.focusaid.dataSource.user.UserInfoDto
 import com.yeongil.focusaid.dataSource.user.UserInfoPref
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.*
@@ -144,9 +145,64 @@ class LogRepository(
         logDao.insertRuleTriggerLog(RuleTriggerLogDto(log = json.encodeToString(triggerLog)))
     }
 
-    companion object {
-        const val IGNORE = "IGNORED"
-        const val REMOVED = "REMOVED"
-        const val CONFIRMED = "CONFIRMED"
+        suspend fun checkRemainingLogs() {
+        val ruleLogs = logDao.getAllRuleLog()
+        val activationLogs = logDao.getAllRuleActivationLog()
+        val confirmLogs = logDao.getAllRuleConfirmLog()
+        val deleteLogs = logDao.getAllRuleDeleteLog()
+        val triggerLogs = logDao.getAllRuleTriggerLog()
+
+        ruleLogs.forEach {
+            try {
+                val response = focusAidService.postRuleLog(json.decodeFromString(it.log))
+                if (response.code() == 201) {
+                    logDao.deleteRuleLog(it.id)
+                }
+                Log.e("hello", response.code().toString())
+            } catch (error: Exception) {
+                Log.e("hello", error.message.toString())
+                return
+            }
+        }
+        activationLogs.forEach {
+            try {
+                val response = focusAidService.postRuleActivationLog(json.decodeFromString(it.log))
+                if (response.code() == 201) {
+                    logDao.deleteRuleActivationLog(it.id)
+                }
+            } catch (error: Exception) {
+                Log.e("hello", error.message.toString())
+            }
+        }
+        confirmLogs.forEach {
+            try {
+                val response = focusAidService.postRuleConfirmLog(json.decodeFromString(it.log))
+                if (response.code() == 201) {
+                    logDao.deleteRuleConfirmLog(it.id)
+                }
+            } catch (error: Exception) {
+                Log.e("hello", error.message.toString())
+            }
+        }
+        deleteLogs.forEach {
+            try {
+                val response = focusAidService.postRuleDeleteLog(json.decodeFromString(it.log))
+                if (response.code() == 201) {
+                    logDao.deleteRuleDeleteLog(it.id)
+                }
+            } catch (error: Exception) {
+                Log.e("hello", error.message.toString())
+            }
+        }
+        triggerLogs.forEach {
+            try {
+                val response = focusAidService.postRuleTriggerLog(json.decodeFromString(it.log))
+                if (response.code() == 201) {
+                    logDao.deleteRuleTriggerLog(it.id)
+                }
+            } catch (error: Exception) {
+                Log.e("hello", error.message.toString())
+            }
+        }
     }
 }

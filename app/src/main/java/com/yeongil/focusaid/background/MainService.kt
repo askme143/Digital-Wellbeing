@@ -161,6 +161,10 @@ class MainService : LifecycleService() {
             }
         }
 
+        lifecycleScope.launch {
+            logRepo.checkRemainingLogs()
+        }
+
         return START_STICKY
     }
 
