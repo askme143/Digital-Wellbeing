@@ -2,6 +2,7 @@ package com.yeongil.focusaid.dataSource.user
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class UserInfoPref(context: Context) {
     companion object {
@@ -22,5 +23,13 @@ class UserInfoPref(context: Context) {
         if (userName == null || email == null) return null
 
         return UserInfoDto(email, userName)
+    }
+
+    fun setUserInfo(userName: String, email: String) {
+        sharedPref.edit {
+            putString(USER_NAME_KEY, userName)
+            putString(EMAIL_KEY, email)
+            commit()
+        }
     }
 }

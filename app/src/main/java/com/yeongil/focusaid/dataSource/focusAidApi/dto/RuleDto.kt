@@ -9,18 +9,18 @@ import com.yeongil.focusaid.data.rule.trigger.TimeTrigger
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FocusAidRuleDto(
+data class RuleDto(
     val ruleId: Int,
     val ruleName: String,
     val activated: Boolean,
     val notiOnTrigger: Boolean,
-    val locationTrigger: LocationTrigger?,
-    val timeTrigger: TimeTrigger?,
-    val activityTrigger: ActivityTrigger?,
-    val appBlockAction: AppBlockAction?,
-    val notificationAction: NotificationAction?,
-    val dndAction: Boolean?,
-    val ringerAction: Int?,
+    val locationTrigger: LocationTrigger? = null,
+    val timeTrigger: TimeTrigger? = null,
+    val activityTrigger: ActivityTrigger? = null,
+    val appBlockAction: AppBlockAction? = null,
+    val notificationAction: NotificationAction? = null,
+    val dndAction: Boolean? = null,
+    val ringerAction: Int? = null,
 ) {
     constructor(rule: Rule): this(
         rule.ruleInfo.ruleId,

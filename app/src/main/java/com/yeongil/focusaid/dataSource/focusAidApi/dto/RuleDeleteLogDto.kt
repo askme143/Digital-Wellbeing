@@ -1,5 +1,8 @@
 package com.yeongil.focusaid.dataSource.focusAidApi.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RuleDeleteLogDto(
     val userName: String,
     val email: String,
@@ -7,11 +10,3 @@ data class RuleDeleteLogDto(
     val ruleId: Int
 ) {
 }
-/*
-{
-	"userName": "윤영일",
-	"email": "askme143@kaist.ac.kr",
-	"timestamp": 123,
-	"ruleId": 1
-}
- */

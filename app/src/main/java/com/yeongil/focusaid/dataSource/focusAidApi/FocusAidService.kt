@@ -21,4 +21,19 @@ interface FocusAidService {
 
     @POST("rules/confirm")
     suspend fun postRuleConfirmLog(@Body ruleConfirmLog: RuleConfirmLogDto): Response<Unit?>
+
+    @POST("/rules/batch")
+    suspend fun postRuleLogs(@Body ruleLog: List<RuleLogDto>): Response<Unit?>
+
+    @POST("/rules/batch")
+    suspend fun postRuleDeleteLogs(@Body ruleLog: List<RuleLogDto>): Response<Unit?>
+
+    @POST("/rules/activation/batch")
+    suspend fun postRuleActivationLogs(@Body ruleActivationLog: RuleActivationLogDto): Response<Unit?>
+
+    @POST("rules/trigger/batch")
+    suspend fun postRuleTriggerLogs(@Body ruleTriggerLog: RuleTriggerLogDto): Response<Unit?>
+
+    @POST("rules/confirm/batch")
+    suspend fun postRuleConfirmLogs(@Body ruleConfirmLog: RuleConfirmLogDto): Response<Unit?>
 }

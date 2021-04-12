@@ -2,6 +2,7 @@ package com.yeongil.focusaid.viewModel.viewModel.rule
 
 import android.text.Html
 import android.text.Spanned
+import android.util.Log
 import androidx.lifecycle.*
 import com.yeongil.focusaid.R
 import com.yeongil.focusaid.data.rule.action.AppBlockAction
@@ -13,6 +14,7 @@ import com.yeongil.focusaid.data.rule.RuleInfo
 import com.yeongil.focusaid.data.rule.trigger.ActivityTrigger
 import com.yeongil.focusaid.data.rule.trigger.LocationTrigger
 import com.yeongil.focusaid.data.rule.trigger.TimeTrigger
+import com.yeongil.focusaid.repository.LogRepository
 import com.yeongil.focusaid.repository.PackageManagerRepository
 import com.yeongil.focusaid.repository.RuleRepository
 import com.yeongil.focusaid.utils.*
@@ -28,6 +30,7 @@ import kotlinx.coroutines.withContext
 
 class RuleEditViewModel(
     private val ruleRepo: RuleRepository,
+    private val logRepo: LogRepository,
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
     private val emptyRule = Rule(
@@ -40,6 +43,7 @@ class RuleEditViewModel(
         null,
         null
     )
+    private var editStartTimeInMillis: Long = 0
     var isNewRule: Boolean = true
     var originalRule: Rule = emptyRule
     val editingRule = MutableLiveData(emptyRule)
@@ -294,6 +298,7 @@ class RuleEditViewModel(
 
     fun init(rule: Rule) {
         isNewRule = false
+        editStartTimeInMillis = System.currentTimeMillis()
         originalRule = rule.copy()
         editingRule.value = rule.copy()
         ruleName.value = editingRule.value?.ruleInfo?.ruleName ?: "규칙 이름"
@@ -303,6 +308,7 @@ class RuleEditViewModel(
 
     fun init() {
         isNewRule = true
+        editStartTimeInMillis = System.currentTimeMillis()
         originalRule = emptyRule
         editingRule.value = emptyRule.copy()
         ruleName.value = editingRule.value?.ruleInfo?.ruleName ?: "규칙 이름"
@@ -340,11 +346,18 @@ class RuleEditViewModel(
         val savingRule = rule.copy(ruleInfo = ruleInfo)
         editingRule.value = savingRule
 
+        val takenTimeInSeconds = ((System.currentTimeMillis() - editStartTimeInMillis) / 1000).toInt()
+
         if (ruleInfo.ruleName == "")
             errorText.value = "규칙 이름을 설정하세요."
         else {
             viewModelScope.launch(Dispatchers.IO) {
                 val success = ruleRepo.insertOrUpdateRule(savingRule)
+                if (success) {
+                    Log.e("hello", "Insert complete")
+                    logRepo.createRuleLog(rule, takenTimeInSeconds)
+                }
+
                 withContext(Dispatchers.Main) {
                     if (success) {
                         errorText.value = ""

@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.yeongil.focusaid.background.MainService
+import com.yeongil.focusaid.dataSource.user.UserInfoPref
 import com.yeongil.focusaid.viewModel.viewModel.action.AppListViewModel
 import com.yeongil.focusaid.viewModelFactory.AppListViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -26,8 +27,17 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
 
+    private val userInfoPref by lazy { UserInfoPref(baseContext) }
     private val appListViewModel by viewModels<AppListViewModel> {
         AppListViewModelFactory(applicationContext)
+    }
+
+    private val loginActivityIntent by lazy {
+        Intent(this, LoginActivity::class.java)
+            .apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
     }
 
     @SuppressLint("BatteryLife")
@@ -35,6 +45,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         job = Job()
+
+        /* If there is no user info */
+        val userInfo = userInfoPref.getUserInfo()
+        if (userInfo == null) startActivity(loginActivityIntent)
 
         /* Do some heavy tasks */
         lifecycleScope.launch(Dispatchers.Default) {

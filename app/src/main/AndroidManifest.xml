@@ -29,7 +29,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FocusAid">
+        android:theme="@style/Theme.FocusAid"
+        android:usesCleartextTraffic="true">
         <activity android:name="com.yeongil.focusaid.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,6 +41,7 @@
         <activity
             android:name="com.yeongil.focusaid.AppBlockActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
+        <activity android:name=".LoginActivity" />
 
         <receiver android:name=".background.BootReceiver">
             <intent-filter>

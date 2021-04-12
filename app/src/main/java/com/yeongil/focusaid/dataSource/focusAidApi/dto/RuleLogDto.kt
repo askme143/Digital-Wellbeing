@@ -1,7 +1,10 @@
 package com.yeongil.focusaid.dataSource.focusAidApi.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RuleLogDto(
-    private val userName: String,
+    val userName: String,
 
     val email: String,
 
@@ -9,5 +12,5 @@ data class RuleLogDto(
 
     val timeTakenInSeconds: Int,
 
-    val rule: FocusAidRuleDto,
+    val rule: RuleDto,
 ) {}

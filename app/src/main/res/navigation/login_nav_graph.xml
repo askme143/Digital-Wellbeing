@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/login_nav_graph"
+    app:startDestination="@id/userInfoFragment">
+
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="com.yeongil.focusaid.ui.login.UserInfoFragment"
+        android:label="UserInfoFragment" >
+        <action
+            android:id="@+id/action_userInfoFragment_to_userInfoConfirmDialog"
+            app:destination="@id/userInfoConfirmDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/userInfoConfirmDialog"
+        android:name="com.yeongil.focusaid.ui.login.UserInfoConfirmDialog"
+        android:label="UserInfoConfirmDialog" >
+        <action
+            android:id="@+id/action_userInfoConfirmDialog_to_userInfoFragment"
+            app:destination="@id/userInfoFragment"
+            app:popUpTo="@id/userInfoFragment"
+            app:popUpToInclusive="true"
+            />
+    </dialog>
+</navigation>
