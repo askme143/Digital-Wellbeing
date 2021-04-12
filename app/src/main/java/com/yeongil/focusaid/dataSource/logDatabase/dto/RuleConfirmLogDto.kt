@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Entity(tableName = "rule_confirm_log")
 data class RuleConfirmLogDto(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val log: String,
 ) {
 }

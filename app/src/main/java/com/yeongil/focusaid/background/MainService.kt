@@ -21,7 +21,12 @@ import com.yeongil.focusaid.data.rule.Rule
 import com.yeongil.focusaid.data.rule.action.*
 import com.yeongil.focusaid.data.rule.action.RingerAction.RingerMode
 import com.yeongil.focusaid.dataSource.SequenceNumber
+import com.yeongil.focusaid.dataSource.focusAidApi.FocusAidApi
+import com.yeongil.focusaid.dataSource.focusAidApi.dto.Confirmed
+import com.yeongil.focusaid.dataSource.logDatabase.LogDatabase
 import com.yeongil.focusaid.dataSource.ruleDatabase.RuleDatabase
+import com.yeongil.focusaid.dataSource.user.UserInfoPref
+import com.yeongil.focusaid.repository.LogRepository
 import com.yeongil.focusaid.repository.RuleRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,6 +39,13 @@ class MainService : LifecycleService() {
     private val sharedPref by lazy { getSharedPreferences(MAIN_SERVICE_PREF_NAME, MODE_PRIVATE) }
     private val ruleRepo by lazy {
         RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleDao())
+    }
+    private val logRepo by lazy {
+        LogRepository(
+            FocusAidApi.service,
+            UserInfoPref(baseContext),
+            LogDatabase.getInstance(baseContext).logDao()
+        )
     }
 
     private val midnightIntent by lazy {
@@ -109,6 +121,25 @@ class MainService : LifecycleService() {
                 Log.e("hello", "Notification Confirm: ${ruleId}")
                 lifecycleScope.launch(Dispatchers.Default) {
                     if (ruleId != 0) confirmRuleExec(ruleId)
+                }
+            }
+            RULE_CONFIRM_REMOVED -> {
+                Log.e("hello", RULE_EXEC_CONFIRM)
+                val ruleId = intent.getIntExtra(CONFIRMED_RULE_ID_KEY, 0)
+                Log.e("hello", "Notification Confirm Removed: ${ruleId}")
+                lifecycleScope.launch(Dispatchers.Default) {
+                    if (ruleId != 0) {
+                        val rule = ruleRepo.getRuleByRid(ruleId)
+                        val ruleSet = getRuleSet()
+                        val newRuleSet = RuleSet(
+                            ruleSet.notified - rule,
+                            ruleSet.conflicting + rule,
+                            ruleSet.running
+                        )
+
+                        updateRuleSet(newRuleSet)
+                        logRepo.createRuleConfirmLog(rule, Confirmed.REMOVED)
+                    }
                 }
             }
             MIDNIGHT_RESET -> {
@@ -299,6 +330,22 @@ class MainService : LifecycleService() {
         val startedRules = rulesToRun - ruleSet.running
         val stoppedRules = ruleSet.running - rulesToRun
         applyRuleSetChange(startedRules, stoppedRules)
+
+        /* Log newly triggered rules */
+        val oldRules = ruleSet.conflicting + ruleSet.notified + ruleSet.running
+
+        val newTriggeredRules = triggeredRules - oldRules
+        val releasedRules = oldRules - triggeredRules
+        lifecycleScope.launch {
+            newTriggeredRules.forEach {
+                logRepo.createRuleTriggerLog(it, true)
+            }
+            releasedRules.forEach {
+                logRepo.createRuleTriggerLog(it, false)
+            }
+        }
+
+
     }
 
     private fun applyRuleSetChange(startedRules: List<Rule>, stoppedRules: List<Rule>) {
@@ -396,6 +443,11 @@ class MainService : LifecycleService() {
         removedRules.forEach {
             NotificationManagerCompat.from(this).cancel(it.ruleInfo.ruleId + 1)
         }
+        lifecycleScope.launch {
+            removedRules.forEach {
+                logRepo.createRuleConfirmLog(it, Confirmed.IGNORED)
+            }
+        }
 
         newRules.forEach {
             val builder = NotificationCompat.Builder(this, RULE_NOTIFICATION_CHANNEL_ID)
@@ -407,12 +459,26 @@ class MainService : LifecycleService() {
                         .apply {
                             action = RULE_EXEC_CONFIRM
                             putExtra(CONFIRMED_RULE_ID_KEY, it.ruleInfo.ruleId)
-                            Log.e("hello", "Notification Create: ${it.ruleInfo.ruleId}")
                         }
                         .let { intent ->
                             PendingIntent.getService(
                                 this,
-                                it.ruleInfo.ruleId + REQ_CODE_OFFSET,
+                                it.ruleInfo.ruleId * 2 + REQ_CODE_OFFSET,
+                                intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                            )
+                        }
+                )
+                .setDeleteIntent(
+                    Intent(this, MainService::class.java)
+                        .apply {
+                            action = RULE_CONFIRM_REMOVED
+                            putExtra(CONFIRMED_RULE_ID_KEY, it.ruleInfo.ruleId)
+                        }
+                        .let { intent ->
+                            PendingIntent.getService(
+                                this,
+                                it.ruleInfo.ruleId * 2 + REQ_CODE_OFFSET + 1,
                                 intent,
                                 PendingIntent.FLAG_UPDATE_CURRENT
                             )
@@ -562,6 +628,9 @@ class MainService : LifecycleService() {
 
             /* Apply Action */
             applyRuleSetChange(listOf(rule), emptyList())
+
+            /* Create Rule Confirmed Log */
+            logRepo.createRuleConfirmLog(rule, Confirmed.CONFIRMED)
         } else {
             updateRuleSet(
                 RuleSet(ruleSet.notified - rule, ruleSet.conflicting + rule, ruleSet.running)
@@ -602,6 +671,7 @@ class MainService : LifecycleService() {
         const val START_BACKGROUND = "START_BACKGROUND"
         const val RULE_CHANGE = "RULE_CHANGE"
         const val RULE_EXEC_CONFIRM = "RULE_EXEC_CONFIRM"
+        const val RULE_CONFIRM_REMOVED = "RULE_CONFIRM_REMOVED"
         const val MIDNIGHT_RESET = "MIDNIGHT_RESET"
 
         const val MAIN_SERVICE_PREF_NAME = "com.yeongil.focusaid.MAIN_SERVICE"

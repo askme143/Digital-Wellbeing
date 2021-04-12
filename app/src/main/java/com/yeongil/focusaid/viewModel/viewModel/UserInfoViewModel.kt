@@ -38,12 +38,16 @@ class UserInfoViewModel(
 
 
         if (!nameError && !emailError) {
-            userInfoPref.setUserInfo(name, email)
             submitEvent.value = Event(Unit)
         }
     }
 
     fun confirm(confirmed: Boolean) {
+        val name = this.name.value ?: ""
+        val email = this.email.value ?: ""
+
+        userInfoPref.setUserInfo(name, email)
+
         confirmEvent.value = Event(confirmed)
     }
 }

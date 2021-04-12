@@ -346,24 +346,25 @@ class RuleEditViewModel(
         val savingRule = rule.copy(ruleInfo = ruleInfo)
         editingRule.value = savingRule
 
-        val takenTimeInSeconds = ((System.currentTimeMillis() - editStartTimeInMillis) / 1000).toInt()
+        val takenTimeInSeconds =
+            ((System.currentTimeMillis() - editStartTimeInMillis) / 1000).toInt()
 
         if (ruleInfo.ruleName == "")
             errorText.value = "규칙 이름을 설정하세요."
         else {
             viewModelScope.launch(Dispatchers.IO) {
                 val success = ruleRepo.insertOrUpdateRule(savingRule)
-                if (success) {
-                    Log.e("hello", "Insert complete")
-                    logRepo.createRuleLog(rule, takenTimeInSeconds)
-                }
-
                 withContext(Dispatchers.Main) {
                     if (success) {
                         errorText.value = ""
                         insertEvent.value = Event(Unit)
                     } else
                         errorText.value = "이미 존재하는 이름입니다."
+                }
+
+                if (success) {
+                    logRepo.createRuleLog(rule, takenTimeInSeconds)
+                    if (isNewRule) logRepo.createRuleActivationLog(rule)
                 }
             }
         }

@@ -10,7 +10,7 @@ interface FocusAidService {
     @POST("/rules")
     suspend fun postRuleLog(@Body ruleLog: RuleLogDto): Response<Unit?>
 
-    @DELETE("/rules")
+    @POST("/rules/delete")
     suspend fun postRuleDeleteLog(@Body ruleDeleteLog: RuleDeleteLogDto): Response<Unit?>
 
     @POST("/rules/activation")
@@ -25,7 +25,7 @@ interface FocusAidService {
     @POST("/rules/batch")
     suspend fun postRuleLogs(@Body ruleLog: List<RuleLogDto>): Response<Unit?>
 
-    @POST("/rules/batch")
+    @POST("/rules/delete/batch")
     suspend fun postRuleDeleteLogs(@Body ruleLog: List<RuleLogDto>): Response<Unit?>
 
     @POST("/rules/activation/batch")

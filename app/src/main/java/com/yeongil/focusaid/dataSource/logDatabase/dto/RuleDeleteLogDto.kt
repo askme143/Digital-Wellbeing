@@ -8,6 +8,6 @@ import kotlinx.serialization.Serializable
 @Entity(tableName = "rule_delete_log")
 data class RuleDeleteLogDto(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val log: String,
 )

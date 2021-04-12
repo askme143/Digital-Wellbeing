@@ -2,6 +2,7 @@ package com.yeongil.focusaid.viewModel.viewModel.rule
 
 import androidx.lifecycle.*
 import com.yeongil.focusaid.data.rule.RuleInfo
+import com.yeongil.focusaid.repository.LogRepository
 import com.yeongil.focusaid.repository.RuleRepository
 import com.yeongil.focusaid.utils.Event
 import com.yeongil.focusaid.utils.recyclerViewUtils.RecyclerItem
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RuleInfoViewModel(
-    private val ruleRepo: RuleRepository
+    private val ruleRepo: RuleRepository,
+    private val logRepo: LogRepository
 ) : ViewModel() {
     val ruleInfoItemList: LiveData<List<RecyclerItem>> = liveData {
         ruleRepo.getRuleInfoListFlow().collect {
@@ -44,7 +46,11 @@ class RuleInfoViewModel(
     private val onClickActivate: (RuleInfo) -> Unit = {
         val newRuleInfo = it.copy(activated = !it.activated)
         itemClickActivate.value = Event(Pair(it.ruleId, newRuleInfo.activated))
-        viewModelScope.launch { ruleRepo.updateRuleInfo(newRuleInfo) }
+        viewModelScope.launch {
+            ruleRepo.updateRuleInfo(newRuleInfo)
+            val rule = ruleRepo.getRuleByRid(newRuleInfo.ruleId)
+            logRepo.createRuleActivationLog(rule)
+        }
     }
     private val onClickNotiOnTrigger: (RuleInfo) -> Unit = {
         val newRuleInfo = it.copy(notiOnTrigger = !it.notiOnTrigger)
@@ -59,6 +65,10 @@ class RuleInfoViewModel(
         itemClickEvent.value = Event(ruleId)
     }
 
-    fun deleteRule() =
-        run { viewModelScope.launch { ruleRepo.deleteRuleByRid(_deletingRule.value!!.first) } }
+    fun deleteRule() {
+        viewModelScope.launch {
+            ruleRepo.deleteRuleByRid(_deletingRule.value!!.first)
+            logRepo.createRuleDeleteLog(_deletingRule.value!!.first)
+        }
+    }
 }
