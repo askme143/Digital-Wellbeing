@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 object FocusAidApi {
     private var serviceInstance: FocusAidService? = null
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://52.79.231.150:3000")
+        .baseUrl("https://www.focus-aid.kro.kr/")
 //        .baseUrl("http://localhost:3000")
         .addConverterFactory(
             Json { encodeDefaults = false }
