@@ -353,7 +353,7 @@ class RuleEditViewModel(
             errorText.value = "규칙 이름을 설정하세요."
         else {
             viewModelScope.launch(Dispatchers.IO) {
-                val success = ruleRepo.insertOrUpdateRule(savingRule)
+                val (success, savedRule) = ruleRepo.insertOrUpdateRule(savingRule)
                 withContext(Dispatchers.Main) {
                     if (success) {
                         errorText.value = ""
@@ -362,9 +362,9 @@ class RuleEditViewModel(
                         errorText.value = "이미 존재하는 이름입니다."
                 }
 
-                if (success) {
-                    logRepo.createRuleLog(rule, takenTimeInSeconds)
-                    if (isNewRule) logRepo.createRuleActivationLog(rule)
+                if (success && savedRule != null) {
+                    logRepo.createRuleLog(savedRule, takenTimeInSeconds)
+                    if (isNewRule) logRepo.createRuleActivationLog(savedRule)
                 }
             }
         }

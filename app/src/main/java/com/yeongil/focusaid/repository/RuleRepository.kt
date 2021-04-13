@@ -1,6 +1,7 @@
 package com.yeongil.focusaid.repository
 
 import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import com.yeongil.focusaid.data.rule.Rule
 import com.yeongil.focusaid.data.rule.RuleInfo
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.RuleDao
@@ -17,12 +18,14 @@ import com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger.TimeTriggerDto
 import com.yeongil.focusaid.utils.TEMPORAL_RULE_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class RuleRepository(
     private val sequenceNumber: SequenceNumber,
     private val ruleDao: RuleDao,
 ) {
-    suspend fun insertOrUpdateRule(rule: Rule): Boolean {
+    suspend fun insertOrUpdateRule(rule: Rule): Pair<Boolean, Rule?> {
         val rid =
             if (rule.ruleInfo.ruleId != TEMPORAL_RULE_ID)
                 rule.ruleInfo.ruleId
@@ -48,13 +51,13 @@ class RuleRepository(
         return if (rule.ruleInfo.ruleId == TEMPORAL_RULE_ID) {
             try {
                 ruleDao.insertRule(ruleDto)
-                true
+                Pair(true, Rule(ruleDto))
             } catch (exception: SQLiteConstraintException) {
-                false
+                Pair(false, null)
             }
         } else {
             ruleDao.updateRule(ruleDto)
-            true
+            Pair(true, Rule(ruleDto))
         }
     }
 
