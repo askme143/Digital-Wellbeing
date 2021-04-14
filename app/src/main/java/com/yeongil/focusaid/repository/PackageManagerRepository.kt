@@ -24,6 +24,7 @@ class PackageManagerRepository(
         (info.flags and ApplicationInfo.FLAG_SYSTEM) != 0
                 && info.packageName != "com.google.android.youtube"
                 && info.packageName != "com.google.android.gm"
+                && info.packageName != "com.android.chrome"
                 || info.packageName == "com.yeongil.focusaid"
                 || info.packageName == "com.samsung.android.spay"
                 || info.packageName == "com.samsung.android.spayfw"
