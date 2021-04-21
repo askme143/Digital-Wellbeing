@@ -50,7 +50,7 @@ class MainFragment : Fragment() {
                 findNavController().navigateSafe(directions.actionMainFragmentToDescriptionFragment())
             }
         }
-        ruleInfoViewModel.itemClickActivate.observe(viewLifecycleOwner) { event ->
+        ruleInfoViewModel.itemClickActivateEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { (ruleId, activated) ->
                 if (activated) {
                     Toast.makeText(context, "규칙이 활성화 됩니다. 조건을 충족하면 액션이 수행됩니다", Toast.LENGTH_SHORT)
@@ -87,6 +87,14 @@ class MainFragment : Fragment() {
         ruleInfoViewModel.itemDeleteEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 findNavController().navigateSafe(directions.actionMainFragmentToDeleteConfirmDialog())
+            }
+        }
+        ruleInfoViewModel.itemDeleteCompleteEvent.observe(viewLifecycleOwner) {event ->
+            event.getContentIfNotHandled()?.let { ruleId ->
+                val intent = Intent(requireContext(), MainService::class.java)
+                intent.action = MainService.RULE_CHANGE
+                intent.putExtra(MainService.CHANGED_RULE_ID_KEY, ruleId)
+                requireActivity().startService(intent)
             }
         }
 

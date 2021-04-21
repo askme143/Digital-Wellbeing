@@ -15,8 +15,8 @@ android {
         applicationId "com.yeongil.focusaid"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 13
-        versionName "0.05.05-dev"
+        versionCode 14
+        versionName "0.05.06"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -8,8 +8,10 @@ import com.yeongil.focusaid.utils.Event
 import com.yeongil.focusaid.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.focusaid.viewModel.itemViewModel.HelpPhraseItemViewModel
 import com.yeongil.focusaid.viewModel.itemViewModel.RuleInfoItemViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RuleInfoViewModel(
     private val ruleRepo: RuleRepository,
@@ -37,15 +39,17 @@ class RuleInfoViewModel(
     }
 
     val itemClickEvent = MutableLiveData<Event<Int>>()
-    val itemClickActivate = MutableLiveData<Event<Pair<Int, Boolean>>>()
+    val itemClickActivateEvent = MutableLiveData<Event<Pair<Int, Boolean>>>()
     val itemClickNotiOnTriggerEvent = MutableLiveData<Event<Pair<Int, Boolean>>>()
     val itemDeleteEvent = MutableLiveData<Event<Unit>>()
+    val itemDeleteCompleteEvent = MutableLiveData<Event<Int>>()
     private val _deletingRule = MutableLiveData<Pair<Int, String>>()
     val deletingRuleName: LiveData<String> get() = _deletingRule.map { it.second }
 
+
     private val onClickActivate: (RuleInfo) -> Unit = {
         val newRuleInfo = it.copy(activated = !it.activated)
-        itemClickActivate.value = Event(Pair(it.ruleId, newRuleInfo.activated))
+        itemClickActivateEvent.value = Event(Pair(it.ruleId, newRuleInfo.activated))
         viewModelScope.launch {
             ruleRepo.updateRuleInfo(newRuleInfo)
             val rule = ruleRepo.getRuleByRid(newRuleInfo.ruleId)
@@ -67,8 +71,13 @@ class RuleInfoViewModel(
 
     fun deleteRule() {
         viewModelScope.launch {
-            ruleRepo.deleteRuleByRid(_deletingRule.value!!.first)
-            logRepo.createRuleDeleteLog(_deletingRule.value!!.first)
+            val rid = _deletingRule.value!!.first
+
+            ruleRepo.deleteRuleByRid(rid)
+            withContext(Dispatchers.Main) {
+                itemDeleteCompleteEvent.value = Event(rid)
+            }
+            logRepo.createRuleDeleteLog(rid)
         }
     }
 }

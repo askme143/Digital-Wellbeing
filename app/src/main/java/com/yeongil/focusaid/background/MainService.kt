@@ -333,14 +333,14 @@ class MainService : LifecycleService() {
         /* apply changes to action services */
         val startedRules = rulesToRun - ruleSet.running
         val stoppedRules = ruleSet.running - rulesToRun
-        applyRuleSetChange(startedRules, stoppedRules)
+        applyRuleSetChange(startedRules, stoppedRules, rulesToRun)
 
         /* Log newly triggered rules */
         val oldRules = ruleSet.conflicting + ruleSet.notified + ruleSet.running
 
         val newTriggeredRules = triggeredRules - oldRules
         val releasedRules = oldRules - triggeredRules
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
             newTriggeredRules.forEach {
                 logRepo.createRuleTriggerLog(it, true)
             }
@@ -352,7 +352,11 @@ class MainService : LifecycleService() {
 
     }
 
-    private fun applyRuleSetChange(startedRules: List<Rule>, stoppedRules: List<Rule>) {
+    private fun applyRuleSetChange(
+        startedRules: List<Rule>,
+        stoppedRules: List<Rule>,
+        rulesToRun: List<Rule>
+    ) {
         var stopAppBlockAction = false
         var stopNotificationAction = false
         var stopRingerAction = false
@@ -379,6 +383,13 @@ class MainService : LifecycleService() {
             if (it.notificationAction != null) stopNotificationAction = true
             if (it.dndAction != null) stopDndAction = true
             if (it.ringerAction != null) stopRingerAction = true
+        }
+
+        if (!stopAppBlockAction && appBlockAction == null) {
+            stopAppBlockAction = rulesToRun.all { it.appBlockAction == null }
+        }
+        if (!stopNotificationAction && notificationAction == null) {
+            stopNotificationAction = rulesToRun.all { it.notificationAction == null }
         }
 
         val dndIntent by lazy { Intent(this, DndService::class.java) }
@@ -631,7 +642,7 @@ class MainService : LifecycleService() {
             startForeground(1, builder.build())
 
             /* Apply Action */
-            applyRuleSetChange(listOf(rule), emptyList())
+            applyRuleSetChange(listOf(rule), emptyList(), ruleSet.running + rule)
 
             /* Create Rule Confirmed Log */
             logRepo.createRuleConfirmLog(rule, Confirmed.CONFIRMED)

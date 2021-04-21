@@ -40,6 +40,11 @@ class TimeTriggerService : LifecycleService() {
             /* Set alarm manager */
             if (minInterval == null) {
                 alarmManager.cancel(pendingIntent)
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + 60 * 1000,
+                    pendingIntent
+                )
             } else {
                 alarmManager.cancel(pendingIntent)
                 alarmManager.setExactAndAllowWhileIdle(
