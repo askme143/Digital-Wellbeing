@@ -26,7 +26,7 @@ class LocationSearchViewModel(
     val currLocationErrorEvent = MutableLiveData<Event<Unit>>()
 
     private val locationList = MutableLiveData<List<Location>>()
-    val locationRecyclerItemList = liveData<List<RecyclerItem>> {
+    val locationRecyclerItemList = liveData {
         locationList.asFlow().collect { list ->
             emit(
                 list.map { LocationItemViewModel(it.id, it, onClickItem) }

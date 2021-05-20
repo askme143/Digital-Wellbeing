@@ -22,15 +22,6 @@ class NotificationActionViewModel(
     val constNotificationRing = NOTIFICATION_RING
     val constNotificationSilent = NOTIFICATION_SILENT
     val handlingAction = MutableLiveData<Int>()
-    val handlingActionText = handlingAction.map {
-        when (it) {
-            NOTIFICATION_HIDE -> "알림 숨기기"
-            NOTIFICATION_VIBRATE -> "진동으로 받기"
-            NOTIFICATION_RING -> "소리로 받기"
-            NOTIFICATION_SILENT -> "무음으로 받기"
-            else -> ""
-        }
-    }
 
     fun onSelectHandlingAction(action: Int) = run { handlingAction.value = action }
 
@@ -61,7 +52,7 @@ class NotificationActionViewModel(
         .map { (appList, allApp) -> allApp?.not() ?: true && appList?.isEmpty() ?: true }
 
     /* Noti Keyword */
-    val notiKeywordItemList = MutableLiveData<List<NotiKeywordItem>>()
+    private val notiKeywordItemList = MutableLiveData<List<NotiKeywordItem>>()
     val notiKeywordItemClickEvent = MutableLiveData<Event<NotiKeywordItem>>()
     private val onClickNotiKeywordItem = { id: String ->
         notiKeywordItemClickEvent.value = Event(getNotiKeywordItem(id))
@@ -142,7 +133,7 @@ class NotificationActionViewModel(
     //////////////////////////
     /* Notification Keyword */
     //////////////////////////
-    fun getNotiKeywordItem(id: String): NotiKeywordItem {
+    private fun getNotiKeywordItem(id: String): NotiKeywordItem {
         return notiKeywordItemList.value!!.first { it.id == id }
     }
 

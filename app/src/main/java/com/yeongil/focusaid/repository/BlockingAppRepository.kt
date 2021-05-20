@@ -16,13 +16,7 @@ class BlockingAppRepository(
     suspend fun updateBlockingApp(blockingApp: BlockingApp) =
         blockingAppDao.updateBlockingApp(BlockingAppDto(blockingApp))
 
-    suspend fun deleteBlockingApp(packageName: String) =
-        blockingAppDao.deleteBlockingApp(packageName)
-
     suspend fun deleteAllBlockingApps() = blockingAppDao.deleteAllBlockingApps()
-
-    suspend fun getAllBlockingApps() =
-        blockingAppDao.getAllBlockingApps().map { it.toBlockingApp() }
 
     suspend fun getBlockingAppByPackageName(packageName: String) =
         blockingAppDao.getBlockingAppByPackageName(packageName)?.toBlockingApp()

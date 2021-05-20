@@ -2,11 +2,9 @@ package com.yeongil.focusaid.viewModel.viewModel.action
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import com.yeongil.focusaid.data.rule.action.AppBlockEntry
 import com.yeongil.focusaid.utils.ALERT
 import com.yeongil.focusaid.utils.CLOSE_IMMEDIATE
-import com.yeongil.focusaid.utils.combineWith
 
 class AppBlockEntryViewModel : ViewModel() {
     private companion object {

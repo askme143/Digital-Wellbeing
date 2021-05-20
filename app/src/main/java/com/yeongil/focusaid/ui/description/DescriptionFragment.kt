@@ -38,13 +38,6 @@ class DescriptionFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = descriptionViewModel
 
-//        binding.title.setOnClickListener {
-//            findNavController().navigateSafe(directions.actionDescriptionFragmentToRuleNameEditDialog())
-//        }
-//        binding.editBtn.setOnClickListener {
-//            ruleEditViewModel.init(descriptionViewModel.rule.value!!)
-//            findNavController().navigateSafe(directions.actionDescriptionFragmentToTriggerFragment())
-//        }
         binding.finishBtn.setOnClickListener {
             findNavController().navigateSafe(directions.actionDescriptionFragmentToMainFragment())
         }

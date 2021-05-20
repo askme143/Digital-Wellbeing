@@ -19,11 +19,11 @@ class AppBlockActionViewModel(
     /* Data */
     var originalAction: AppBlockAction? = null
     val appBlockEntryList = MutableLiveData<List<AppBlockEntry>>()
-    val allAppBlock = MutableLiveData<Boolean>(false)
-    val allAppHandlingAction = MutableLiveData<Int>(CLOSE_IMMEDIATE)
+    val allAppBlock = MutableLiveData(false)
+    val allAppHandlingAction = MutableLiveData(CLOSE_IMMEDIATE)
 
     // Indicate whether the user have clicked any item. It's for showing help
-    val isFirstItemClick = MutableLiveData<Boolean>(true)
+    private val isFirstItemClick = MutableLiveData(true)
 
     /* View Related */
     // Recycler Item List

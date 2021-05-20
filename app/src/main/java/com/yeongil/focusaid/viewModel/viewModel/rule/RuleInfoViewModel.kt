@@ -2,7 +2,6 @@ package com.yeongil.focusaid.viewModel.viewModel.rule
 
 import androidx.lifecycle.*
 import com.yeongil.focusaid.data.rule.RuleInfo
-import com.yeongil.focusaid.repository.LogRepository
 import com.yeongil.focusaid.repository.RuleRepository
 import com.yeongil.focusaid.utils.Event
 import com.yeongil.focusaid.utils.recyclerViewUtils.RecyclerItem
@@ -15,7 +14,6 @@ import kotlinx.coroutines.withContext
 
 class RuleInfoViewModel(
     private val ruleRepo: RuleRepository,
-    private val logRepo: LogRepository
 ) : ViewModel() {
     val ruleInfoItemList: LiveData<List<RecyclerItem>> = liveData {
         ruleRepo.getRuleInfoListFlow().collect {
@@ -52,8 +50,6 @@ class RuleInfoViewModel(
         itemClickActivateEvent.value = Event(Pair(it.ruleId, newRuleInfo.activated))
         viewModelScope.launch {
             ruleRepo.updateRuleInfo(newRuleInfo)
-            val rule = ruleRepo.getRuleByRid(newRuleInfo.ruleId)
-            logRepo.createRuleActivationLog(rule)
         }
     }
     private val onClickNotiOnTrigger: (RuleInfo) -> Unit = {
@@ -77,7 +73,6 @@ class RuleInfoViewModel(
             withContext(Dispatchers.Main) {
                 itemDeleteCompleteEvent.value = Event(rid)
             }
-            logRepo.createRuleDeleteLog(rid)
         }
     }
 }

@@ -2,7 +2,6 @@ package com.yeongil.focusaid.utils
 
 import android.annotation.SuppressLint
 import android.location.Location
-import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

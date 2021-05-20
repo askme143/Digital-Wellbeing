@@ -3,14 +3,10 @@ package com.yeongil.focusaid.viewModelFactory
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yeongil.focusaid.repository.RuleRepository
 import com.yeongil.focusaid.dataSource.SequenceNumber
-import com.yeongil.focusaid.dataSource.focusAidApi.FocusAidApi
-import com.yeongil.focusaid.dataSource.logDatabase.LogDatabase
 import com.yeongil.focusaid.dataSource.ruleDatabase.RuleDatabase
-import com.yeongil.focusaid.dataSource.user.UserInfoPref
-import com.yeongil.focusaid.repository.LogRepository
 import com.yeongil.focusaid.repository.PackageManagerRepository
+import com.yeongil.focusaid.repository.RuleRepository
 import com.yeongil.focusaid.viewModel.viewModel.rule.RuleEditViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -21,11 +17,6 @@ class RuleEditViewModelFactory(private val context: Context) : ViewModelProvider
                 RuleRepository(
                     SequenceNumber(context.applicationContext),
                     RuleDatabase.getInstance(context.applicationContext).ruleDao()
-                ),
-                LogRepository(
-                    FocusAidApi.service,
-                    UserInfoPref(context.applicationContext),
-                    LogDatabase.getInstance(context.applicationContext).logDao()
                 ),
                 PackageManagerRepository(context.applicationContext.packageManager)
             ) as T

@@ -19,7 +19,7 @@ class EmptyTriggerDialog : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogEmptyTriggerBinding.inflate(inflater, container, false)
 
         binding.cancelBtn.setOnClickListener {

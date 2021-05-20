@@ -15,10 +15,10 @@ class AppListViewModel(
     // Data
     private val appItemList = MutableLiveData<List<AppItem>>()
     val searchText = MutableLiveData<String>()
-    val appItemAllChecked = MutableLiveData<Boolean>(false)
+    val appItemAllChecked = MutableLiveData(false)
 
     // View Related
-    val appRecyclerItemList = appItemList.map { list ->
+    private val appRecyclerItemList = appItemList.map { list ->
         list.map {
             AppItemViewModel(
                 it.packageName,
@@ -41,7 +41,7 @@ class AppListViewModel(
                     .map { it.toRecyclerItem() }
             }
 
-    val itemCount = MutableLiveData<Int>(0)
+    val itemCount = MutableLiveData(0)
     val onClickItem: (MutableLiveData<Boolean>) -> Unit = {
         val newValue = !(it.value ?: false)
         it.value = newValue

@@ -26,7 +26,7 @@ class TriggerDeleteConfirmDialog : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogDeleteConfirmBinding.inflate(inflater, container, false)
 
         binding.cancelBtn.setOnClickListener {

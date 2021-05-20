@@ -24,8 +24,8 @@ class LocationTriggerViewModel(
     val internetErrorEvent = MutableLiveData<Event<Unit>>()
 
     val progress = MutableLiveData(0)
-    val latLng = MutableLiveData<LatLng>(LatLng(0.0, 0.0))
-    val locationName = MutableLiveData<String>("")
+    val latLng = MutableLiveData(LatLng(0.0, 0.0))
+    val locationName = MutableLiveData("")
 
     val range = progress.map { it + 150 }
     val rangeText = range.map { "현재 범위: ${it}m" }

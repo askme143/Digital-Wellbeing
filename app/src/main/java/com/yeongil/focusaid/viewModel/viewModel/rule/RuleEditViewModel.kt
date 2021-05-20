@@ -2,7 +2,6 @@ package com.yeongil.focusaid.viewModel.viewModel.rule
 
 import android.text.Html
 import android.text.Spanned
-import android.util.Log
 import androidx.lifecycle.*
 import com.yeongil.focusaid.R
 import com.yeongil.focusaid.data.rule.action.AppBlockAction
@@ -14,7 +13,6 @@ import com.yeongil.focusaid.data.rule.RuleInfo
 import com.yeongil.focusaid.data.rule.trigger.ActivityTrigger
 import com.yeongil.focusaid.data.rule.trigger.LocationTrigger
 import com.yeongil.focusaid.data.rule.trigger.TimeTrigger
-import com.yeongil.focusaid.repository.LogRepository
 import com.yeongil.focusaid.repository.PackageManagerRepository
 import com.yeongil.focusaid.repository.RuleRepository
 import com.yeongil.focusaid.utils.*
@@ -30,7 +28,6 @@ import kotlinx.coroutines.withContext
 
 class RuleEditViewModel(
     private val ruleRepo: RuleRepository,
-    private val logRepo: LogRepository,
     private val pmRepo: PackageManagerRepository
 ) : ViewModel() {
     private val emptyRule = Rule(
@@ -101,13 +98,13 @@ class RuleEditViewModel(
     val itemClickEvent = MutableLiveData<Event<String>>()
 
     val itemDeleteEvent = MutableLiveData<Event<Boolean>>()
-    var deletingItemId = ""
+    private var deletingItemId = ""
 
-    val isActionItemEmpty = liveData<Boolean> {
+    val isActionItemEmpty = liveData {
         actionRecyclerItemList.asFlow().collect { emit(it.isEmpty()) }
     }
 
-    val errorText = MutableLiveData<String>("")
+    val errorText = MutableLiveData("")
     val insertEvent = MutableLiveData<Event<Unit>>()
     val ruleName = MutableLiveData<String>()
 
@@ -346,25 +343,17 @@ class RuleEditViewModel(
         val savingRule = rule.copy(ruleInfo = ruleInfo)
         editingRule.value = savingRule
 
-        val takenTimeInSeconds =
-            ((System.currentTimeMillis() - editStartTimeInMillis) / 1000).toInt()
-
         if (ruleInfo.ruleName == "")
             errorText.value = "규칙 이름을 설정하세요."
         else {
             viewModelScope.launch(Dispatchers.IO) {
-                val (success, savedRule) = ruleRepo.insertOrUpdateRule(savingRule)
+                val success = ruleRepo.insertOrUpdateRule(savingRule)
                 withContext(Dispatchers.Main) {
                     if (success) {
                         errorText.value = ""
                         insertEvent.value = Event(Unit)
                     } else
                         errorText.value = "이미 존재하는 이름입니다."
-                }
-
-                if (success && savedRule != null) {
-                    logRepo.createRuleLog(savedRule, takenTimeInSeconds)
-                    if (isNewRule) logRepo.createRuleActivationLog(savedRule)
                 }
             }
         }

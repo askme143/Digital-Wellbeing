@@ -25,7 +25,7 @@ class DescriptionViewModel(
     val ruleName = _rule.map { it.ruleInfo.ruleName }
 
     val itemClickEvent = MutableLiveData<Event<String>>()
-    val onItemClick: (String) -> Unit = { id ->
+    private val onItemClick: (String) -> Unit = { id ->
         itemClickEvent.value = Event(id)
     }
 

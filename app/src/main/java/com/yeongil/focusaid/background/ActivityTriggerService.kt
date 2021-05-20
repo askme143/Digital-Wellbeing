@@ -2,15 +2,12 @@ package com.yeongil.focusaid.background
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
-import com.yeongil.focusaid.MainActivity
 import com.yeongil.focusaid.dataSource.SequenceNumber
 import com.yeongil.focusaid.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.focusaid.repository.RuleRepository

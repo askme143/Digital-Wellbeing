@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 
 
 object KakaoApi {
-    private val apiKey = "3c452cdffef6d0a0873e0b826b22b353"
+    private const val apiKey = "3c452cdffef6d0a0873e0b826b22b353"
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://dapi.kakao.com/")
         .addConverterFactory(Json.asConverterFactory(MediaType.parse("application/json")!!))

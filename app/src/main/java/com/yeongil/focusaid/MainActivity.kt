@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         super.onResume()
     }
 
-    private suspend fun load() {
+    private fun load() {
         appListViewModel.loadAppList()  // load app lists with sorting
     }
 }

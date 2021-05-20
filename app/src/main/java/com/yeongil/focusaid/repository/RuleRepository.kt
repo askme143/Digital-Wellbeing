@@ -1,31 +1,28 @@
 package com.yeongil.focusaid.repository
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import com.yeongil.focusaid.data.rule.Rule
 import com.yeongil.focusaid.data.rule.RuleInfo
+import com.yeongil.focusaid.dataSource.SequenceNumber
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.RuleDao
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.RuleDto
-import com.yeongil.focusaid.dataSource.SequenceNumber
+import com.yeongil.focusaid.dataSource.ruleDatabase.dto.RuleInfoDto
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.AppBlockActionDto
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.DndActionDto
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.NotificationActionDto
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.RingerActionDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.RuleInfoDto
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger.ActivityTriggerDto
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger.LocationTriggerDto
 import com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger.TimeTriggerDto
 import com.yeongil.focusaid.utils.TEMPORAL_RULE_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class RuleRepository(
     private val sequenceNumber: SequenceNumber,
     private val ruleDao: RuleDao,
 ) {
-    suspend fun insertOrUpdateRule(rule: Rule): Pair<Boolean, Rule?> {
+    suspend fun insertOrUpdateRule(rule: Rule): Boolean {
         val rid =
             if (rule.ruleInfo.ruleId != TEMPORAL_RULE_ID)
                 rule.ruleInfo.ruleId
@@ -51,13 +48,13 @@ class RuleRepository(
         return if (rule.ruleInfo.ruleId == TEMPORAL_RULE_ID) {
             try {
                 ruleDao.insertRule(ruleDto)
-                Pair(true, Rule(ruleDto))
+                true
             } catch (exception: SQLiteConstraintException) {
-                Pair(false, null)
+                false
             }
         } else {
             ruleDao.updateRule(ruleDto)
-            Pair(true, Rule(ruleDto))
+            true
         }
     }
 
@@ -82,10 +79,6 @@ class RuleRepository(
         return ruleDao.getRuleListAsFlowByRid().map { list ->
             list.map { Rule(it) }
         }
-    }
-
-    fun getActiveRuleListAsFlow(): Flow<List<Rule>> {
-        return getRuleListAsFlow().map { list -> list.filter { it.ruleInfo.activated } }
     }
 
     suspend fun getActiveRuleList(): List<Rule> {

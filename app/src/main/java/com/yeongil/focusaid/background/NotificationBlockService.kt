@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.text.SpannableString
-import android.util.Log
 import androidx.core.content.edit
 import com.yeongil.focusaid.data.rule.action.KeywordEntry
 import com.yeongil.focusaid.data.rule.action.NotificationAction
