@@ -99,7 +99,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
-            recycler_item_list_with_lifecycle="@{vm.appRecyclerItemListSearched}"
+            recycler_item_list="@{vm.appRecyclerItemListSearched}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"

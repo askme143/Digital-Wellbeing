@@ -49,14 +49,6 @@ class NotificationActionFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = notiActionViewModel
 
-        with(binding.keywordRecyclerView) {
-            if (this.adapter == null) {
-                this.layoutManager = LinearLayoutManager(context)
-                this.adapter = RecyclerViewAdapter(viewLifecycleOwner)
-                this.itemAnimator = null
-            }
-        }
-
         notiActionViewModel.notiKeywordItemClickEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { item ->
                 notiKeywordViewModel.putNotiKeywordItem(item)

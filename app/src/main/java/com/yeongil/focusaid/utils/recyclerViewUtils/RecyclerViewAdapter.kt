@@ -2,14 +2,17 @@ package com.yeongil.focusaid.utils.recyclerViewUtils
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.doOnAttach
+import androidx.core.view.doOnDetach
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewAdapter(private val parentLifecycle: LifecycleOwner? = null) :
+class RecyclerViewAdapter :
     ListAdapter<RecyclerItem, RecyclerViewAdapter.BindingViewHolder>(DiffCallback()) {
     override fun getItemViewType(position: Int): Int {
         return getItem(position).layoutId
@@ -18,7 +21,6 @@ class RecyclerViewAdapter(private val parentLifecycle: LifecycleOwner? = null) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ViewDataBinding = DataBindingUtil.inflate(inflater, viewType, parent, false)
-        if (parentLifecycle != null) binding.lifecycleOwner = parentLifecycle
 
         return BindingViewHolder(binding)
     }
@@ -28,7 +30,12 @@ class RecyclerViewAdapter(private val parentLifecycle: LifecycleOwner? = null) :
         holder.binding.executePendingBindings()
     }
 
-    class BindingViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root)
+    class BindingViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.doOnAttach { binding.lifecycleOwner = itemView.findViewTreeLifecycleOwner() }
+            itemView.doOnDetach { binding.lifecycleOwner = null }
+        }
+    }
 
     class DiffCallback : DiffUtil.ItemCallback<RecyclerItem>() {
         override fun areItemsTheSame(oldItem: RecyclerItem, newItem: RecyclerItem): Boolean {

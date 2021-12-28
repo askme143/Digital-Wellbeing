@@ -163,7 +163,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/keyword_recycler_view"
-            recycler_item_list_with_lifecycle="@{vm.notiKeywordRecyclerItemList}"
+            recycler_item_list="@{vm.notiKeywordRecyclerItemList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"

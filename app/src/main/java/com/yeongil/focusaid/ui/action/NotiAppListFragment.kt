@@ -40,14 +40,6 @@ class NotiAppListFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = appListViewModel
 
-        with(binding.recyclerView) {
-            if (this.adapter == null) {
-                this.layoutManager = LinearLayoutManager(context)
-                this.adapter = RecyclerViewAdapter(viewLifecycleOwner)
-                this.itemAnimator = null
-            }
-        }
-
         binding.beforeBtn.setOnClickListener {
             hideKeyboard()
 
