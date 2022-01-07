@@ -49,6 +49,8 @@ android {
 }
 
 dependencies {
+    def roomVersion = "2.4.0"
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
@@ -69,9 +71,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
 
-    implementation "androidx.room:room-runtime:2.4.0"
-    kapt "androidx.room:room-compiler:2.4.0"
-    implementation "androidx.room:room-ktx:2.4.0"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
