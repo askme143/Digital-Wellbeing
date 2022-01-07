@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="알림 숨김 방법 설정하기"
+            android:text="@string/notification_hiding_settings"
             android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="@id/header_bg"
@@ -48,13 +48,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="알림을 숨길 앱"
+            android:text="@string/apps_to_hide_notifications_from"
             android:textColor="@color/black"
             android:textSize="28sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 
         <ImageView
+            android:contentDescription="@string/app_add_btn_description"
             android:id="@+id/add_app_btn"
             android:layout_width="wrap_content"
             android:layout_height="40sp"
@@ -68,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="26dp"
-            android:text="앱 추가"
+            android:text="@string/add_apps"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/add_app_btn"
@@ -106,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="앱 추가 버튼을 터치하여\n알림을 처리할 앱을 추가해 주세요\n(동시에 여러 앱 선택 가능)\n\n모든 앱에 대해서 적용하고 싶은 경우,\n“앱 추가 버튼”을 터치하여\n“모든 앱 선택하기”를 선택해 주세요"
+            android:text="@string/press_add_apps"
             android:textAlignment="center"
             android:textStyle="italic"
             android:visibility="@{vm.noApp ? View.VISIBLE : View.GONE}"
@@ -126,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="알림 숨김 키워드"
+            android:text="@string/notification_hiding_keyword"
             android:textColor="@color/black"
             android:textSize="28sp"
             app:layout_constraintBottom_toTopOf="@id/footer_barrier"
@@ -134,6 +135,7 @@
             app:layout_constraintTop_toBottomOf="@id/app_barrier" />
 
         <ImageView
+            android:contentDescription="@string/add_keyword_btn_description"
             android:id="@+id/add_keyword_btn"
             android:layout_width="wrap_content"
             android:layout_height="40sp"
@@ -147,7 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="키워드 추가"
+            android:text="@string/add_keyword"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/add_keyword_btn"
@@ -173,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="키워드 추가 버튼을 터치하여\n처리할 키워드를 지정해 주세요\n\n지정한 키워드를 메시지에 포함 혹은\n미포함된 알림을 처리할 수 있습니다"
+            android:text="@string/press_add_keyword"
             android:textAlignment="center"
             android:textStyle="italic"
             android:visibility="@{vm.noKeyword ? View.VISIBLE : View.GONE}"
@@ -192,7 +194,7 @@
             android:id="@+id/before_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="뒤로"
+            android:text="@string/back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -201,7 +203,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="@{vm.actionExists}"
-            android:text="완료"
+            android:text="@string/complete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 

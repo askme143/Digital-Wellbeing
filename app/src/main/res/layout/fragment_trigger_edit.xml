@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="추가할 조건 타입 선택하기"
+            android:text="@string/select_trigger_type"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -55,6 +55,7 @@
             app:layout_constraintTop_toBottomOf="@id/header_barrier">
 
             <ImageView
+                android:contentDescription="@string/location_icon_description"
                 android:id="@+id/location_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -68,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="장소 조건 추가하기"
+                android:text="@string/add_location_trigger"
                 android:textColor="@color/purple_text"
                 android:textSize="30sp"
                 android:textStyle="bold"
@@ -102,6 +103,7 @@
             app:layout_constraintTop_toBottomOf="@id/location_btn">
 
             <ImageView
+                android:contentDescription="@string/time_icon_description"
                 android:id="@+id/time_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -115,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="시간 조건 추가하기"
+                android:text="@string/add_time_trigger"
                 android:textColor="@color/purple_text"
                 android:textSize="30sp"
                 android:textStyle="bold"
@@ -149,6 +151,7 @@
             app:layout_constraintTop_toBottomOf="@id/time_btn">
 
             <ImageView
+                android:contentDescription="@string/activity_icon_description"
                 android:id="@+id/activity_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -162,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="활동 조건 추가하기"
+                android:text="@string/add_activity_trigger"
                 android:textColor="@color/purple_text"
                 android:textSize="30sp"
                 android:textStyle="bold"
@@ -185,7 +188,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="설정할 조건의 타입을 선택하세요."
+            android:text="@string/select_type_of_the_trigger"
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="italic"
@@ -197,7 +200,7 @@
             android:id="@+id/cancel_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="취소(뒤로)"
+            android:text="@string/cancel_prev"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

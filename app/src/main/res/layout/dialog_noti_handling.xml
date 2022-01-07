@@ -18,7 +18,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알림 처리 방법"
+            android:text="@string/notification_handling_method"
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationHide)}"
                 android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationHide)}"
-                android:text="알림 숨기기" />
+                android:text="@string/hide" />
 
             <RadioButton
                 android:id="@+id/vibrate"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationVibrate)}"
                 android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationVibrate)}"
-                android:text="진동으로 받기" />
+                android:text="@string/vibration" />
 
             <RadioButton
                 android:id="@+id/ring"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationRing)}"
                 android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationRing)}"
-                android:text="소리로 받기" />
+                android:text="@string/ring" />
 
             <RadioButton
                 android:id="@+id/silent"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constNotificationSilent)}"
                 android:onClick="@{() -> vm.onSelectHandlingAction(vm.constNotificationSilent)}"
-                android:text="무음으로 받기" />
+                android:text="@string/silent" />
         </RadioGroup>
 
         <androidx.constraintlayout.widget.Barrier
@@ -76,7 +76,7 @@
             android:id="@+id/cancel_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="취소"
+            android:text="@string/cancel"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/radio_group"
             app:layout_constraintWidth_default="percent"
@@ -86,7 +86,7 @@
             android:id="@+id/complete_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="완료"
+            android:text="@string/complete"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/radio_group"
             app:layout_constraintWidth_default="percent"

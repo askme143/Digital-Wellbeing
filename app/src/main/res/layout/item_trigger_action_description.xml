@@ -21,6 +21,7 @@
             image_drawable="@{itemVM.triggerActionItem.resourceId}"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:contentDescription="@string/icon_description"
             app:layout_constraintBottom_toBottomOf="@id/title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/title" />
@@ -32,9 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="@{itemVM.triggerActionItem.title}"
+            android:textColor="@color/purple_text"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/purple_text"
             app:layout_constraintLeft_toRightOf="@id/icon"
             app:layout_constraintTop_toTopOf="parent" />
 

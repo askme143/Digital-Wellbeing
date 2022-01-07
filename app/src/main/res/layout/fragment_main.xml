@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="나의 규칙들"
+            android:text="@string/my_rules"
             android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="@id/header_bg"
@@ -38,6 +38,7 @@
 
 
         <ImageView
+            android:contentDescription="@string/add_btn_description"
             android:id="@+id/add_btn"
             android:layout_width="wrap_content"
             android:layout_height="40sp"
@@ -52,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="규칙 추가"
+            android:text="@string/add_rule"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/add_btn"
@@ -84,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:padding="10dp"
-            android:text="생성된 방해 관리 \n규칙이 없습니다. \n\n규칙 추가 버튼을 터치하여 \n규칙을 추가해 주세요."
+            android:text="@string/no_rules_press_add_btn"
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="italic"

@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="추가할 액션 타입 선택하기"
+            android:text="@string/select_action_type"
             android:textColor="@color/black"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -69,6 +69,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:contentDescription="@string/app_block_icon_description"
                         android:id="@+id/app_block_icon"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
@@ -82,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="앱 사용 제한 설정"
+                        android:text="@string/app_block"
                         android:textColor="@color/purple_text"
                         android:textSize="30sp"
                         android:textStyle="bold"
@@ -116,6 +117,7 @@
                     app:layout_constraintTop_toBottomOf="@id/app_block_btn">
 
                     <ImageView
+                        android:contentDescription="@string/notification_icon_description"
                         android:id="@+id/notification_icon"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
@@ -129,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="알림 처리 방법 설정"
+                        android:text="@string/notification_handling"
                         android:textColor="@color/purple_text"
                         android:textSize="30sp"
                         android:textStyle="bold"
@@ -163,6 +165,7 @@
                     app:layout_constraintTop_toBottomOf="@id/notification_btn">
 
                     <ImageView
+                        android:contentDescription="@string/dnd_icon_description"
                         android:id="@+id/dnd_icon"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
@@ -176,7 +179,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="방해 금지 모드 실행"
+                        android:text="@string/set_dnd_mode"
                         android:textColor="@color/purple_text"
                         android:textSize="30sp"
                         android:textStyle="bold"
@@ -210,6 +213,7 @@
                     app:layout_constraintTop_toBottomOf="@id/dnd_btn">
 
                     <ImageView
+                        android:contentDescription="@string/ringer_icon_description"
                         android:id="@+id/ringer_icon"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
@@ -223,7 +227,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="소리 모드 변경"
+                        android:text="@string/change_ringer_mode"
                         android:textColor="@color/purple_text"
                         android:textSize="30sp"
                         android:textStyle="bold"
@@ -246,7 +250,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="실행할 액션의 타입을 선택하세요"
+                    android:text="@string/select_action_type_you_want"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     android:textStyle="italic"
@@ -261,7 +265,7 @@
             android:id="@+id/cancel_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="취소(이전)"
+            android:text="@string/cancel_prev"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

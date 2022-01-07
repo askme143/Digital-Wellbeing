@@ -21,6 +21,7 @@
         android:paddingVertical="5dp">
 
         <ImageView
+            android:contentDescription="@string/app_icon_description"
             android:id="@+id/app_icon"
             image_drawable="@{itemVM.appItem.icon}"
             android:layout_width="50dp"

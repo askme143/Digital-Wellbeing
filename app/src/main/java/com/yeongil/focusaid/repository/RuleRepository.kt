@@ -75,12 +75,6 @@ class RuleRepository(
         return Rule(ruleDao.getRuleByRid(rid))
     }
 
-    private fun getRuleListAsFlow(): Flow<List<Rule>> {
-        return ruleDao.getRuleListAsFlowByRid().map { list ->
-            list.map { Rule(it) }
-        }
-    }
-
     suspend fun getActiveRuleList(): List<Rule> {
         return ruleDao.getRuleList()
             .filter { it.ruleInfoDto.ruleInfo.activated }

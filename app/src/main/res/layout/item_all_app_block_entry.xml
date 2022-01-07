@@ -19,6 +19,7 @@
         android:padding="10dp">
 
         <ImageView
+            android:contentDescription="@string/app_icon_description"
             android:id="@+id/app_icon"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -33,7 +34,7 @@
             android:id="@+id/app_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="모든 앱"
+            android:text="@string/all_app"
             android:textColor="@color/purple_text"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@id/description"

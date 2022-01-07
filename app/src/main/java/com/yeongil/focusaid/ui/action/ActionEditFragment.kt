@@ -138,7 +138,7 @@ class ActionEditFragment : Fragment() {
         dialog.create()
 
         dialog.findViewById<TextView>(R.id.title)!!.text =
-            "접근성 권한을 허용해주세요.\n(설치된 서비스 > FocusAid 허용)"
+            getString(R.string.allow_accessibility_permission)
         dialog.findViewById<Button>(R.id.confirm_btn)!!.setOnClickListener {
             requireContext().startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
             dialog.dismiss()

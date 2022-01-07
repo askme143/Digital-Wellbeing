@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="액션 설정하기"
+            android:text="@string/set_actions"
             android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="@id/header_bg"
@@ -35,6 +35,7 @@
             app:layout_constraintTop_toTopOf="@id/header_bg" />
 
         <ImageView
+            android:contentDescription="@string/add_btn_description"
             android:id="@+id/add_btn"
             android:layout_width="wrap_content"
             android:layout_height="40sp"
@@ -49,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="액션 추가"
+            android:text="@string/add_action"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/add_btn"
@@ -87,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="이전"
+            android:text="@string/prev"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -97,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:enabled="@{!vm.isActionItemEmpty()}"
-            android:text="다음"
+            android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 

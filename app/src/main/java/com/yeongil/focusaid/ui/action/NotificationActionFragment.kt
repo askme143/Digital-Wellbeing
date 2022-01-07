@@ -9,16 +9,14 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yeongil.focusaid.R
 import com.yeongil.focusaid.databinding.FragmentNotificationActionBinding
 import com.yeongil.focusaid.utils.navigateSafe
-import com.yeongil.focusaid.utils.recyclerViewUtils.RecyclerViewAdapter
+import com.yeongil.focusaid.viewModel.viewModel.action.AppListViewModel
 import com.yeongil.focusaid.viewModel.viewModel.action.NotificationActionViewModel
 import com.yeongil.focusaid.viewModel.viewModel.action.NotificationKeywordViewModel
 import com.yeongil.focusaid.viewModel.viewModel.rule.RuleEditViewModel
-import com.yeongil.focusaid.viewModel.viewModel.action.AppListViewModel
 import com.yeongil.focusaid.viewModelFactory.AppListViewModelFactory
 import com.yeongil.focusaid.viewModelFactory.NotificationActionViewModelFactory
 import com.yeongil.focusaid.viewModelFactory.RuleEditViewModelFactory

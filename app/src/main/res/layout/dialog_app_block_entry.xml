@@ -22,7 +22,7 @@
             android:id="@+id/time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="허용시간"
+            android:text="@string/time_allowed"
             android:textSize="24sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="시간       분"
+            android:text="@string/hour_space_minute"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/time_picker"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -90,14 +90,14 @@
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constCloseImmediate)}"
                 android:onClick="@{() -> vm.onItemSelected(vm.constCloseImmediate)}"
-                android:text="바로 종료" />
+                android:text="@string/close_immediately" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@{vm.handlingAction.equals(vm.constAlert)}"
                 android:onClick="@{() -> vm.onItemSelected(vm.constAlert)}"
-                android:text="경고 알림" />
+                android:text="@string/alert" />
         </RadioGroup>
 
         <androidx.constraintlayout.widget.Barrier
@@ -111,7 +111,7 @@
             android:id="@+id/cancel_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="취소"
+            android:text="@string/cancel"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/radio_group"
             app:layout_constraintWidth_default="percent"
@@ -121,7 +121,7 @@
             android:id="@+id/complete_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="완료"
+            android:text="@string/ok"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/radio_group"
             app:layout_constraintWidth_default="percent"

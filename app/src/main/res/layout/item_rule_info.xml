@@ -32,6 +32,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:contentDescription="@string/delete_btn_description"
             android:id="@+id/delete_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -55,7 +56,7 @@
             android:layout_marginStart="5dp"
             android:onClick="@{() -> itemVM.onClickActivate()}"
             android:paddingHorizontal="10dp"
-            android:text="규칙\n활성화"
+            android:text="@string/activate_rule"
             android:textAlignment="center"
             android:textColor="@color/purple_text"
             android:textSize="16sp"
@@ -83,7 +84,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> itemVM.onClickNotiOnTrigger()}"
             android:paddingHorizontal="10dp"
-            android:text="사용자 확인 후\n규칙 실행"
+            android:text="@string/exec_after_confirm"
             android:textAlignment="center"
             android:textColor="@color/purple_text"
             android:textSize="16sp"

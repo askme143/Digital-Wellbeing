@@ -2,11 +2,13 @@ package com.yeongil.focusaid.background
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.TargetApi
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Intent
+import android.os.Build
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import com.yeongil.focusaid.AppBlockActivity
@@ -192,6 +194,7 @@ class AppBlockService : AccessibilityService() {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.Q)
     private fun getUsageStatus(
         packageName: String,
         from: Long,
@@ -279,6 +282,7 @@ class AppBlockService : AccessibilityService() {
         )
     }
 
+    @TargetApi(Build.VERSION_CODES.Q)
     private data class UsageStatus(
         val usageTime: Long = 0,
         val lastEventType: Int = UsageEvents.Event.ACTIVITY_PAUSED,

@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> itemVM.onClick()}"
         android:padding="10dp"
-        android:paddingStart="20dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="0dp">
 
         <TextView
             android:id="@+id/keyword"
@@ -32,8 +33,8 @@
             android:id="@+id/handling_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/purple_text"
             android:text='@{itemVM.notiKeywordItem.inclusion ? Html.fromHtml(@string/include) : Html.fromHtml(@string/exclude)}'
+            android:textColor="@color/purple_text"
             android:textSize="12sp"
             app:layout_constraintLeft_toLeftOf="@id/keyword"
             app:layout_constraintTop_toBottomOf="@id/keyword" />
@@ -49,6 +50,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:contentDescription="@string/delete_btn_description"
             android:id="@+id/delete_btn"
             android:layout_width="25dp"
             android:layout_height="25dp"

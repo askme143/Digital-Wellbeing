@@ -1,8 +1,7 @@
 package com.yeongil.focusaid.utils
 
 class Event<out T>(private val content: T) {
-    var hasBeenHandled = false
-        private set
+    private var hasBeenHandled = false
 
     fun getContentIfNotHandled(): T? {
         if (hasBeenHandled) return null
@@ -12,5 +11,4 @@ class Event<out T>(private val content: T) {
         return content
     }
 
-    fun peekContent(): T = content
 }

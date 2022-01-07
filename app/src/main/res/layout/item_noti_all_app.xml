@@ -16,6 +16,7 @@
         android:paddingVertical="4dp">
 
         <ImageView
+            android:contentDescription="@string/app_icon_description"
             android:id="@+id/app_icon"
             android:layout_width="44dp"
             android:layout_height="44dp"
@@ -30,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="모든 앱"
+            android:text="@string/all_app"
             android:textColor="@color/purple_text"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/app_icon"
@@ -39,6 +40,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
         <ImageView
+            android:contentDescription="@string/delete_btn_description"
             android:id="@+id/delete_btn"
             android:layout_width="25dp"
             android:layout_height="25dp"
