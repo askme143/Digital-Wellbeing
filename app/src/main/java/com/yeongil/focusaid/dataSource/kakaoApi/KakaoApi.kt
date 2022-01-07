@@ -26,7 +26,7 @@ object KakaoApi {
         .build()
 
     private var serviceInstance: KakaoApiService? = null
-    val service
+    val service: KakaoApiService
         get() = serviceInstance
             ?: retrofit.create(KakaoApiService::class.java).also { serviceInstance = it }
 }

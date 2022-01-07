@@ -7,7 +7,6 @@ import com.yeongil.focusaid.data.Location
 import com.yeongil.focusaid.repository.LocationRepository
 import com.yeongil.focusaid.utils.Event
 import com.yeongil.focusaid.utils.FusedLocationClient
-import com.yeongil.focusaid.utils.recyclerViewUtils.RecyclerItem
 import com.yeongil.focusaid.viewModel.itemViewModel.LocationItemViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect

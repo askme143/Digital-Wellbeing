@@ -17,7 +17,7 @@ class AppBlockViewModel(
     private val packageName = MutableLiveData<String>()
     val appLabel = packageName.map { pmRepo.getLabel(it) }
 
-    val isClose = MutableLiveData<Boolean>()
+    private val isClose = MutableLiveData<Boolean>()
 
     private val _countDown = MutableLiveData(10)
     val tempUseBtnText = _countDown.combineWith(isClose) { int, bool -> Pair(int, bool) }

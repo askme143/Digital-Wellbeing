@@ -270,7 +270,7 @@ class AppBlockService : AccessibilityService() {
                 action = CHECK_APP_USAGE
                 putExtra(PACKAGE_NAME_EXTRA_KEY, packageName)
             }
-            .let { PendingIntent.getService(this, 0, it, 0) }
+            .let { PendingIntent.getService(this, 0, it, PendingIntent.FLAG_IMMUTABLE) }
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,

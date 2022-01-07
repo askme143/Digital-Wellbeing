@@ -18,9 +18,9 @@ class AppBlockActionViewModel(
 ) : ViewModel() {
     /* Data */
     var originalAction: AppBlockAction? = null
-    val appBlockEntryList = MutableLiveData<List<AppBlockEntry>>()
+    private val appBlockEntryList = MutableLiveData<List<AppBlockEntry>>()
     val allAppBlock = MutableLiveData(false)
-    val allAppHandlingAction = MutableLiveData(CLOSE_IMMEDIATE)
+    private val allAppHandlingAction = MutableLiveData(CLOSE_IMMEDIATE)
 
     // Indicate whether the user have clicked any item. It's for showing help
     private val isFirstItemClick = MutableLiveData(true)

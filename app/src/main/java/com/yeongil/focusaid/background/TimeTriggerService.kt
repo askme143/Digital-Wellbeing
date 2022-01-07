@@ -26,7 +26,7 @@ class TimeTriggerService : LifecycleService() {
     private val alarmManager by lazy { getSystemService(ALARM_SERVICE) as AlarmManager }
     private val pendingIntent by lazy {
         Intent(this, TimeTriggerService::class.java).let {
-            PendingIntent.getService(this, 0, it, 0)
+            PendingIntent.getService(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
         }
     }
 

@@ -32,7 +32,7 @@ class ActivityTriggerService : LifecycleService() {
     private val activityClient by lazy { ActivityRecognition.getClient(this) }
     private val pendingIntent by lazy {
         Intent(this, ActivityTriggerService::class.java).let {
-            PendingIntent.getService(this, 0, it, 0)
+            PendingIntent.getService(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
         }
     }
 

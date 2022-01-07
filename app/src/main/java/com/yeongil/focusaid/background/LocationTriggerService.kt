@@ -33,7 +33,7 @@ class LocationTriggerService : LifecycleService() {
     private val alarmManager by lazy { getSystemService(Context.ALARM_SERVICE) as AlarmManager }
     private val pendingIntent by lazy {
         Intent(this, LocationTriggerService::class.java).let { intent ->
-            PendingIntent.getService(this, 0, intent, 0)
+            PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
     }
 

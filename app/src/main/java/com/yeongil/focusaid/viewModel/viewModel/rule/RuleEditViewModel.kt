@@ -1,7 +1,7 @@
 package com.yeongil.focusaid.viewModel.viewModel.rule
 
-import android.text.Html
 import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.*
 import com.yeongil.focusaid.R
 import com.yeongil.focusaid.data.rule.action.AppBlockAction
@@ -68,7 +68,7 @@ class RuleEditViewModel(
 
         it + HelpPhraseItemViewModel(text).toRecyclerItem()
     }
-    val actionRecyclerItemList = triggerActionItemList.map { list ->
+    private val actionRecyclerItemList = triggerActionItemList.map { list ->
         list.filter { it.isAction }
             .map {
                 TriggerActionItemViewModel(
@@ -122,9 +122,7 @@ class RuleEditViewModel(
         val html = "$redFontTagStart$location${redFontTagEnd}을(를)$breakTag" +
                 "중심으로 ${redFontTagStart}${range} 이내${redFontTagEnd} $conjunction"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     val timeHtml = editingRule.map { rule ->
         val repeatDay = rule.timeTrigger?.repeatDay?.let { repeatDayToString(it) }
@@ -136,9 +134,7 @@ class RuleEditViewModel(
         val html = "${redFontTagStart}매주 ${repeatDay}요일$breakTag" +
                 "$time${redFontTagEnd} $conjunction"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     val activityHtml = editingRule.map { rule ->
         val activity = when (rule.activityTrigger?.activity) {
@@ -150,16 +146,12 @@ class RuleEditViewModel(
 
         val html = "$redFontTagStart$activity$redFontTagEnd 감지"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     val manualTriggerHtml: Spanned = run {
         val html = "${redFontTagStart}사용자가 규칙을 활성화 시${redFontTagEnd}"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     val isManualTrigger = editingRule.map {
         it.locationTrigger == null && it.activityTrigger == null && it.timeTrigger == null
@@ -237,9 +229,7 @@ class RuleEditViewModel(
             listOfNotNull(appBlockHtml, notificationHtml, dndHtml, ringerHtml)
                 .joinToString(breakTag)
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     /* Releasing Html */
@@ -251,9 +241,7 @@ class RuleEditViewModel(
         val html = "$redFontTagStart$location${redFontTagEnd}을(를)$breakTag" +
                 "중심으로 ${redFontTagStart}${range} 벗어남${redFontTagEnd} $conjunction"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     val timeReleasingHtml = editingRule.map { rule ->
         val repeatDay = rule.timeTrigger?.repeatDay?.let { repeatDayToString(it) }
@@ -265,9 +253,7 @@ class RuleEditViewModel(
         val html = "${redFontTagStart}매주 ${repeatDay}요일$breakTag" +
                 "$endTime 이후${redFontTagEnd} $conjunction"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     val activityReleasingHtml = editingRule.map { rule ->
         val activity = when (rule.activityTrigger?.activity) {
@@ -279,16 +265,12 @@ class RuleEditViewModel(
 
         val html = "$activity 외 ${redFontTagStart}다른 활동$redFontTagEnd 감지"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     val manualReleasingHtml: Spanned = run {
         val html = "${redFontTagStart}사용자가 규칙을 해제 시${redFontTagEnd}"
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(html)
+        HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     /* Function */

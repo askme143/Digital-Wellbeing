@@ -56,9 +56,9 @@ class TriggerActionItem(val title: String, val description: Spanned) {
 
     constructor(locationTrigger: LocationTrigger) : this(
         LOCATION_TRIGGER_TITLE,
-        locationTrigger.let { triger ->
-            val location = triger.locationName
-            val range = triger.range
+        locationTrigger.let { trigger ->
+            val location = trigger.locationName
+            val range = trigger.range
             val html = "$boldStart$location${boldEnd}을(를)$breakTag" +
                     "중심으로 $boldStart${range}m$boldEnd 내에 있을 때"
 
