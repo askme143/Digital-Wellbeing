@@ -16,10 +16,9 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.yeongil.focusaid.MainActivity
 import com.yeongil.focusaid.R
-import com.yeongil.focusaid.background.data.RuleSet
+import com.yeongil.focusaid.background.data.RuleState
 import com.yeongil.focusaid.data.rule.Rule
 import com.yeongil.focusaid.data.rule.action.*
-import com.yeongil.focusaid.data.rule.action.RingerAction.RingerMode
 import com.yeongil.focusaid.dataSource.SequenceNumber
 import com.yeongil.focusaid.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.focusaid.repository.RuleRepository
@@ -50,7 +49,7 @@ class MainService : LifecycleService() {
                 )
             }
     }
-    private val builder by lazy {
+    private val foregroundNotificationBuilder by lazy {
         NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentText("실행 중")
@@ -80,7 +79,7 @@ class MainService : LifecycleService() {
 
                 updateTimeTriggeredRules(intentStr)
                 lifecycleScope.launch(Dispatchers.Default) {
-                    checkTrigger(timeTriggerSet = ruleIdSet)
+                    onTriggerUpdate(getTriggeredRules(timeTriggerSet = ruleIdSet))
                 }
             }
             ACTIVITY_TRIGGER -> {
@@ -90,7 +89,7 @@ class MainService : LifecycleService() {
 
                 updateActivityTriggeredRules(intentStr)
                 lifecycleScope.launch(Dispatchers.Default) {
-                    checkTrigger(activityTriggerSet = ruleIdSet)
+                    onTriggerUpdate(getTriggeredRules(activityTriggerSet = ruleIdSet))
                 }
             }
             LOCATION_TRIGGER -> {
@@ -100,7 +99,7 @@ class MainService : LifecycleService() {
 
                 updateLocationTriggeredRules(intentStr)
                 lifecycleScope.launch(Dispatchers.Default) {
-                    checkTrigger(locationTriggerSet = ruleIdSet)
+                    onTriggerUpdate(getTriggeredRules(locationTriggerSet = ruleIdSet))
                 }
             }
             START_BACKGROUND -> {
@@ -114,30 +113,24 @@ class MainService : LifecycleService() {
                 Log.e("hello", RULE_CHANGE)
                 startTriggerObserving()
             }
-            RULE_EXEC_CONFIRM -> {
-                Log.e("hello", RULE_EXEC_CONFIRM)
+            RULE_EXEC_ACCEPT -> {
+                Log.e("hello", RULE_EXEC_ACCEPT)
+
                 val ruleId = intent.getIntExtra(CONFIRMED_RULE_ID_KEY, 0)
-                Log.e("hello", "Notification Confirm: $ruleId")
+                Log.e("hello", "Rule Execution Accepted: $ruleId")
+
                 lifecycleScope.launch(Dispatchers.Default) {
-                    if (ruleId != 0) confirmRuleExec(ruleId)
+                    if (ruleId != 0) onRuleExecAccepted(ruleRepo.getRuleByRid(ruleId))
                 }
             }
-            RULE_CONFIRM_REMOVED -> {
-                Log.e("hello", RULE_EXEC_CONFIRM)
-                val ruleId = intent.getIntExtra(CONFIRMED_RULE_ID_KEY, 0)
-                Log.e("hello", "Notification Confirm Removed: $ruleId")
-                lifecycleScope.launch(Dispatchers.Default) {
-                    if (ruleId != 0) {
-                        val rule = ruleRepo.getRuleByRid(ruleId)
-                        val ruleSet = getRuleSet()
-                        val newRuleSet = RuleSet(
-                            ruleSet.notified - rule,
-                            ruleSet.conflicting + rule,
-                            ruleSet.running
-                        )
+            RULE_EXEC_REJECT -> {
+                Log.e("hello", RULE_EXEC_REJECT)
 
-                        updateRuleSet(newRuleSet)
-                    }
+                val ruleId = intent.getIntExtra(CONFIRMED_RULE_ID_KEY, 0)
+                Log.e("hello", "Rule Execution Rejected: $ruleId")
+
+                lifecycleScope.launch(Dispatchers.Default) {
+                    if (ruleId != 0) onRuleExecRejected(ruleRepo.getRuleByRid(ruleId))
                 }
             }
             MIDNIGHT_RESET -> {
@@ -165,6 +158,211 @@ class MainService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
 
+        initNotificationChannel()
+        initRingerChangeReceiver()
+        initMidnightAlarm()
+
+        startForeground(1, foregroundNotificationBuilder.build())
+    }
+
+    private fun startTriggerObserving() {
+        val timeIntent = Intent(this, TimeTriggerService::class.java)
+        val activityIntent = Intent(this, ActivityTriggerService::class.java)
+        val locationIntent = Intent(this, LocationTriggerService::class.java)
+
+        startService(timeIntent)
+        startService(activityIntent)
+        startService(locationIntent)
+    }
+
+    private fun onTriggerUpdate(triggeredRuleSet: Set<Rule>) {
+        val oldRuleState = getRuleState()
+
+        val alreadyConflicted = triggeredRuleSet intersect oldRuleState.conflicting
+        val notifySet = triggeredRuleSet
+            .subtract(oldRuleState.conflicting)
+            .subtract(oldRuleState.running)
+            .filter { it.ruleInfo.notiOnTrigger }
+            .toSet()
+
+        val candidates = triggeredRuleSet subtract (notifySet union alreadyConflicted)
+        val runSet = handleConflict(oldRuleState.running, candidates)
+
+        val conflictSet = triggeredRuleSet - notifySet - runSet
+
+        val newRuleState = RuleState(notifySet, conflictSet, runSet)
+
+        applyNewRuleState(oldRuleState, newRuleState)
+    }
+
+    private fun onRuleExecAccepted(rule: Rule) {
+        fun isTriggered(rule: Rule): Boolean {
+            return (rule.timeTrigger == null || rule.ruleInfo.ruleId in getTimeTriggeredRules())
+                    && (rule.locationTrigger == null || rule.ruleInfo.ruleId in getLocationTriggeredRules())
+                    && (rule.activityTrigger == null || rule.ruleInfo.ruleId in getActivityTriggeredRules())
+        }
+
+        fun isNotified(rule: Rule): Boolean {
+            return rule in getRuleState().notified
+        }
+
+        if (!isTriggered(rule) || !isNotified(rule)) return
+
+        val oldRuleState = getRuleState()
+        val candidates = oldRuleState.running + rule
+
+        val runSet = handleConflict(oldRuleState.running, candidates)
+        val notifySet = oldRuleState.notified - rule
+        val conflictSet =
+            if (rule in runSet) oldRuleState.conflicting else oldRuleState.conflicting + rule
+
+        val newRuleState = RuleState(notifySet, conflictSet, runSet)
+
+        applyNewRuleState(oldRuleState, newRuleState)
+    }
+
+    private fun onRuleExecRejected(rule: Rule) {
+        val oldRuleState = getRuleState()
+        val newRuleState = RuleState(
+            oldRuleState.notified - rule,
+            oldRuleState.conflicting + rule,
+            oldRuleState.running
+        )
+
+        applyNewRuleState(oldRuleState, newRuleState)
+    }
+
+    private fun applyNewRuleState(oldRuleState: RuleState, newRuleState: RuleState) {
+        updateRuleState(newRuleState)
+        updateActions(oldRuleState.running, newRuleState.running)
+        notifyRules(oldRuleState.notified, newRuleState.notified)
+        updateForegroundNotification(newRuleState.running)
+    }
+
+    private fun updateActions(oldRunningSet: Set<Rule>, newRunningSet: Set<Rule>) {
+        val removedRules = oldRunningSet subtract newRunningSet
+        val newRules = newRunningSet subtract oldRunningSet
+
+        updateAppBlockAction(
+            removedRules.firstOrNull { it.appBlockAction != null },
+            newRules.firstOrNull { it.appBlockAction != null })
+
+        updateNotificationAction(
+            removedRules.firstOrNull { it.notificationAction != null },
+            newRules.firstOrNull { it.notificationAction != null })
+
+        updateRingerAction(
+            removedRules.firstOrNull { it.ringerAction != null },
+            newRules.firstOrNull { it.ringerAction != null })
+
+        updateDndAction(
+            removedRules.firstOrNull { it.dndAction != null },
+            newRules.firstOrNull { it.dndAction != null })
+    }
+
+    private fun notifyRules(oldNotifiedSet: Set<Rule>, newNotifiedSet: Set<Rule>) {
+        val notificationBuilder = NotificationCompat.Builder(this, RULE_NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        val rejects = oldNotifiedSet subtract newNotifiedSet
+        val notifies = newNotifiedSet subtract oldNotifiedSet
+
+        fun notificationId(rule: Rule): Int {
+            return rule.ruleInfo.ruleId
+        }
+
+        fun notificationText(rule: Rule): String {
+            return "${rule.ruleInfo.ruleName} 규칙이 수행됩니다."
+        }
+
+        fun makePendingIntent(rule: Rule, action: String): PendingIntent? {
+            return PendingIntent.getService(
+                this,
+                rule.ruleInfo.ruleId * 2 + REQ_CODE_OFFSET,
+                Intent(this, MainService::class.java)
+                    .apply {
+                        this.action = action
+                        putExtra(CONFIRMED_RULE_ID_KEY, rule.ruleInfo.ruleId)
+                    },
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        rejects.forEach { NotificationManagerCompat.from(this).cancel(notificationId(it)) }
+        notifies.forEach {
+            val builder = notificationBuilder
+                .setContentText(notificationText(it))
+                .setContentIntent(makePendingIntent(it, RULE_EXEC_ACCEPT))
+                .setDeleteIntent(makePendingIntent(it, RULE_EXEC_REJECT))
+                .setAutoCancel(true)
+
+            notificationManager.notify(notificationId(it), builder.build())
+        }
+    }
+
+    private fun updateForegroundNotification(runningRules: Set<Rule>) {
+        with(runningRules) {
+            foregroundNotificationBuilder.setContentText(
+                when (this.size) {
+                    0 -> "수행 중인 규칙이 없습니다."
+                    1 -> "현재 [${this.first().ruleInfo.ruleName}] 규칙이 수행 중입니다."
+                    else -> "현재 [${this.first().ruleInfo.ruleName}]외 ${this.size - 1}개 규칙이 수행 중입니다."
+                }
+            )
+        }
+        foregroundNotificationBuilder.setWhen(System.currentTimeMillis())
+        notificationManager.notify(1, foregroundNotificationBuilder.build())
+    }
+
+    private fun handleConflict(runningRules: Set<Rule>, candidates: Set<Rule>): Set<Rule> {
+        tailrec fun selectNewRunningRules(
+            candidatesWithPriority: List<Pair<Rule, Int>>,
+        ): Set<Rule> {
+            val conflicts: Set<Pair<Rule, Int>> = when {
+                candidatesWithPriority.count { (rule, _) -> rule.appBlockAction != null } > 1 -> {
+                    candidatesWithPriority.filter { (rule, _) -> rule.appBlockAction != null }
+                        .toSet()
+                }
+                candidatesWithPriority.count { (rule, _) -> rule.notificationAction != null } > 1 -> {
+                    candidatesWithPriority.filter { (rule, _) -> rule.notificationAction != null }
+                        .toSet()
+                }
+                candidatesWithPriority.count { (rule, _) -> rule.dndAction != null } > 1 -> {
+                    candidatesWithPriority.filter { (rule, _) -> rule.dndAction != null }
+                        .toSet()
+                }
+                candidatesWithPriority.count { (rule, _) -> rule.ringerAction != null } > 1 -> {
+                    candidatesWithPriority.filter { (rule, _) -> rule.ringerAction != null }
+                        .toSet()
+                }
+                else -> {
+                    return candidatesWithPriority.map { it.first }.toSet()
+                }
+            }
+
+            val selectedRule = conflicts.maxByOrNull { (_, priority) -> priority }!!
+            return selectNewRunningRules(candidatesWithPriority - conflicts + selectedRule)
+        }
+
+        val candidatesWithPriority = candidates.map { rule ->
+            Pair(rule, calcRulePriority(rule, rule !in runningRules))
+        }
+
+        return selectNewRunningRules(candidatesWithPriority)
+    }
+
+    private fun calcRulePriority(rule: Rule, isNew: Boolean): Int {
+        val manualTriggerFirst = if (rule.locationTrigger == null
+            && rule.timeTrigger == null
+            && rule.activityTrigger == null
+        ) 10 else 0
+        val oldRuleFirst = if (isNew) 0 else 1
+
+        return manualTriggerFirst + oldRuleFirst
+    }
+
+    private fun initNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             /* Create Notification Channel for ForegroundService */
             val serviceChannel = NotificationChannel(
@@ -187,9 +385,10 @@ class MainService : LifecycleService() {
             }
 
             notificationManager.createNotificationChannel(notifyChannel)
-            Log.e("hello", "hello")
         }
+    }
 
+    private fun initRingerChangeReceiver() {
         /* Listen for the ringer mode change */
         val ringerChangeReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -203,7 +402,9 @@ class MainService : LifecycleService() {
         }
         val filter = IntentFilter().apply { addAction(AudioManager.RINGER_MODE_CHANGED_ACTION) }
         registerReceiver(ringerChangeReceiver, filter)
+    }
 
+    private fun initMidnightAlarm() {
         /* Call when it's midnight */
         val calendar = Calendar.getInstance().apply {
             add(Calendar.DATE, 1)
@@ -216,8 +417,121 @@ class MainService : LifecycleService() {
             calendar.timeInMillis,
             midnightIntent
         )
+    }
 
-        startForeground(1, builder.build())
+    private fun reset() {
+        updateLocationTriggeredRules(emptySetStr)
+        updateActivityTriggeredRules(emptySetStr)
+        updateTimeTriggeredRules(emptySetStr)
+        updateRuleState(RuleState())
+    }
+
+    private fun resetManualTriggerRules() {
+        val ruleState = getRuleState()
+
+        /* Reset AppBlockAction of ManualTriggerRule */
+        val appBlockManualRule = ruleState.running
+            .firstOrNull {
+                it.appBlockAction != null && it.timeTrigger == null
+                        && it.locationTrigger == null && it.activityTrigger == null
+            }
+        if (appBlockManualRule != null) {
+            val rid = appBlockManualRule.ruleInfo.ruleId
+            val appBlockAction = appBlockManualRule.appBlockAction ?: return
+            val appBlockIntent by lazy { Intent(this, AppBlockService::class.java) }
+
+            appBlockIntent.apply {
+                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
+                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, appBlockAction)
+                putExtra(AppBlockService.RID_EXTRA_KEY, rid)
+            }
+            startService(appBlockIntent)
+        }
+    }
+
+    private fun updateAppBlockAction(oldRule: Rule?, newRule: Rule?) {
+        val appBlockIntent by lazy { Intent(this, AppBlockService::class.java) }
+
+        if (newRule != null) {
+            appBlockIntent.apply {
+                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
+                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, newRule.appBlockAction)
+                putExtra(AppBlockService.RID_EXTRA_KEY, newRule.ruleInfo.ruleId)
+            }
+            startService(appBlockIntent)
+        } else if (oldRule != null) {
+            appBlockIntent.apply {
+                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
+                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, null as AppBlockAction?)
+                putExtra(AppBlockService.RID_EXTRA_KEY, 0)
+            }
+            startService(appBlockIntent)
+        }
+    }
+
+    private fun updateNotificationAction(oldRule: Rule?, newRule: Rule?) {
+        val notificationIntent by lazy { Intent(this, NotificationBlockService::class.java) }
+        if (newRule != null) {
+            notificationIntent.putExtra(
+                NotificationBlockService.NOTIFICATION_EXTRA_KEY,
+                newRule.notificationAction
+            )
+            startService(notificationIntent)
+        } else if (oldRule != null) {
+            notificationIntent.putExtra(
+                NotificationBlockService.NOTIFICATION_EXTRA_KEY,
+                null as NotificationAction?
+            )
+            startService(notificationIntent)
+        }
+    }
+
+    private fun updateRingerAction(oldRule: Rule?, newRule: Rule?) {
+        val ringerIntent by lazy { Intent(this, RingerService::class.java) }
+
+        if (newRule?.ringerAction != null) {
+            ringerIntent.putExtra(
+                RingerService.RINGER_EXTRA_KEY,
+                newRule.ringerAction.ringerMode as Parcelable
+            )
+            if (oldRule != null) {
+                ringerIntent.action = RingerService.CHANGE_ACTION
+            } else {
+                ringerIntent.action = RingerService.RUN_ACTION
+            }
+        } else if (oldRule != null) {
+            ringerIntent.action = RingerService.STOP_ACTION
+        }
+
+        startService(ringerIntent)
+    }
+
+    private fun updateDndAction(oldRule: Rule?, newRule: Rule?) {
+        val dndIntent by lazy { Intent(this, DndService::class.java) }
+
+        if (newRule != null) {
+            dndIntent.putExtra(DndService.DND_EXTRA_KEY, true)
+            dndIntent.action = DndService.RUN_ACTION
+            startService(dndIntent)
+        } else if (oldRule != null) {
+            dndIntent.putExtra(DndService.DND_EXTRA_KEY, false)
+            dndIntent.action = DndService.RUN_ACTION
+            startService(dndIntent)
+        }
+    }
+
+    private suspend fun getTriggeredRules(
+        timeTriggerSet: Set<Int> = getTimeTriggeredRules(),
+        activityTriggerSet: Set<Int> = getActivityTriggeredRules(),
+        locationTriggerSet: Set<Int> = getLocationTriggeredRules(),
+    ): Set<Rule> {
+        val rules = ruleRepo.getActiveRuleList().toSet()
+
+        return rules
+            .filter { it.timeTrigger == null || it.ruleInfo.ruleId in timeTriggerSet }
+            .filter { it.activityTrigger == null || it.ruleInfo.ruleId in activityTriggerSet }
+            .filter { it.locationTrigger == null || it.ruleInfo.ruleId in locationTriggerSet }
+            .toSet()
     }
 
     private fun getTimeTriggeredRules(): Set<Int> {
@@ -262,388 +576,17 @@ class MainService : LifecycleService() {
         }
     }
 
-    private fun getRuleSet(): RuleSet {
+    private fun getRuleState(): RuleState {
         return Json.decodeFromString(
-            sharedPref.getString(RULE_SET_KEY, ruleSetDefaultStr) ?: ruleSetDefaultStr
+            sharedPref.getString(RULE_STATE_KEY, ruleSetDefaultStr) ?: ruleSetDefaultStr
         )
     }
 
-    private fun updateRuleSet(ruleSet: RuleSet) {
+    private fun updateRuleState(ruleState: RuleState) {
         sharedPref.edit {
-            putString(RULE_SET_KEY, Json.encodeToString(ruleSet))
-            putLong(TIMESTAMP_RULE_SET_KEY, System.currentTimeMillis())
+            putString(RULE_STATE_KEY, Json.encodeToString(ruleState))
+            putLong(TIMESTAMP_RULE_STATE_KEY, System.currentTimeMillis())
             commit()
-        }
-    }
-
-    private fun reset() {
-        updateLocationTriggeredRules(emptySetStr)
-        updateActivityTriggeredRules(emptySetStr)
-        updateTimeTriggeredRules(emptySetStr)
-        updateRuleSet(RuleSet())
-    }
-
-    private suspend fun checkTrigger(
-        timeTriggerSet: Set<Int> = getTimeTriggeredRules(),
-        activityTriggerSet: Set<Int> = getActivityTriggeredRules(),
-        locationTriggerSet: Set<Int> = getLocationTriggeredRules(),
-    ) {
-        val rules = ruleRepo.getActiveRuleList()
-        val ruleSet = getRuleSet()
-
-        val triggeredRules = rules
-            .filter { it.timeTrigger == null || it.ruleInfo.ruleId in timeTriggerSet }
-            .filter { it.activityTrigger == null || it.ruleInfo.ruleId in activityTriggerSet }
-            .filter { it.locationTrigger == null || it.ruleInfo.ruleId in locationTriggerSet }
-
-        val rulesToNotify = triggeredRules
-            .filter { it.ruleInfo.notiOnTrigger }
-            .minus(ruleSet.conflicting)
-            .minus(ruleSet.running)
-        val rulesToRun =
-            handleConflict(
-                triggeredRules - rulesToNotify,
-                ruleSet.conflicting,
-                ruleSet.running
-            )
-        val rulesToBeConflicted = triggeredRules - rulesToNotify - rulesToRun
-
-        val newRuleSet = RuleSet(rulesToNotify, rulesToBeConflicted, rulesToRun)
-        updateRuleSet(newRuleSet)
-
-        /* update main notification */
-        builder.setContentText(
-            when (rulesToRun.size) {
-                0 -> "수행 중인 규칙이 없습니다."
-                1 -> "현재 [${rulesToRun[0].ruleInfo.ruleName}] 규칙이 수행 중입니다."
-                else -> "현재 [${rulesToRun[0].ruleInfo.ruleName}]외 ${rulesToRun.size - 1}개 규칙이 수행 중입니다."
-            }
-        )
-        builder.setWhen(System.currentTimeMillis())
-        notificationManager.notify(1, builder.build())
-
-        /* make notification */
-        notifyRules(rulesToNotify, ruleSet.notified)
-
-        /* apply changes to action services */
-        val startedRules = rulesToRun - ruleSet.running
-        val stoppedRules = ruleSet.running - rulesToRun
-        applyRuleSetChange(startedRules, stoppedRules, rulesToRun)
-    }
-
-    private fun applyRuleSetChange(
-        startedRules: List<Rule>,
-        stoppedRules: List<Rule>,
-        rulesToRun: List<Rule>
-    ) {
-        var stopAppBlockAction = false
-        var stopNotificationAction = false
-        var stopRingerAction = false
-        var stopDndAction = false
-
-        var appBlockAction: AppBlockAction? = null
-        var appBlockRid: Int? = null
-        var notificationAction: NotificationAction? = null
-        var ringerMode: RingerMode? = null
-        var dndAction: Boolean? = null
-
-        startedRules.forEach {
-            if (it.appBlockAction != null) {
-                appBlockAction = it.appBlockAction
-                appBlockRid = it.ruleInfo.ruleId
-            }
-            if (it.notificationAction != null) notificationAction = it.notificationAction
-            if (it.dndAction != null) dndAction = true
-            if (it.ringerAction != null) ringerMode = it.ringerAction.ringerMode
-        }
-
-        stoppedRules.forEach {
-            if (it.appBlockAction != null) stopAppBlockAction = true
-            if (it.notificationAction != null) stopNotificationAction = true
-            if (it.dndAction != null) stopDndAction = true
-            if (it.ringerAction != null) stopRingerAction = true
-        }
-
-        if (!stopAppBlockAction && appBlockAction == null) {
-            stopAppBlockAction = rulesToRun.all { it.appBlockAction == null }
-        }
-        if (!stopNotificationAction && notificationAction == null) {
-            stopNotificationAction = rulesToRun.all { it.notificationAction == null }
-        }
-
-        val dndIntent by lazy { Intent(this, DndService::class.java) }
-        val ringerIntent by lazy { Intent(this, RingerService::class.java) }
-        val notificationIntent by lazy { Intent(this, NotificationBlockService::class.java) }
-        val appBlockIntent by lazy { Intent(this, AppBlockService::class.java) }
-
-        /* DNDAction */
-        if (dndAction != null || stopDndAction) {
-            if (dndAction != null)
-                dndIntent.putExtra(DndService.DND_EXTRA_KEY, true)
-
-            dndIntent.action = DndService.RUN_ACTION
-            startService(dndIntent)
-        }
-        /* RingerAction */
-        if (ringerMode != null || stopRingerAction) {
-            if (ringerMode != null) {
-                ringerIntent.putExtra(RingerService.RINGER_EXTRA_KEY, ringerMode as Parcelable)
-
-                ringerIntent.action =
-                    if (stopRingerAction) RingerService.CHANGE_ACTION
-                    else RingerService.RUN_ACTION
-            } else {
-                ringerIntent.action = RingerService.STOP_ACTION
-            }
-
-            startService(ringerIntent)
-        }
-        /* Notification Action */
-        if (notificationAction != null) {
-            notificationIntent.putExtra(
-                NotificationBlockService.NOTIFICATION_EXTRA_KEY,
-                notificationAction
-            )
-            startService(notificationIntent)
-        } else if (stopNotificationAction) {
-            notificationIntent.putExtra(
-                NotificationBlockService.NOTIFICATION_EXTRA_KEY,
-                null as NotificationAction?
-            )
-            startService(notificationIntent)
-        }
-        /* App Block Action */
-        if (appBlockAction != null) {
-            appBlockIntent.apply {
-                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
-                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, appBlockAction)
-                putExtra(AppBlockService.RID_EXTRA_KEY, appBlockRid)
-            }
-            startService(appBlockIntent)
-        } else if (stopAppBlockAction) {
-            appBlockIntent.apply {
-                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
-                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, null as AppBlockAction?)
-                putExtra(AppBlockService.RID_EXTRA_KEY, 0)
-            }
-            startService(appBlockIntent)
-        }
-    }
-
-    private fun notifyRules(rulesToNotify: List<Rule>, notifiedRules: List<Rule>) {
-        val removedRules = notifiedRules - rulesToNotify
-        val newRules = rulesToNotify - notifiedRules
-
-        removedRules.forEach {
-            NotificationManagerCompat.from(this).cancel(it.ruleInfo.ruleId + 1)
-        }
-
-        newRules.forEach {
-            val builder = NotificationCompat.Builder(this, RULE_NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentText("${it.ruleInfo.ruleName} 규칙이 수행됩니다.")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(
-                    Intent(this, MainService::class.java)
-                        .apply {
-                            action = RULE_EXEC_CONFIRM
-                            putExtra(CONFIRMED_RULE_ID_KEY, it.ruleInfo.ruleId)
-                        }
-                        .let { intent ->
-                            PendingIntent.getService(
-                                this,
-                                it.ruleInfo.ruleId * 2 + REQ_CODE_OFFSET,
-                                intent,
-                                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                            )
-                        }
-                )
-                .setDeleteIntent(
-                    Intent(this, MainService::class.java)
-                        .apply {
-                            action = RULE_CONFIRM_REMOVED
-                            putExtra(CONFIRMED_RULE_ID_KEY, it.ruleInfo.ruleId)
-                        }
-                        .let { intent ->
-                            PendingIntent.getService(
-                                this,
-                                it.ruleInfo.ruleId * 2 + REQ_CODE_OFFSET + 1,
-                                intent,
-                                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                            )
-                        }
-                )
-                .setAutoCancel(true)
-
-            notificationManager.notify(it.ruleInfo.ruleId + 1, builder.build())
-        }
-    }
-
-    private fun handleConflict(
-        rules: List<Rule>,
-        conflictingRules: List<Rule>,
-        runningRules: List<Rule>
-    ): List<Rule> {
-        /* Return true if the rule is a manual trigger rule */
-        fun isManualTrigger(rule: Rule) = rule.locationTrigger == null
-                && rule.timeTrigger == null
-                && rule.activityTrigger == null
-
-        /* Return a conflict-free rule list */
-        tailrec fun removeConflictInNewRules(rules: List<Rule>): List<Rule> {
-            return when {
-                rules.count { it.appBlockAction != null } > 2 -> {
-                    val appBlockRules = rules.filter { it.appBlockAction != null }
-                    val selectedRule =
-                        appBlockRules.firstOrNull { isManualTrigger(it) } ?: appBlockRules.random()
-                    removeConflictInNewRules(rules - appBlockRules + selectedRule)
-                }
-                rules.count { it.notificationAction != null } > 2 -> {
-                    val notificationRules = rules.filter { it.notificationAction != null }
-                    val selectedRule =
-                        notificationRules.firstOrNull { isManualTrigger(it) }
-                            ?: notificationRules.random()
-                    removeConflictInNewRules(rules - notificationRules + selectedRule)
-                }
-                rules.count { it.dndAction != null } > 2 -> {
-                    val dndRules = rules.filter { it.dndAction != null }
-                    val selectedRule =
-                        dndRules.firstOrNull { isManualTrigger(it) } ?: dndRules.random()
-                    removeConflictInNewRules(rules - dndRules + selectedRule)
-                }
-                rules.count { it.ringerAction != null } > 2 -> {
-                    val ringerRules = rules.filter { it.ringerAction != null }
-                    val selectedRule =
-                        ringerRules.firstOrNull { isManualTrigger(it) } ?: ringerRules.random()
-                    removeConflictInNewRules(rules - ringerRules + selectedRule)
-                }
-                else -> rules
-            }
-        }
-
-        /* Remove conflicting rules from OldRules and return it */
-        tailrec fun removeConflict(
-            newRules: List<Rule>,
-            oldRules: List<Rule>
-        ): List<Rule> {
-            val newAppBlockRule by lazy { newRules.firstOrNull { it.appBlockAction != null } }
-            val oldAppBlockRule by lazy { oldRules.firstOrNull { it.appBlockAction != null } }
-            val newNotificationRule by lazy { newRules.firstOrNull { it.notificationAction != null } }
-            val oldNotificationRule by lazy { oldRules.firstOrNull { it.notificationAction != null } }
-            val newDndRule by lazy { newRules.firstOrNull { it.dndAction != null } }
-            val oldDndRule by lazy { oldRules.firstOrNull { it.dndAction != null } }
-            val newRingerRule by lazy { newRules.firstOrNull { it.ringerAction != null } }
-            val oldRingerRule by lazy { oldRules.firstOrNull { it.ringerAction != null } }
-
-            return when {
-                newAppBlockRule != null && oldAppBlockRule != null -> {
-                    if (!isManualTrigger(newAppBlockRule!!) && isManualTrigger(oldAppBlockRule!!))
-                        removeConflict(newRules - newAppBlockRule!!, oldRules)
-                    else
-                        removeConflict(newRules, oldRules - oldAppBlockRule!!)
-                }
-                newNotificationRule != null && oldNotificationRule != null -> {
-                    if (!isManualTrigger(newNotificationRule!!)
-                        && isManualTrigger(oldNotificationRule!!)
-                    )
-                        removeConflict(newRules - newNotificationRule!!, oldRules)
-                    else
-                        removeConflict(newRules, oldRules - oldNotificationRule!!)
-                }
-                newDndRule != null && oldDndRule != null -> {
-                    if (!isManualTrigger(newDndRule!!) && isManualTrigger(oldDndRule!!))
-                        removeConflict(newRules - newDndRule!!, oldRules)
-                    else
-                        removeConflict(newRules, oldRules - oldDndRule!!)
-                }
-                newRingerRule != null && oldRingerRule != null -> {
-                    if (!isManualTrigger(newRingerRule!!) && isManualTrigger(oldRingerRule!!))
-                        removeConflict(newRules - newRingerRule!!, oldRules)
-                    else
-                        removeConflict(newRules, oldRules - oldRingerRule!!)
-                }
-                else -> newRules + oldRules
-            }
-        }
-
-        val newRules = rules - conflictingRules - runningRules
-        val oldRules = (rules - newRules).filter { it in runningRules }
-
-        val filteredNewRules = removeConflictInNewRules(newRules)
-        return removeConflict(filteredNewRules, oldRules)
-    }
-
-    private fun startTriggerObserving() {
-        val timeIntent = Intent(this, TimeTriggerService::class.java)
-        val activityIntent = Intent(this, ActivityTriggerService::class.java)
-        val locationIntent = Intent(this, LocationTriggerService::class.java)
-
-        startService(timeIntent)
-        startService(activityIntent)
-        startService(locationIntent)
-    }
-
-    private suspend fun confirmRuleExec(ruleId: Int) {
-        val timeTriggerSet by lazy { getTimeTriggeredRules() }
-        val activityTriggerSet by lazy { getActivityTriggeredRules() }
-        val locationTriggerSet by lazy { getLocationTriggeredRules() }
-
-        val rule = ruleRepo.getRuleByRid(ruleId)
-
-        if (rule.timeTrigger != null && ruleId !in timeTriggerSet) return
-        if (rule.locationTrigger != null && ruleId !in locationTriggerSet) return
-        if (rule.activityTrigger != null && ruleId !in activityTriggerSet) return
-
-        val ruleSet = getRuleSet()
-        if (rule !in ruleSet.notified) return
-
-        val rulesToRun =
-            handleConflict(ruleSet.running + rule, ruleSet.conflicting, ruleSet.running)
-
-        if (rule in rulesToRun) {
-            updateRuleSet(
-                RuleSet(ruleSet.notified - rule, ruleSet.conflicting, ruleSet.running + rule)
-            )
-
-            /* Notification Update */
-            builder.setContentText(
-                when (rulesToRun.size) {
-                    0 -> "수행 중인 규칙이 없습니다."
-                    1 -> "현재 [${rulesToRun[0].ruleInfo.ruleName}] 규칙이 수행 중입니다."
-                    else -> "현재 [${rulesToRun[0].ruleInfo.ruleName}]외 ${rulesToRun.size - 1}개 규칙이 수행 중입니다."
-                }
-            )
-            startForeground(1, builder.build())
-
-            /* Apply Action */
-            applyRuleSetChange(listOf(rule), emptyList(), ruleSet.running + rule)
-        } else {
-            updateRuleSet(
-                RuleSet(ruleSet.notified - rule, ruleSet.conflicting + rule, ruleSet.running)
-            )
-        }
-    }
-
-    private fun resetManualTriggerRules() {
-        val ruleSet = getRuleSet()
-
-        /* Reset AppBlockManualTriggerRule */
-        val appBlockManualRule = ruleSet.running
-            .firstOrNull {
-                it.appBlockAction != null && it.timeTrigger == null
-                        && it.locationTrigger == null && it.activityTrigger == null
-            }
-        if (appBlockManualRule != null) {
-            val rid = appBlockManualRule.ruleInfo.ruleId
-            val appBlockAction = appBlockManualRule.appBlockAction ?: return
-            val appBlockIntent by lazy { Intent(this, AppBlockService::class.java) }
-
-            appBlockIntent.apply {
-                action = AppBlockService.SUBMIT_APP_BLOCK_ACTION
-                putExtra(AppBlockService.APP_BLOCK_EXTRA_KEY, appBlockAction)
-                putExtra(AppBlockService.RID_EXTRA_KEY, rid)
-            }
-            startService(appBlockIntent)
         }
     }
 
@@ -656,8 +599,8 @@ class MainService : LifecycleService() {
         const val LOCATION_TRIGGER = "LOCATION_TRIGGER"
         const val START_BACKGROUND = "START_BACKGROUND"
         const val RULE_CHANGE = "RULE_CHANGE"
-        const val RULE_EXEC_CONFIRM = "RULE_EXEC_CONFIRM"
-        const val RULE_CONFIRM_REMOVED = "RULE_CONFIRM_REMOVED"
+        const val RULE_EXEC_ACCEPT = "RULE_EXEC_ACCEPT"
+        const val RULE_EXEC_REJECT = "RULE_EXEC_REJECT"
         const val MIDNIGHT_RESET = "MIDNIGHT_RESET"
 
         const val MAIN_SERVICE_PREF_NAME = "com.yeongil.focusaid.MAIN_SERVICE"
@@ -670,8 +613,8 @@ class MainService : LifecycleService() {
         const val ACTIVITY_TRIGGERED_RULES_KEY = "ACTIVITY_TRIGGERED_RULES"
         const val LOCATION_TRIGGERED_RULES_KEY = "LOCATION_TRIGGERED_RULES"
 
-        const val TIMESTAMP_RULE_SET_KEY = "TIMESTAMP_RULE_SET"
-        const val RULE_SET_KEY = "RULE_SET"
+        const val TIMESTAMP_RULE_STATE_KEY = "TIMESTAMP_RULE_SET"
+        const val RULE_STATE_KEY = "RULE_STATE"
 
         const val CONFIRMED_RULE_ID_KEY = "CONFIRMED_RULE_ID"
         const val CHANGED_RULE_ID_KEY = "CHANGED_RULE_ID"
@@ -683,6 +626,6 @@ class MainService : LifecycleService() {
 
 
         val emptySetStr = Json.encodeToString(emptySet<Unit>())
-        val ruleSetDefaultStr = Json.encodeToString(RuleSet())
+        val ruleSetDefaultStr = Json.encodeToString(RuleState())
     }
 }

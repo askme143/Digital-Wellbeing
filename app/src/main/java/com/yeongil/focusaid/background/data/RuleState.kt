@@ -4,8 +4,8 @@ import com.yeongil.focusaid.data.rule.Rule
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RuleSet(
-    val notified: List<Rule> = listOf(),
-    val conflicting: List<Rule> = listOf(),
-    val running: List<Rule> = listOf(),
+data class RuleState(
+    val notified: Set<Rule> = setOf(),
+    val conflicting: Set<Rule> = setOf(),
+    val running: Set<Rule> = setOf(),
 )
