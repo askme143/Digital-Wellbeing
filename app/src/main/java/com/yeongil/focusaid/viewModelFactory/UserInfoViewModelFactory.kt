@@ -9,7 +9,7 @@ import com.yeongil.focusaid.viewModel.viewModel.UserInfoViewModel
 @Suppress("UNCHECKED_CAST")
 class UserInfoViewModelFactory(private val context: Context) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(UserInfoViewModel::class.java)) {
             UserInfoViewModel(
                 UserInfoPref(context.applicationContext)

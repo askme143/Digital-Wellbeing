@@ -23,6 +23,7 @@ import com.yeongil.focusaid.data.rule.action.RingerAction.RingerMode
 import com.yeongil.focusaid.dataSource.SequenceNumber
 import com.yeongil.focusaid.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.focusaid.repository.RuleRepository
+import com.yeongil.focusaid.utils.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
@@ -31,6 +32,7 @@ import kotlinx.serialization.json.Json
 import java.util.*
 
 class MainService : LifecycleService() {
+    private val initEvent = Event(Unit)
     private val sharedPref by lazy { getSharedPreferences(MAIN_SERVICE_PREF_NAME, MODE_PRIVATE) }
     private val ruleRepo by lazy {
         RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleDao())
@@ -39,7 +41,14 @@ class MainService : LifecycleService() {
     private val midnightIntent by lazy {
         Intent(this, MainService::class.java)
             .apply { action = MIDNIGHT_RESET }
-            .let { PendingIntent.getService(this, MIDNIGHT_REQ_CODE, it, 0) }
+            .let {
+                PendingIntent.getService(
+                    this,
+                    MIDNIGHT_REQ_CODE,
+                    it,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            }
     }
     private val builder by lazy {
         NotificationCompat.Builder(this, CHANNEL_ID)
@@ -95,9 +104,11 @@ class MainService : LifecycleService() {
                 }
             }
             START_BACKGROUND -> {
-                Log.e("hello", START_BACKGROUND)
-                reset()
-                startTriggerObserving()
+                initEvent.getContentIfNotHandled()?.let {
+                    Log.e("hello", START_BACKGROUND)
+                    reset()
+                    startTriggerObserving()
+                }
             }
             RULE_CHANGE -> {
                 Log.e("hello", RULE_CHANGE)
@@ -176,6 +187,7 @@ class MainService : LifecycleService() {
             }
 
             notificationManager.createNotificationChannel(notifyChannel)
+            Log.e("hello", "hello")
         }
 
         /* Listen for the ringer mode change */
@@ -442,7 +454,7 @@ class MainService : LifecycleService() {
                                 this,
                                 it.ruleInfo.ruleId * 2 + REQ_CODE_OFFSET,
                                 intent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
+                                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                             )
                         }
                 )
@@ -457,7 +469,7 @@ class MainService : LifecycleService() {
                                 this,
                                 it.ruleInfo.ruleId * 2 + REQ_CODE_OFFSET + 1,
                                 intent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
+                                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                             )
                         }
                 )

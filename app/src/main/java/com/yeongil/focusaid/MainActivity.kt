@@ -67,22 +67,13 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
 
         /* Start Background Service */
-        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        val runningServices = activityManager.getRunningServices(Int.MAX_VALUE)
-        if (MainService::class.java.name !in runningServices.map { it.service.className }) {
-            val intent = Intent(this, MainService::class.java)
-                .apply { action = MainService.START_BACKGROUND }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
-            } else {
-                startService(intent)
-            }
+        val intent = Intent(this, MainService::class.java)
+            .apply { action = MainService.START_BACKGROUND }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
         }
-    }
-
-    override fun onResume() {
-        Log.e("hello", "main resume")
-        super.onResume()
     }
 
     private fun load() {

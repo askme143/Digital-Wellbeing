@@ -8,7 +8,7 @@ import com.yeongil.focusaid.viewModel.viewModel.action.AppListViewModel
 
 @Suppress("UNCHECKED_CAST")
 class AppListViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(AppListViewModel::class.java)) {
             AppListViewModel(PackageManagerRepository(context.applicationContext.packageManager)) as T
         } else {

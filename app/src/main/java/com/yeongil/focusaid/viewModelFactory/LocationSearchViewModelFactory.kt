@@ -11,7 +11,7 @@ import com.yeongil.focusaid.viewModel.viewModel.trigger.LocationSearchViewModel
 
 @Suppress("UNCHECKED_CAST")
 class LocationSearchViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(LocationSearchViewModel::class.java)) {
             LocationSearchViewModel(
                 LocationRepository(KakaoApi.service),

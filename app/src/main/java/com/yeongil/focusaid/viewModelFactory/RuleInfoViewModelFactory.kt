@@ -11,7 +11,7 @@ import com.yeongil.focusaid.viewModel.viewModel.rule.RuleInfoViewModel
 @Suppress("UNCHECKED_CAST")
 class RuleInfoViewModelFactory(private val context: Context) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(RuleInfoViewModel::class.java)) {
             RuleInfoViewModel(
                 RuleRepository(

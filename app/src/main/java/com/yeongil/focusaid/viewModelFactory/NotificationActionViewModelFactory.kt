@@ -8,7 +8,7 @@ import com.yeongil.focusaid.viewModel.viewModel.action.NotificationActionViewMod
 
 @Suppress("UNCHECKED_CAST")
 class NotificationActionViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(NotificationActionViewModel::class.java)) {
             NotificationActionViewModel(PackageManagerRepository(context.applicationContext.packageManager)) as T
         } else {
