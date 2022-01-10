@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.yeongil.focusaid.BuildConfig
 
 
 class DndService : Service() {
@@ -39,7 +40,7 @@ class DndService : Service() {
     }
 
     companion object {
-        const val RUN_ACTION = "RUN_ACTION"
+        const val RUN_ACTION = "${BuildConfig.APPLICATION_ID}.RUN_ACTION"
         const val DND_EXTRA_KEY = "DND_EXTRA"
     }
 }

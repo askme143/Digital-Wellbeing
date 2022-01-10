@@ -14,6 +14,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.yeongil.focusaid.BuildConfig
 import com.yeongil.focusaid.MainActivity
 import com.yeongil.focusaid.R
 import com.yeongil.focusaid.background.data.RuleState
@@ -594,16 +595,16 @@ class MainService : LifecycleService() {
         const val CHANNEL_ID = "focus_aid_service_channel"
         const val RULE_NOTIFICATION_CHANNEL_ID = "focus_aid_rule_notification_channel"
 
-        const val TIME_TRIGGER = "TIME_TRIGGER"
-        const val ACTIVITY_TRIGGER = "ACTIVITY_TRIGGER"
-        const val LOCATION_TRIGGER = "LOCATION_TRIGGER"
-        const val START_BACKGROUND = "START_BACKGROUND"
-        const val RULE_CHANGE = "RULE_CHANGE"
-        const val RULE_EXEC_ACCEPT = "RULE_EXEC_ACCEPT"
-        const val RULE_EXEC_REJECT = "RULE_EXEC_REJECT"
-        const val MIDNIGHT_RESET = "MIDNIGHT_RESET"
+        const val TIME_TRIGGER = "${BuildConfig.APPLICATION_ID}.TIME_TRIGGER"
+        const val ACTIVITY_TRIGGER = "${BuildConfig.APPLICATION_ID}.ACTIVITY_TRIGGER"
+        const val LOCATION_TRIGGER = "${BuildConfig.APPLICATION_ID}.LOCATION_TRIGGER"
+        const val START_BACKGROUND = "${BuildConfig.APPLICATION_ID}.START_BACKGROUND"
+        const val RULE_CHANGE = "${BuildConfig.APPLICATION_ID}.RULE_CHANGE"
+        const val RULE_EXEC_ACCEPT = "${BuildConfig.APPLICATION_ID}.RULE_EXEC_ACCEPT"
+        const val RULE_EXEC_REJECT = "${BuildConfig.APPLICATION_ID}.RULE_EXEC_REJECT"
+        const val MIDNIGHT_RESET = "${BuildConfig.APPLICATION_ID}.MIDNIGHT_RESET"
 
-        const val MAIN_SERVICE_PREF_NAME = "com.yeongil.focusaid.MAIN_SERVICE"
+        const val MAIN_SERVICE_PREF_NAME = "${BuildConfig.APPLICATION_ID}.MAIN_SERVICE"
 
         const val TIMESTAMP_TIME_TRIGGER_KEY = "TIMESTAMP_TIME_TRIGGER"
         const val TIMESTAMP_ACTIVITY_TRIGGER_KEY = "TIMESTAMP_ACTIVITY_TRIGGER"

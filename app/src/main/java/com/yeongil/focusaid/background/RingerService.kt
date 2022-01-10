@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.os.IBinder
 import androidx.core.content.edit
+import com.yeongil.focusaid.BuildConfig
 import com.yeongil.focusaid.data.rule.action.RingerAction.RingerMode
 
 
@@ -115,10 +116,10 @@ class RingerService : Service() {
     }
 
     companion object {
-        const val RINGER_MODE_CHANGE_DETECTED = "RINGER_MODE_CHANGE_DETECTED"
-        const val RUN_ACTION = "RUN_ACTION"
-        const val STOP_ACTION = "STOP_ACTION"
-        const val CHANGE_ACTION = "CHANGE_ACTION"
+        const val RINGER_MODE_CHANGE_DETECTED = "${BuildConfig.APPLICATION_ID}.RINGER_MODE_CHANGE_DETECTED"
+        const val RUN_ACTION = "${BuildConfig.APPLICATION_ID}.RUN_ACTION"
+        const val STOP_ACTION = "${BuildConfig.APPLICATION_ID}.STOP_ACTION"
+        const val CHANGE_ACTION = "${BuildConfig.APPLICATION_ID}.CHANGE_ACTION"
 
         const val RINGER_EXTRA_KEY = "RINGER_EXTRA"
 

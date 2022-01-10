@@ -2,11 +2,12 @@ package com.yeongil.focusaid.dataSource
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.yeongil.focusaid.BuildConfig
 
 class SequenceNumber(context: Context) {
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(
-            "com.yeongil.focusaid.SEQUENCE_NUMBER",
+            "${BuildConfig.APPLICATION_ID}.SEQUENCE_NUMBER",
             Context.MODE_PRIVATE
         )
     private val key = "sequence number"

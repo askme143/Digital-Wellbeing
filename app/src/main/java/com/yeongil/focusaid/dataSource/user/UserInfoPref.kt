@@ -3,6 +3,7 @@ package com.yeongil.focusaid.dataSource.user
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.yeongil.focusaid.BuildConfig
 
 class UserInfoPref(context: Context) {
     companion object {
@@ -12,7 +13,7 @@ class UserInfoPref(context: Context) {
 
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(
-            "com.yeongil.focusaid.USER",
+            "${BuildConfig.APPLICATION_ID}.USER",
             Context.MODE_PRIVATE
         )
 

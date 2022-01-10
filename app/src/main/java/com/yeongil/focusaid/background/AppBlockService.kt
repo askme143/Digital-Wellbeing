@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import com.yeongil.focusaid.AppBlockActivity
+import com.yeongil.focusaid.BuildConfig
 import com.yeongil.focusaid.data.BlockingApp
 import com.yeongil.focusaid.data.BlockingApp.BlockingAppActionType
 import com.yeongil.focusaid.data.rule.action.AppBlockAction
@@ -296,9 +297,9 @@ class AppBlockService : AccessibilityService() {
         const val PACKAGE_NAME_EXTRA_KEY = "PACKAGE_NAME"
         const val EXTRA_SECONDS_EXTRA_KEY = "EXTRA_TIME"
 
-        const val CHECK_APP_USAGE = "CHECK_APP_USAGE"
-        const val SUBMIT_APP_BLOCK_ACTION = "SUBMIT_APP_BLOCK_ACTION"
-        const val EXTEND_ALLOWED_TIME = "EXTEND_ALLOWED_TIME"
-        const val ALLOW_FOR_THIS_EXECUTION = "ALLOW_FOR_THIS_EXECUTION"
+        const val CHECK_APP_USAGE = "${BuildConfig.APPLICATION_ID}.CHECK_APP_USAGE"
+        const val SUBMIT_APP_BLOCK_ACTION = "${BuildConfig.APPLICATION_ID}.SUBMIT_APP_BLOCK_ACTION"
+        const val EXTEND_ALLOWED_TIME = "${BuildConfig.APPLICATION_ID}.EXTEND_ALLOWED_TIME"
+        const val ALLOW_FOR_THIS_EXECUTION = "${BuildConfig.APPLICATION_ID}.ALLOW_FOR_THIS_EXECUTION"
     }
 }

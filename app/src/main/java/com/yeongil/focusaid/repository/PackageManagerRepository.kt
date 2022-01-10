@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import com.yeongil.focusaid.BuildConfig
 
 class PackageManagerRepository(
     private val pm: PackageManager,
@@ -25,7 +26,7 @@ class PackageManagerRepository(
                 && info.packageName != "com.google.android.youtube"
                 && info.packageName != "com.google.android.gm"
                 && info.packageName != "com.android.chrome"
-                || info.packageName == "com.yeongil.focusaid"
+                || info.packageName == BuildConfig.APPLICATION_ID
                 || info.packageName == "com.samsung.android.spay"
                 || info.packageName == "com.samsung.android.spayfw"
 
