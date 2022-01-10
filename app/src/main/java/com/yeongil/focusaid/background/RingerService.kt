@@ -13,7 +13,7 @@ import com.yeongil.focusaid.data.rule.action.RingerAction.RingerMode
 class RingerService : Service() {
     private val audioManager by lazy { getSystemService(AUDIO_SERVICE) as AudioManager }
     private val sharedPref by lazy {
-        getSharedPreferences("com.yeongil.focusaid.Ringer_Service", Context.MODE_PRIVATE)
+        getSharedPreferences("${BuildConfig.APPLICATION_ID}.Ringer_Service", Context.MODE_PRIVATE)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

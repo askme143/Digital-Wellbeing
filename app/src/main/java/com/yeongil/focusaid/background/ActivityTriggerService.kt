@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
+import com.yeongil.focusaid.BuildConfig
 import com.yeongil.focusaid.dataSource.SequenceNumber
 import com.yeongil.focusaid.dataSource.ruleDatabase.RuleDatabase
 import com.yeongil.focusaid.repository.RuleRepository
@@ -113,7 +114,7 @@ class ActivityTriggerService : LifecycleService() {
     }
 
     companion object {
-        const val ACTIVITY_SERVICE_PREF_NAME = "com.yeongil.focusaid.ACTIVITY_SERVICE"
+        const val ACTIVITY_SERVICE_PREF_NAME = "${BuildConfig.APPLICATION_ID}.ACTIVITY_SERVICE"
 
         const val TIMESTAMP_CURRENT_ACTIVITIES_KEY = "TIMESTAMP_CURRENT_ACTIVITIES"
         const val CURRENT_ACTIVITIES_KEY = "CURRENT_ACTIVITIES"

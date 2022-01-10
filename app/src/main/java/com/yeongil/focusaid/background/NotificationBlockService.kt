@@ -7,6 +7,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.text.SpannableString
 import androidx.core.content.edit
+import com.yeongil.focusaid.BuildConfig
 import com.yeongil.focusaid.data.rule.action.KeywordEntry
 import com.yeongil.focusaid.data.rule.action.NotificationAction
 import kotlinx.serialization.decodeFromString
@@ -122,7 +123,7 @@ class NotificationBlockService : NotificationListenerService() {
 
     companion object {
         const val NOTI_BLOCK_SERVICE_PREF_NAME =
-            "com.yeongil.focusaid.NOTIFICATION_BLOCK_SERVICE"
+            "${BuildConfig.APPLICATION_ID}.NOTIFICATION_BLOCK_SERVICE"
 
         const val NOTIFICATION_ACTION_KEY = "NOTIFICATION_ACTION"
         const val NOTIFICATION_EXTRA_KEY = "NOTIFICATION_EXTRA"
