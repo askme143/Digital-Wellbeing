@@ -1,4 +1,4 @@
-package com.yeongil.focusaid.dataSource.ruleDatabase.dto.action
+package com.yeongil.focusaid.dataSource.ruleDatabase.entity.action
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "app_block_actions")
-data class AppBlockActionDto(
+data class AppBlockActionEntity(
     @PrimaryKey val rid: Int,
     @Embedded val appBlockAction: AppBlockAction
 )

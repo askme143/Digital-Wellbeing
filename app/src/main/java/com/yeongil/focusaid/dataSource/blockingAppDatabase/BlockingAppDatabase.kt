@@ -7,11 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.yeongil.focusaid.dataSource.blockingAppDatabase.converters.Converters
 import com.yeongil.focusaid.dataSource.blockingAppDatabase.dao.BlockingAppDao
-import com.yeongil.focusaid.dataSource.blockingAppDatabase.dto.BlockingAppDto
+import com.yeongil.focusaid.dataSource.blockingAppDatabase.entity.BlockingAppEntity
 
 @Database(
     entities = [
-        BlockingAppDto::class,
+        BlockingAppEntity::class,
     ],
     version = 1
 )

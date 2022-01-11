@@ -1,4 +1,4 @@
-package com.yeongil.focusaid.dataSource.ruleDatabase.dto
+package com.yeongil.focusaid.dataSource.ruleDatabase.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
     tableName = "rule_info",
     indices = [Index(value = ["rule_name"], unique = true)]
 )
-data class RuleInfoDto(
+data class RuleInfoEntity(
     @PrimaryKey val rid: Int,
     @Embedded val ruleInfo: RuleInfo,
 )

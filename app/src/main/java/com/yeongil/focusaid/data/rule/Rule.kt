@@ -8,7 +8,7 @@ import com.yeongil.focusaid.data.rule.action.RingerAction
 import com.yeongil.focusaid.data.rule.trigger.ActivityTrigger
 import com.yeongil.focusaid.data.rule.trigger.LocationTrigger
 import com.yeongil.focusaid.data.rule.trigger.TimeTrigger
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.RuleDto
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleEntity
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -25,14 +25,14 @@ data class Rule(
     val dndAction: DndAction? = null,
     val ringerAction: RingerAction? = null,
 ) : Parcelable {
-    constructor(ruleDto: RuleDto) : this(
-        ruleDto.ruleInfoDto.ruleInfo,
-        ruleDto.locationTriggerDto?.locationTrigger,
-        ruleDto.timeTriggerDto?.timeTrigger,
-        ruleDto.activityTriggerDto?.activityTrigger,
-        ruleDto.appBlockActionDto?.appBlockAction,
-        ruleDto.notificationActionDto?.notificationAction,
-        ruleDto.dndActionDto?.dndAction,
-        ruleDto.ringerActionDto?.ringerAction,
+    constructor(ruleEntity: RuleEntity) : this(
+        ruleEntity.ruleInfoEntity.ruleInfo,
+        ruleEntity.locationTriggerEntity?.locationTrigger,
+        ruleEntity.timeTriggerEntity?.timeTrigger,
+        ruleEntity.activityTriggerEntity?.activityTrigger,
+        ruleEntity.appBlockActionEntity?.appBlockAction,
+        ruleEntity.notificationActionEntity?.notificationAction,
+        ruleEntity.dndActionEntity?.dndAction,
+        ruleEntity.ringerActionEntity?.ringerAction,
     )
 }

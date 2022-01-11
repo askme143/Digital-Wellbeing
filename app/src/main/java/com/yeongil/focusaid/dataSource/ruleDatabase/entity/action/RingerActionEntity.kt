@@ -1,4 +1,4 @@
-package com.yeongil.focusaid.dataSource.ruleDatabase.dto.action
+package com.yeongil.focusaid.dataSource.ruleDatabase.entity.action
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "ringer_actions")
-data class RingerActionDto(
+data class RingerActionEntity(
     @PrimaryKey val rid: Int,
     @Embedded val ringerAction: RingerAction
 )

@@ -4,25 +4,25 @@ import android.content.Context
 import androidx.room.*
 import com.yeongil.focusaid.dataSource.ruleDatabase.converter.Converters
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.RuleDao
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.AppBlockActionDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.DndActionDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.NotificationActionDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.RingerActionDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.RuleInfoDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger.ActivityTriggerDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger.LocationTriggerDto
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger.TimeTriggerDto
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.AppBlockActionEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.DndActionEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.NotificationActionEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.RingerActionEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleInfoEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.ActivityTriggerEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.LocationTriggerEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.TimeTriggerEntity
 
 @Database(
     entities = [
-        RuleInfoDto::class,
-        LocationTriggerDto::class,
-        ActivityTriggerDto::class,
-        TimeTriggerDto::class,
-        AppBlockActionDto::class,
-        NotificationActionDto::class,
-        DndActionDto::class,
-        RingerActionDto::class,
+        RuleInfoEntity::class,
+        LocationTriggerEntity::class,
+        ActivityTriggerEntity::class,
+        TimeTriggerEntity::class,
+        AppBlockActionEntity::class,
+        NotificationActionEntity::class,
+        DndActionEntity::class,
+        RingerActionEntity::class,
     ],
     version = 1
 )

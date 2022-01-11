@@ -1,4 +1,4 @@
-package com.yeongil.focusaid.dataSource.ruleDatabase.dto.action
+package com.yeongil.focusaid.dataSource.ruleDatabase.entity.action
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "dnd_actions")
-data class DndActionDto(
+data class DndActionEntity(
     @PrimaryKey val rid: Int,
     @Embedded val dndAction: DndAction
 )

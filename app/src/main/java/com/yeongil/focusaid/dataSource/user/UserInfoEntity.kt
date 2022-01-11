@@ -1,6 +1,6 @@
 package com.yeongil.focusaid.dataSource.user
 
-data class UserInfoDto(
+data class UserInfoEntity(
     val email: String,
     val userName: String,
 )

@@ -1,15 +1,15 @@
 package com.yeongil.focusaid.dataSource.ruleDatabase.dao.action
 
 import androidx.room.*
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.action.DndActionDto
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.DndActionEntity
 
 @Dao
 interface DndActionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDndAction(dndActionDto: DndActionDto)
+    suspend fun insertDndAction(dndActionEntity: DndActionEntity)
 
     @Update
-    suspend fun updateDndAction(dndActionDto: DndActionDto)
+    suspend fun updateDndAction(dndActionEntity: DndActionEntity)
 
     @Query("DELETE FROM dnd_actions WHERE rid = :rid")
     suspend fun deleteDndActionByRid(rid: Int)

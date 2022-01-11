@@ -1,4 +1,4 @@
-package com.yeongil.focusaid.dataSource.blockingAppDatabase.dto
+package com.yeongil.focusaid.dataSource.blockingAppDatabase.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.yeongil.focusaid.data.BlockingApp
 
 @Entity(tableName = "blocking_apps")
-data class BlockingAppDto(
+data class BlockingAppEntity(
     val rid: Int,
     @PrimaryKey @ColumnInfo(name = "package_name") val packageName: String,
     val timestamp: Long,

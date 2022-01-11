@@ -17,13 +17,13 @@ class UserInfoPref(context: Context) {
             Context.MODE_PRIVATE
         )
 
-    fun getUserInfo(): UserInfoDto? {
+    fun getUserInfo(): UserInfoEntity? {
         val userName = sharedPref.getString(USER_NAME_KEY, null)
         val email = sharedPref.getString(EMAIL_KEY, null)
 
         if (userName == null || email == null) return null
 
-        return UserInfoDto(email, userName)
+        return UserInfoEntity(email, userName)
     }
 
     fun setUserInfo(userName: String, email: String) {

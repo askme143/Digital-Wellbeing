@@ -1,7 +1,7 @@
 package com.yeongil.focusaid.dataSource.blockingAppDatabase.converters
 
 import androidx.room.TypeConverter
-import com.yeongil.focusaid.dataSource.blockingAppDatabase.dto.BlockingAppDto.BlockingAppActionType
+import com.yeongil.focusaid.dataSource.blockingAppDatabase.entity.BlockingAppEntity.BlockingAppActionType
 
 class Converters {
     @TypeConverter

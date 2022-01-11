@@ -1,4 +1,4 @@
-package com.yeongil.focusaid.dataSource.ruleDatabase.dto.trigger
+package com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "location_triggers")
-data class LocationTriggerDto(
+data class LocationTriggerEntity(
     @PrimaryKey val rid: Int,
     @Embedded val locationTrigger: LocationTrigger
 )

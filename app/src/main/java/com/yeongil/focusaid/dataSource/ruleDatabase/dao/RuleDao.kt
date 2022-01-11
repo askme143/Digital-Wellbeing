@@ -7,7 +7,7 @@ import com.yeongil.focusaid.dataSource.ruleDatabase.dao.action.*
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.trigger.ActivityTriggerDao
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.trigger.LocationTriggerDao
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.trigger.TimeTriggerDao
-import com.yeongil.focusaid.dataSource.ruleDatabase.dto.RuleDto
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,38 +16,38 @@ interface RuleDao :
     LocationTriggerDao, TimeTriggerDao, ActivityTriggerDao,
     AppBlockActionDao, NotificationActionDao, DndActionDao, RingerActionDao {
     @Transaction
-    suspend fun insertRule(ruleDto: RuleDto) {
-        insertRuleInfo(ruleDto.ruleInfoDto)
+    suspend fun insertRule(ruleEntity: RuleEntity) {
+        insertRuleInfo(ruleEntity.ruleInfoEntity)
 
-        ruleDto.locationTriggerDto?.let { insertLocationTrigger(it) }
-        ruleDto.timeTriggerDto?.let { insertTimeTrigger(it) }
-        ruleDto.activityTriggerDto?.let { insertActivityTrigger(it) }
+        ruleEntity.locationTriggerEntity?.let { insertLocationTrigger(it) }
+        ruleEntity.timeTriggerEntity?.let { insertTimeTrigger(it) }
+        ruleEntity.activityTriggerEntity?.let { insertActivityTrigger(it) }
 
-        ruleDto.appBlockActionDto?.let { insertAppBlockAction(it) }
-        ruleDto.notificationActionDto?.let { insertNotificationAction(it) }
-        ruleDto.dndActionDto?.let { insertDndAction(it) }
-        ruleDto.ringerActionDto?.let { insertRingerAction(it) }
+        ruleEntity.appBlockActionEntity?.let { insertAppBlockAction(it) }
+        ruleEntity.notificationActionEntity?.let { insertNotificationAction(it) }
+        ruleEntity.dndActionEntity?.let { insertDndAction(it) }
+        ruleEntity.ringerActionEntity?.let { insertRingerAction(it) }
     }
 
     @Transaction
-    suspend fun updateRule(ruleDto: RuleDto) {
-        updateRuleInfo(ruleDto.ruleInfoDto)
+    suspend fun updateRule(ruleEntity: RuleEntity) {
+        updateRuleInfo(ruleEntity.ruleInfoEntity)
 
-        val rid = ruleDto.ruleInfoDto.rid
+        val rid = ruleEntity.ruleInfoEntity.rid
 
-        ruleDto.locationTriggerDto?.let { insertLocationTrigger(it) }
+        ruleEntity.locationTriggerEntity?.let { insertLocationTrigger(it) }
             ?: deleteLocationTriggerByRid(rid)
-        ruleDto.timeTriggerDto?.let { insertTimeTrigger(it) }
+        ruleEntity.timeTriggerEntity?.let { insertTimeTrigger(it) }
             ?: deleteTimeTriggerByRid(rid)
-        ruleDto.activityTriggerDto?.let { insertActivityTrigger(it) }
+        ruleEntity.activityTriggerEntity?.let { insertActivityTrigger(it) }
             ?: deleteActivityTriggerByRid(rid)
-        ruleDto.appBlockActionDto?.let { insertAppBlockAction(it) }
+        ruleEntity.appBlockActionEntity?.let { insertAppBlockAction(it) }
             ?: deleteAppBlockActionByRid(rid)
-        ruleDto.notificationActionDto?.let { insertNotificationAction(it) }
+        ruleEntity.notificationActionEntity?.let { insertNotificationAction(it) }
             ?: deleteNotificationActionByRid(rid)
-        ruleDto.dndActionDto?.let { insertDndAction(it) }
+        ruleEntity.dndActionEntity?.let { insertDndAction(it) }
             ?: deleteDndActionByRid(rid)
-        ruleDto.ringerActionDto?.let { insertRingerAction(it) }
+        ruleEntity.ringerActionEntity?.let { insertRingerAction(it) }
             ?: deleteRingerActionByRid(rid)
     }
 
@@ -67,13 +67,13 @@ interface RuleDao :
 
     @Transaction
     @Query("SELECT * FROM rule_info WHERE rid = :rid")
-    suspend fun getRuleByRid(rid: Int): RuleDto
+    suspend fun getRuleByRid(rid: Int): RuleEntity
 
     @Transaction
     @Query("SELECT * FROM rule_info")
-    fun getRuleListAsFlowByRid(): Flow<List<RuleDto>>
+    fun getRuleListAsFlowByRid(): Flow<List<RuleEntity>>
 
     @Transaction
     @Query("SELECT * FROM rule_info")
-    suspend fun getRuleList(): List<RuleDto>
+    suspend fun getRuleList(): List<RuleEntity>
 }
