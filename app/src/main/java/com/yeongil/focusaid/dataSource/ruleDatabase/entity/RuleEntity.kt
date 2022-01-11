@@ -14,16 +14,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RuleEntity(
     @Embedded val ruleInfoEntity: RuleInfoEntity,
+
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
     val locationTriggerEntity: LocationTriggerEntity?,
+
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
     val timeTriggerEntity: TimeTriggerEntity?,
+
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
@@ -35,16 +38,19 @@ data class RuleEntity(
         entityColumn = "rid",
     )
     val appBlockActionEntity: AppBlockActionEntity?,
+
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
     val notificationActionEntity: NotificationActionEntity?,
+
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",
     )
     val dndActionEntity: DndActionEntity?,
+
     @Relation(
         parentColumn = "rid",
         entityColumn = "rid",

@@ -1,14 +1,18 @@
 package com.yeongil.focusaid.dataSource.ruleDatabase.entity.action
 
-import androidx.room.Embedded
+import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.yeongil.focusaid.data.rule.action.RingerAction
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "ringer_actions")
 data class RingerActionEntity(
     @PrimaryKey val rid: Int,
-    @Embedded val ringerAction: RingerAction
-)
+    @ColumnInfo(name = "ringer_mode") val ringerModeEntity: RingerModeEntity,
+) {
+    @Parcelize
+    enum class RingerModeEntity : Parcelable { VIBRATE, RING, SILENT }
+}

@@ -5,7 +5,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.yeongil.focusaid.data.Location
 import com.yeongil.focusaid.dataSource.kakaoApi.KakaoApiService
 import retrofit2.await
-import java.lang.Exception
 
 class LocationRepository(
     private val kakaoApiService: KakaoApiService

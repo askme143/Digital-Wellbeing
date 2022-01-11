@@ -1,14 +1,17 @@
 package com.yeongil.focusaid.dataSource.ruleDatabase
 
 import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.yeongil.focusaid.dataSource.ruleDatabase.converter.Converters
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.RuleDao
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleInfoEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.AppBlockActionEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.DndActionEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.NotificationActionEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.RingerActionEntity
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleInfoEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.ActivityTriggerEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.LocationTriggerEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.TimeTriggerEntity

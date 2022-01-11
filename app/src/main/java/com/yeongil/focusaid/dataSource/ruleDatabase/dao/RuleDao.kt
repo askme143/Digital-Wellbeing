@@ -3,7 +3,10 @@ package com.yeongil.focusaid.dataSource.ruleDatabase.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.yeongil.focusaid.dataSource.ruleDatabase.dao.action.*
+import com.yeongil.focusaid.dataSource.ruleDatabase.dao.action.AppBlockActionDao
+import com.yeongil.focusaid.dataSource.ruleDatabase.dao.action.DndActionDao
+import com.yeongil.focusaid.dataSource.ruleDatabase.dao.action.NotificationActionDao
+import com.yeongil.focusaid.dataSource.ruleDatabase.dao.action.RingerActionDao
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.trigger.ActivityTriggerDao
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.trigger.LocationTriggerDao
 import com.yeongil.focusaid.dataSource.ruleDatabase.dao.trigger.TimeTriggerDao
@@ -33,7 +36,7 @@ interface RuleDao :
     suspend fun updateRule(ruleEntity: RuleEntity) {
         updateRuleInfo(ruleEntity.ruleInfoEntity)
 
-        val rid = ruleEntity.ruleInfoEntity.rid
+        val rid = ruleEntity.ruleInfoEntity.ruleId
 
         ruleEntity.locationTriggerEntity?.let { insertLocationTrigger(it) }
             ?: deleteLocationTriggerByRid(rid)

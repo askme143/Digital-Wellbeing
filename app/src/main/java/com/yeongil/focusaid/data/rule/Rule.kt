@@ -8,7 +8,6 @@ import com.yeongil.focusaid.data.rule.action.RingerAction
 import com.yeongil.focusaid.data.rule.trigger.ActivityTrigger
 import com.yeongil.focusaid.data.rule.trigger.LocationTrigger
 import com.yeongil.focusaid.data.rule.trigger.TimeTrigger
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleEntity
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -24,15 +23,4 @@ data class Rule(
     val notificationAction: NotificationAction? = null,
     val dndAction: DndAction? = null,
     val ringerAction: RingerAction? = null,
-) : Parcelable {
-    constructor(ruleEntity: RuleEntity) : this(
-        ruleEntity.ruleInfoEntity.ruleInfo,
-        ruleEntity.locationTriggerEntity?.locationTrigger,
-        ruleEntity.timeTriggerEntity?.timeTrigger,
-        ruleEntity.activityTriggerEntity?.activityTrigger,
-        ruleEntity.appBlockActionEntity?.appBlockAction,
-        ruleEntity.notificationActionEntity?.notificationAction,
-        ruleEntity.dndActionEntity?.dndAction,
-        ruleEntity.ringerActionEntity?.ringerAction,
-    )
-}
+) : Parcelable {}
