@@ -11,6 +11,6 @@ interface ActivityTriggerDao {
     @Update
     suspend fun updateActivityTrigger(activityTriggerEntity: ActivityTriggerEntity)
 
-    @Query("DELETE FROM activity_triggers WHERE rid = :rid")
+    @Query("DELETE FROM activity_trigger WHERE rid = :rid")
     suspend fun deleteActivityTriggerByRid(rid: Int)
 }

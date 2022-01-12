@@ -1,59 +1,25 @@
 package com.yeongil.focusaid.dataSource.ruleDatabase.entity
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.AppBlockActionEntity
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.DndActionEntity
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.NotificationActionEntity
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.RingerActionEntity
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.ActivityTriggerEntity
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.LocationTriggerEntity
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.TimeTriggerEntity
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import com.yeongil.focusaid.utils.TEMPORAL_RULE_ID
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Entity(
+    tableName = "rule",
+    indices = [Index(value = ["rule_name"], unique = true)]
+)
 data class RuleEntity(
-    @Embedded val ruleInfoEntity: RuleInfoEntity,
-
-    @Relation(
-        parentColumn = "rid",
-        entityColumn = "rid",
-    )
-    val locationTriggerEntity: LocationTriggerEntity?,
-
-    @Relation(
-        parentColumn = "rid",
-        entityColumn = "rid",
-    )
-    val timeTriggerEntity: TimeTriggerEntity?,
-
-    @Relation(
-        parentColumn = "rid",
-        entityColumn = "rid",
-    )
-    val activityTriggerEntity: ActivityTriggerEntity?,
-
-    @Relation(
-        parentColumn = "rid",
-        entityColumn = "rid",
-    )
-    val appBlockActionEntity: AppBlockActionEntity?,
-
-    @Relation(
-        parentColumn = "rid",
-        entityColumn = "rid",
-    )
-    val notificationActionEntity: NotificationActionEntity?,
-
-    @Relation(
-        parentColumn = "rid",
-        entityColumn = "rid",
-    )
-    val dndActionEntity: DndActionEntity?,
-
-    @Relation(
-        parentColumn = "rid",
-        entityColumn = "rid",
-    )
-    val ringerActionEntity: RingerActionEntity?,
+    @PrimaryKey
+    @ColumnInfo(name = "rid")
+    val ruleId: Int = TEMPORAL_RULE_ID,
+    @ColumnInfo(name = "rule_name")
+    val ruleName: String = "",
+    @ColumnInfo(name = "activated")
+    val activated: Boolean = true,
+    @ColumnInfo(name = "noti_on_trigger")
+    val notiOnTrigger: Boolean = false,
 )

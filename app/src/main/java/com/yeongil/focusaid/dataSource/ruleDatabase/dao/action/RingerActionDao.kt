@@ -11,6 +11,6 @@ interface RingerActionDao {
     @Update
     suspend fun updateRingerAction(ringerActionEntity: RingerActionEntity)
 
-    @Query("DELETE FROM ringer_actions WHERE rid = :rid")
+    @Query("DELETE FROM ringer_action WHERE rid = :rid")
     suspend fun deleteRingerActionByRid(rid: Int)
 }

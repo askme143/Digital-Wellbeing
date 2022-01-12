@@ -4,26 +4,26 @@ import com.yeongil.focusaid.data.rule.action.AppBlockAction
 import com.yeongil.focusaid.data.rule.action.AppBlockEntry
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.AppBlockActionEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.AppBlockActionEntity.AppBlockEntryEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.combined.AppBlockActionCombined
 
 fun AppBlockAction.toEntity(rid: Int): AppBlockActionEntity {
-    return AppBlockActionEntity(
-        rid,
-        appBlockEntryList.map { it.toEntity() },
-        allAppBlock,
-        allAppHandlingAction
-    )
+    return AppBlockActionEntity(rid, allAppBlock, allAppHandlingAction)
 }
 
-fun AppBlockActionEntity.toData(): AppBlockAction {
+fun AppBlockAction.toCombined(rid: Int): AppBlockActionCombined {
+    return AppBlockActionCombined(toEntity(rid), appBlockEntryList.map { it.toEntity(rid) })
+}
+
+fun AppBlockActionCombined.toData(): AppBlockAction {
     return AppBlockAction(
         appBlockEntryEntityList.map { it.toData() },
-        allAppBlock,
-        allAppHandlingAction
+        appBlockActionEntity.allAppBlock,
+        appBlockActionEntity.allAppHandlingAction
     )
 }
 
-fun AppBlockEntry.toEntity(): AppBlockEntryEntity {
-    return AppBlockEntryEntity(packageName, allowedTimeInMinutes, handlingAction)
+fun AppBlockEntry.toEntity(rid: Int): AppBlockEntryEntity {
+    return AppBlockEntryEntity(0, rid, packageName, allowedTimeInMinutes, handlingAction)
 }
 
 fun AppBlockEntryEntity.toData(): AppBlockEntry {

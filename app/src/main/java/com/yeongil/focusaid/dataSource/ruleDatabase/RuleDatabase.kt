@@ -6,24 +6,28 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.yeongil.focusaid.dataSource.ruleDatabase.converter.Converters
-import com.yeongil.focusaid.dataSource.ruleDatabase.dao.RuleDao
-import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleInfoEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.dao.combined.RuleCombinedDao
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.AppBlockActionEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.DndActionEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.NotificationActionEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.action.RingerActionEntity
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.combined.RuleCombined
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.ActivityTriggerEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.LocationTriggerEntity
 import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.TimeTriggerEntity
 
 @Database(
     entities = [
-        RuleInfoEntity::class,
+        RuleEntity::class,
         LocationTriggerEntity::class,
         ActivityTriggerEntity::class,
         TimeTriggerEntity::class,
         AppBlockActionEntity::class,
+        AppBlockActionEntity.AppBlockEntryEntity::class,
         NotificationActionEntity::class,
+        NotificationActionEntity.KeywordEntryEntity::class,
+        NotificationActionEntity.PackageNameEntity::class,
         DndActionEntity::class,
         RingerActionEntity::class,
     ],
@@ -31,7 +35,7 @@ import com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger.TimeTriggerEn
 )
 @TypeConverters(Converters::class)
 abstract class RuleDatabase : RoomDatabase() {
-    abstract fun ruleDao(): RuleDao
+    abstract fun ruleCombinedDao(): RuleCombinedDao
 
     companion object {
         @Volatile

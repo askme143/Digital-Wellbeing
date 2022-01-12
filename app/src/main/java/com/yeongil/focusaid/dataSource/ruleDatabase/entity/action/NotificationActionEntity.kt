@@ -1,25 +1,54 @@
 package com.yeongil.focusaid.dataSource.ruleDatabase.entity.action
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleEntity
 
-@Serializable
-@Entity(tableName = "notification_actions")
+@Entity(
+    tableName = "notification_action",
+    foreignKeys = [ForeignKey(
+        entity = RuleEntity::class,
+        parentColumns = ["rid"],
+        childColumns = ["rid"],
+        onDelete = CASCADE,
+    )]
+)
 data class NotificationActionEntity(
     @PrimaryKey val rid: Int,
-    @ColumnInfo(name = "app_list") val appList: List<String>,
     @ColumnInfo(name = "all_app") val allApp: Boolean,
-    @ColumnInfo(name = "keyword_list") val keywordEntryEntityList: List<KeywordEntryEntity>,
     @ColumnInfo(name = "handling_action") val handlingAction: Int,
 ) {
-    @Serializable
-    @Parcelize
+    @Entity(
+        tableName = "keyword_entry",
+        foreignKeys = [ForeignKey(
+            entity = NotificationActionEntity::class,
+            parentColumns = ["rid"],
+            childColumns = ["rid"],
+            onDelete = CASCADE
+        )]
+    )
     data class KeywordEntryEntity(
+        @PrimaryKey(autoGenerate = true) val id: Int,
+        val rid: Int,
         val keyword: String,
         val inclusion: Boolean,
-    ) : Parcelable
+    )
+
+    @Entity(
+        tableName = "package_name",
+        foreignKeys = [ForeignKey(
+            entity = NotificationActionEntity::class,
+            parentColumns = ["rid"],
+            childColumns = ["rid"],
+            onDelete = CASCADE
+        )]
+    )
+    data class PackageNameEntity(
+        @PrimaryKey(autoGenerate = true) val id: Int,
+        val rid: Int,
+        @ColumnInfo(name = "package_name") val packageName: String
+    )
 }

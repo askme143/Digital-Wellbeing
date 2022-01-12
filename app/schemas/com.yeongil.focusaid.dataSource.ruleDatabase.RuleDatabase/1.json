@@ -2,38 +2,32 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c1fcfb5d08184442fc6789c2b20e608e",
+    "identityHash": "ae6375d0c05e635eb2b04b85f67df58f",
     "entities": [
       {
-        "tableName": "rule_info",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `ruleId` INTEGER NOT NULL, `rule_name` TEXT NOT NULL, `activated` INTEGER NOT NULL, `noti_on_trigger` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "rule",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `rule_name` TEXT NOT NULL, `activated` INTEGER NOT NULL, `noti_on_trigger` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
         "fields": [
           {
-            "fieldPath": "rid",
+            "fieldPath": "ruleId",
             "columnName": "rid",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "ruleInfo.ruleId",
-            "columnName": "ruleId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ruleInfo.ruleName",
+            "fieldPath": "ruleName",
             "columnName": "rule_name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "ruleInfo.activated",
+            "fieldPath": "activated",
             "columnName": "activated",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "ruleInfo.notiOnTrigger",
+            "fieldPath": "notiOnTrigger",
             "columnName": "noti_on_trigger",
             "affinity": "INTEGER",
             "notNull": true
@@ -47,19 +41,20 @@
         },
         "indices": [
           {
-            "name": "index_rule_info_rule_name",
+            "name": "index_rule_rule_name",
             "unique": true,
             "columnNames": [
               "rule_name"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rule_info_rule_name` ON `${TABLE_NAME}` (`rule_name`)"
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rule_rule_name` ON `${TABLE_NAME}` (`rule_name`)"
           }
         ],
         "foreignKeys": []
       },
       {
-        "tableName": "location_triggers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `range` INTEGER NOT NULL, `locationName` TEXT NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "location_trigger",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `range` INTEGER NOT NULL, `location_name` TEXT NOT NULL, PRIMARY KEY(`rid`), FOREIGN KEY(`rid`) REFERENCES `rule`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "rid",
@@ -68,26 +63,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "locationTrigger.latitude",
+            "fieldPath": "latitude",
             "columnName": "latitude",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "locationTrigger.longitude",
+            "fieldPath": "longitude",
             "columnName": "longitude",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "locationTrigger.range",
+            "fieldPath": "range",
             "columnName": "range",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "locationTrigger.locationName",
-            "columnName": "locationName",
+            "fieldPath": "locationName",
+            "columnName": "location_name",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -99,11 +94,23 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "rule",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
       },
       {
-        "tableName": "activity_triggers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `activity` TEXT NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "activity_trigger",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `activity` TEXT NOT NULL, PRIMARY KEY(`rid`), FOREIGN KEY(`rid`) REFERENCES `rule`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "rid",
@@ -112,7 +119,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "activityTrigger.activity",
+            "fieldPath": "activity",
             "columnName": "activity",
             "affinity": "TEXT",
             "notNull": true
@@ -125,11 +132,23 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "rule",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
       },
       {
-        "tableName": "time_triggers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `start_time_in_minutes` INTEGER NOT NULL, `end_time_in_minutes` INTEGER NOT NULL, `repeat_day` TEXT NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "time_trigger",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `start_time_in_minutes` INTEGER NOT NULL, `end_time_in_minutes` INTEGER NOT NULL, `repeat_day` TEXT NOT NULL, PRIMARY KEY(`rid`), FOREIGN KEY(`rid`) REFERENCES `rule`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "rid",
@@ -138,19 +157,19 @@
             "notNull": true
           },
           {
-            "fieldPath": "timeTrigger.startTimeInMinutes",
+            "fieldPath": "startTimeInMinutes",
             "columnName": "start_time_in_minutes",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "timeTrigger.endTimeInMinutes",
+            "fieldPath": "endTimeInMinutes",
             "columnName": "end_time_in_minutes",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "timeTrigger.repeatDay",
+            "fieldPath": "repeatDay",
             "columnName": "repeat_day",
             "affinity": "TEXT",
             "notNull": true
@@ -163,11 +182,23 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "rule",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
       },
       {
-        "tableName": "app_block_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_block_entry_list` TEXT NOT NULL, `all_app_block` INTEGER NOT NULL, `all_app_handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "app_block_action",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `all_app_block` INTEGER NOT NULL, `all_app_handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`), FOREIGN KEY(`rid`) REFERENCES `rule`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "rid",
@@ -176,19 +207,13 @@
             "notNull": true
           },
           {
-            "fieldPath": "appBlockAction.appBlockEntryList",
-            "columnName": "app_block_entry_list",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "appBlockAction.allAppBlock",
+            "fieldPath": "allAppBlock",
             "columnName": "all_app_block",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "appBlockAction.allAppHandlingAction",
+            "fieldPath": "allAppHandlingAction",
             "columnName": "all_app_handling_action",
             "affinity": "INTEGER",
             "notNull": true
@@ -201,11 +226,79 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "rule",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
       },
       {
-        "tableName": "notification_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `app_list` TEXT NOT NULL, `all_app` INTEGER NOT NULL, `keyword_list` TEXT NOT NULL, `handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "app_block_entry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `rid` INTEGER NOT NULL, `package_name` TEXT NOT NULL, `allowed_time_in_minutes` INTEGER NOT NULL, `handling_action` INTEGER NOT NULL, FOREIGN KEY(`rid`) REFERENCES `app_block_action`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rid",
+            "columnName": "rid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "package_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "allowedTimeInMinutes",
+            "columnName": "allowed_time_in_minutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "handlingAction",
+            "columnName": "handling_action",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "app_block_action",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "notification_action",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `all_app` INTEGER NOT NULL, `handling_action` INTEGER NOT NULL, PRIMARY KEY(`rid`), FOREIGN KEY(`rid`) REFERENCES `rule`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "rid",
@@ -214,25 +307,13 @@
             "notNull": true
           },
           {
-            "fieldPath": "notificationAction.appList",
-            "columnName": "app_list",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "notificationAction.allApp",
+            "fieldPath": "allApp",
             "columnName": "all_app",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "notificationAction.keywordList",
-            "columnName": "keyword_list",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "notificationAction.handlingAction",
+            "fieldPath": "handlingAction",
             "columnName": "handling_action",
             "affinity": "INTEGER",
             "notNull": true
@@ -245,12 +326,30 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "rule",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
       },
       {
-        "tableName": "dnd_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `temp` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "keyword_entry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `rid` INTEGER NOT NULL, `keyword` TEXT NOT NULL, `inclusion` INTEGER NOT NULL, FOREIGN KEY(`rid`) REFERENCES `notification_action`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "rid",
             "columnName": "rid",
@@ -258,8 +357,90 @@
             "notNull": true
           },
           {
-            "fieldPath": "dndAction.temp",
-            "columnName": "temp",
+            "fieldPath": "keyword",
+            "columnName": "keyword",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inclusion",
+            "columnName": "inclusion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "notification_action",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "package_name",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `rid` INTEGER NOT NULL, `package_name` TEXT NOT NULL, FOREIGN KEY(`rid`) REFERENCES `notification_action`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rid",
+            "columnName": "rid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageName",
+            "columnName": "package_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "notification_action",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "dnd_action",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, PRIMARY KEY(`rid`), FOREIGN KEY(`rid`) REFERENCES `rule`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "rid",
+            "columnName": "rid",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -271,11 +452,23 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "rule",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
       },
       {
-        "tableName": "ringer_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `ringer_mode` INTEGER NOT NULL, PRIMARY KEY(`rid`))",
+        "tableName": "ringer_action",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rid` INTEGER NOT NULL, `ringer_mode` INTEGER NOT NULL, PRIMARY KEY(`rid`), FOREIGN KEY(`rid`) REFERENCES `rule`(`rid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "rid",
@@ -284,7 +477,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "ringerAction.ringerMode",
+            "fieldPath": "ringerModeEntity",
             "columnName": "ringer_mode",
             "affinity": "INTEGER",
             "notNull": true
@@ -297,13 +490,25 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "rule",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rid"
+            ],
+            "referencedColumns": [
+              "rid"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c1fcfb5d08184442fc6789c2b20e608e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ae6375d0c05e635eb2b04b85f67df58f')"
     ]
   }
 }

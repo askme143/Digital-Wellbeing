@@ -20,7 +20,7 @@ class TimeTriggerService : LifecycleService() {
     private val ruleRepo by lazy {
         RuleRepository(
             SequenceNumber(this),
-            RuleDatabase.getInstance(this).ruleDao()
+            RuleDatabase.getInstance(this).ruleCombinedDao()
         )
     }
     private val alarmManager by lazy { getSystemService(ALARM_SERVICE) as AlarmManager }

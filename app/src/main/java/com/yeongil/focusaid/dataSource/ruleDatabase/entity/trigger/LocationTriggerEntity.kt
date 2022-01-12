@@ -2,11 +2,20 @@ package com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
-import kotlinx.serialization.Serializable
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleEntity
 
-@Serializable
-@Entity(tableName = "location_triggers")
+@Entity(
+    tableName = "location_trigger",
+    foreignKeys = [ForeignKey(
+        entity = RuleEntity::class,
+        parentColumns = ["rid"],
+        childColumns = ["rid"],
+        onDelete = CASCADE,
+    )]
+)
 data class LocationTriggerEntity(
     @PrimaryKey val rid: Int,
     val latitude: Double,

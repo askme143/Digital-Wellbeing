@@ -11,6 +11,6 @@ interface DndActionDao {
     @Update
     suspend fun updateDndAction(dndActionEntity: DndActionEntity)
 
-    @Query("DELETE FROM dnd_actions WHERE rid = :rid")
+    @Query("DELETE FROM dnd_action WHERE rid = :rid")
     suspend fun deleteDndActionByRid(rid: Int)
 }

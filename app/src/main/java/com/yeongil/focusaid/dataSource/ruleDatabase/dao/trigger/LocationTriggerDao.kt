@@ -12,9 +12,6 @@ interface LocationTriggerDao {
     @Update
     suspend fun updateLocationTrigger(locationTriggerEntity: LocationTriggerEntity)
 
-    @Query("DELETE FROM location_triggers WHERE rid = :rid")
+    @Query("DELETE FROM location_trigger WHERE rid = :rid")
     suspend fun deleteLocationTriggerByRid(rid: Int)
-
-    @Query("SELECT * FROM location_triggers")
-    fun getLocationTriggerListFlow(): Flow<List<LocationTriggerEntity>>
 }

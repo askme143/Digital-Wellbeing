@@ -10,36 +10,6 @@ import kotlinx.serialization.json.Json
 
 class Converters {
     @TypeConverter
-    fun fromAppListToString(value: List<String>): String {
-        return Json.encodeToString(value)
-    }
-
-    @TypeConverter
-    fun fromStringToAppList(value: String): List<String> {
-        return Json.decodeFromString(value)
-    }
-
-    @TypeConverter
-    fun fromKeywordEntryEntityListToString(value: List<NotificationActionEntity.KeywordEntryEntity>): String {
-        return Json.encodeToString(value)
-    }
-
-    @TypeConverter
-    fun fromStringToKeywordEntryEntityList(value: String): List<NotificationActionEntity.KeywordEntryEntity> {
-        return Json.decodeFromString(value)
-    }
-
-    @TypeConverter
-    fun fromAppBlockEntryEntityListToString(value: List<AppBlockActionEntity.AppBlockEntryEntity>): String {
-        return Json.encodeToString(value)
-    }
-
-    @TypeConverter
-    fun fromStringToAppBlockEntryEntityList(value: String): List<AppBlockActionEntity.AppBlockEntryEntity> {
-        return Json.decodeFromString(value)
-    }
-
-    @TypeConverter
     fun fromRepeatDayToString(value: List<Boolean>): String {
         return Json.encodeToString(value)
     }

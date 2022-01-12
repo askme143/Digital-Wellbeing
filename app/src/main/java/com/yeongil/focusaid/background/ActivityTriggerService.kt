@@ -24,7 +24,7 @@ class ActivityTriggerService : LifecycleService() {
     private val ruleRepo by lazy {
         RuleRepository(
             SequenceNumber(this),
-            RuleDatabase.getInstance(this).ruleDao()
+            RuleDatabase.getInstance(this).ruleCombinedDao()
         )
     }
     private val sharedPref by lazy {

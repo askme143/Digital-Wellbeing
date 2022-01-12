@@ -25,7 +25,7 @@ import kotlin.math.max
 
 class LocationTriggerService : LifecycleService() {
     private val ruleRepo by lazy {
-        RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleDao())
+        RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleCombinedDao())
     }
     private val fusedLocationClient by lazy {
         FusedLocationClient(LocationServices.getFusedLocationProviderClient(this))

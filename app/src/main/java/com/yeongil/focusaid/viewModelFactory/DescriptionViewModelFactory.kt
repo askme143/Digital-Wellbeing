@@ -16,7 +16,7 @@ class DescriptionViewModelFactory(private val context: Context) : ViewModelProvi
             DescriptionViewModel(
                 RuleRepository(
                     SequenceNumber(context.applicationContext),
-                    RuleDatabase.getInstance(context.applicationContext).ruleDao()
+                    RuleDatabase.getInstance(context.applicationContext).ruleCombinedDao()
                 ),
                 PackageManagerRepository(context.applicationContext.packageManager)
             ) as T

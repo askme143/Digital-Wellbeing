@@ -16,7 +16,7 @@ class RuleEditViewModelFactory(private val context: Context) : ViewModelProvider
             RuleEditViewModel(
                 RuleRepository(
                     SequenceNumber(context.applicationContext),
-                    RuleDatabase.getInstance(context.applicationContext).ruleDao()
+                    RuleDatabase.getInstance(context.applicationContext).ruleCombinedDao()
                 ),
                 PackageManagerRepository(context.applicationContext.packageManager)
             ) as T

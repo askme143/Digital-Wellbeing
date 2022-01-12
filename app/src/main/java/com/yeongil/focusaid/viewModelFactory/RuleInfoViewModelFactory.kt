@@ -16,7 +16,7 @@ class RuleInfoViewModelFactory(private val context: Context) :
             RuleInfoViewModel(
                 RuleRepository(
                     SequenceNumber(context.applicationContext),
-                    RuleDatabase.getInstance(context.applicationContext).ruleDao()
+                    RuleDatabase.getInstance(context.applicationContext).ruleCombinedDao()
                 ),
             ) as T
         } else {

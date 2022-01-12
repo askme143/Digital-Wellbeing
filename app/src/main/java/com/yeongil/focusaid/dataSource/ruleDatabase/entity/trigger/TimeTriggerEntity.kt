@@ -2,11 +2,20 @@ package com.yeongil.focusaid.dataSource.ruleDatabase.entity.trigger
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
-import kotlinx.serialization.Serializable
+import com.yeongil.focusaid.dataSource.ruleDatabase.entity.RuleEntity
 
-@Serializable
-@Entity(tableName = "time_triggers")
+@Entity(
+    tableName = "time_trigger",
+    foreignKeys = [ForeignKey(
+        entity = RuleEntity::class,
+        parentColumns = ["rid"],
+        childColumns = ["rid"],
+        onDelete = CASCADE,
+    )]
+)
 data class TimeTriggerEntity(
     @PrimaryKey val rid: Int,
     @ColumnInfo(name = "start_time_in_minutes") val startTimeInMinutes: Int,

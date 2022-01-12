@@ -35,7 +35,7 @@ class MainService : LifecycleService() {
     private val initEvent = Event(Unit)
     private val sharedPref by lazy { getSharedPreferences(MAIN_SERVICE_PREF_NAME, MODE_PRIVATE) }
     private val ruleRepo by lazy {
-        RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleDao())
+        RuleRepository(SequenceNumber(this), RuleDatabase.getInstance(this).ruleCombinedDao())
     }
 
     private val midnightIntent by lazy {

@@ -11,6 +11,6 @@ interface TimeTriggerDao {
     @Update
     suspend fun updateTimeTrigger(timeTriggerEntity: TimeTriggerEntity)
 
-    @Query("DELETE FROM time_triggers WHERE rid = :rid")
+    @Query("DELETE FROM time_trigger WHERE rid = :rid")
     suspend fun deleteTimeTriggerByRid(rid: Int)
 }
