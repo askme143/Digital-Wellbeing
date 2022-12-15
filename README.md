@@ -1,5 +1,4 @@
 # Focus-Aid
 
-- Demo video
-
-https://youtu.be/jAKgnqp2zDI
+- Description: Rule-base Smartphone Usage Control Application
+- See demo: https://youtu.be/jAKgnqp2zDI
